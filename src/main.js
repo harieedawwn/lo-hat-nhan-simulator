@@ -108,7 +108,7 @@ sb.addEventListener('contextmenu', (e) => e.preventDefault());
 function openConfirm() { if (s.scram) return; $('confirmScram').hidden = false; $('csNo').focus(); }
 function closeConfirm() { $('confirmScram').hidden = true; }
 sb.addEventListener('click', (e) => { if (e.detail === 0) openConfirm(); });
-sb.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openConfirm(); } });
+sb.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); openConfirm(); } });
 $('csNo').onclick = closeConfirm; $('csYes').onclick = doScram;
 $('confirmScram').addEventListener('click', (e) => { if (e.target.id === 'confirmScram') closeConfirm(); });
 
@@ -195,7 +195,7 @@ addEventListener('keydown', (e) => {
   if (typing) return;
   const onBtn = tag === 'BUTTON' || tag === 'SUMMARY';
   switch (e.key) {
-    case ' ': if (!onBtn && tag !== 'INPUT') { e.preventDefault(); togglePause(); } break;
+    case ' ': if (!(t.closest && t.closest('#popover,#confirmScram,#helpModal,#infocard,#tour,#start,summary'))) { e.preventDefault(); togglePause(); } break;
     case 'ArrowLeft': if (tag !== 'INPUT') { e.preventDefault(); nudge(e.shiftKey ? -5 : -1); } break;
     case 'ArrowRight': if (tag !== 'INPUT') { e.preventDefault(); nudge(e.shiftKey ? 5 : 1); } break;
     case 'l': case 'L': toggleLabels(); break;

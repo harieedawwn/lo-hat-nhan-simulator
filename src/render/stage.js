@@ -107,6 +107,7 @@ export class Stage {
     ctx.clearRect(0, 0, this.fx.width, this.fx.height);
     ctx.setTransform(k * c.s, 0, 0, k * c.s, k * c.x, k * c.y);
     this.flows.draw(ctx, c);
+    this.flows.drawPlume(ctx, c, k);
     // viền đỏ khi quá nhiệt / SCRAM
     const red = s.status === 'overheat' || s.status === 'scram';
     this.vign.style.opacity = red ? (0.55 + 0.45 * Math.sin(performance.now() / (s.status === 'overheat' ? 110 : 260))).toFixed(2) : '0';

@@ -71,7 +71,7 @@ export class Flows {
   }
   setQuality(q) { // 0 thấp, 1 trung bình, 2 cao
     this.qual = q;
-    this.puffCap = [26, 48, 80][q];
+    this.puffCap = [18, 34, 56][q];
     this.density = [0.45, 0.75, 1][q];
     this.nBub = [20, 40, 70][q];
     this.nDrop = [30, 60, 110][q];
@@ -137,7 +137,7 @@ export class Flows {
     }
     // đám hơi (không phóng xạ) trên tháp
     const I = this.plumeI ?? 0;
-    this.puffAcc += dt * (0.5 + 8 * I) * (this.puffCap / 80) * (I > 0 ? 1 : 0);
+    this.puffAcc += dt * (0.4 + 6 * I) * (this.puffCap / 56) * (I > 0 ? 1 : 0);
     while (this.puffAcc >= 1 && this.puffs.length < this.puffCap) {
       this.puffAcc -= 1;
       this.puffs.push({ x: TC + (rng() - 0.5) * 230 * (0.5 + 0.5 * I), y: 462, age: 0, life: 9 + rng() * 5, vy: 38 + rng() * 26, r0: (44 + rng() * 26) * (0.55 + 0.45 * I), g: 5 + rng() * 6, a: 0.3 + 0.5 * I, k: 0 });
@@ -211,17 +211,32 @@ export class Flows {
         }
       }
     }
-    // đám hơi
+    ctx.globalAlpha = 1;
+  }
+
+  /** Đám hơi vẽ ở độ phân giải thấp vào canvas phụ rồi dán một lần (giảm chi phí đổ pixel). */
+  drawPlume(ctx, cam, dpr) {
+    if (!this.puffs.length) return;
+    const W = ctx.canvas.width, H = ctx.canvas.height;
+    const x0 = Math.max(0, Math.floor((cam.x + cam.s * 1600) * dpr)), x1 = Math.min(W, Math.ceil((cam.x + cam.s * 2700) * dpr));
+    const y0 = Math.max(0, Math.floor((cam.y + cam.s * -300) * dpr)), y1 = Math.min(H, Math.ceil((cam.y + cam.s * 500) * dpr));
+    const w = x1 - x0, h = y1 - y0; if (w < 8 || h < 8) return;
+    const sc = [0.25, 0.33, 0.4][this.qual];
+    const pc = this.pc || (this.pc = document.createElement('canvas')), pw = Math.ceil(w * sc), ph = Math.ceil(h * sc);
+    if (pc.width !== pw || pc.height !== ph) { pc.width = pw; pc.height = ph; }
+    const g = pc.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, pw, ph);
+    const k = cam.s * dpr * sc; g.setTransform(k, 0, 0, k, (cam.x * dpr - x0) * sc, (cam.y * dpr - y0) * sc);
+    const shade = this.qual > 1;
     for (const p of this.puffs) {
       const u = p.age / p.life;
       const a = p.a * Math.min(1, u * 6) * (1 - u) * (1 - u * 0.4);
       if (a < 0.01) continue;
       const r = p.r0 + p.g * p.age * 2.2;
-      ctx.globalAlpha = a * 0.32;
-      ctx.drawImage(this.sprite2, p.x - r + r * 0.12, p.y - r + r * 0.2, r * 2, r * 2);
-      ctx.globalAlpha = Math.min(1, a);
-      ctx.drawImage(this.sprite, p.x - r, p.y - r, r * 2, r * 2);
+      if (shade) { g.globalAlpha = a * 0.32; g.drawImage(this.sprite2, p.x - r + r * 0.12, p.y - r + r * 0.2, r * 2, r * 2); }
+      g.globalAlpha = Math.min(1, a);
+      g.drawImage(this.sprite, p.x - r, p.y - r, r * 2, r * 2);
     }
-    ctx.globalAlpha = 1;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    ctx.drawImage(pc, 0, 0, pw, ph, x0, y0, w, h);
   }
 }

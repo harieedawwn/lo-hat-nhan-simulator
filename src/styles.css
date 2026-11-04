@@ -98,7 +98,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-
 .legend .heat{align-items:center;flex-wrap:wrap}.heatbar{width:100%;height:9px;border-radius:5px;background:linear-gradient(90deg,#5C708E,#3AA0A8,#8ACA6A,#F4C648,#F28A2E,#D6341E)}.heatl{font-size:11.5px;color:var(--ink2)}
 .legnote{margin:0;padding:0 14px 10px;font-size:11.5px;color:var(--ink2)}
 #lensBox{left:12px;top:12px}
-#lensBox .lensHead{gap:8px}#lensClose{width:30px;height:30px;border-radius:50%;border:1px solid var(--line2);background:#fff;font-size:16px;line-height:1;flex:none}
+#lensBox .lensHead{gap:8px}#lensClose{width:44px;height:44px;margin:-10px -8px -10px 0;border:0;background:transparent;flex:none;display:grid;place-items:center;font-size:0}#lensClose::before{content:"×";display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--line2);background:#fff;font-size:17px;line-height:1;color:var(--ink)}
 
 /* ============ bảng điều khiển ============ */
 #panel{grid-column:2;grid-row:2;background:linear-gradient(#F6F4EE,#EFEDE6);border-left:1px solid var(--line);min-height:0;display:flex;flex-direction:column;position:relative;z-index:5}
@@ -228,7 +228,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
 }
 /* điện thoại dọc */
 @media (max-width:760px) and (orientation:portrait){
-  :root{--sheet-h:288px;--lens:128px}
+  :root{--sheet-h:292px;--lens:128px}
   #app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
   #top{flex-wrap:wrap;gap:2px 8px;padding:6px 10px}.logo{width:30px;height:30px}.titles h1{font-size:14.5px}.titles .sub{font-size:11.5px}
   .school{order:3;margin:0;width:100%;text-align:center;font-size:12px;padding:3px 10px;border:0;background:transparent;color:var(--ink2);font-weight:700}
@@ -237,7 +237,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
   #stageWrap{grid-column:1;grid-row:2}
   #panel{position:fixed;left:0;right:0;bottom:0;top:auto;height:calc(100dvh - var(--hdr,110px) - 8px);grid-column:auto;grid-row:auto;border-left:0;border-radius:20px 20px 0 0;border-top:1px solid var(--line2);box-shadow:0 -10px 30px rgba(20,33,61,.18);transform:translateY(var(--sheetY,calc(100% - var(--sheet-h))));transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform;z-index:20;padding-bottom:0}
   #panel.dragging{transition:none}
-  #sheetHandle{display:flex;justify-content:center;align-items:center;height:26px;flex:none;touch-action:none;cursor:grab}#sheetHandle i{width:44px;height:5px;border-radius:3px;background:#B6BFCC}
+  #sheetHandle{display:flex;justify-content:center;align-items:center;height:44px;margin-bottom:-14px;flex:none;touch-action:none;cursor:grab}#sheetHandle i{width:44px;height:5px;border-radius:3px;background:#B6BFCC}
   .pscroll{padding-top:2px}#statusCard{order:1;padding:8px 12px}#rodsCard{order:2}#heroCard{order:3}#gaugeCard{order:4}
   .st-title{font-size:15px}.st-text{font-size:12px}.st-ico{width:28px;height:28px}
   .focusbar{bottom:calc(var(--sheet-h) + 8px + var(--safe-b));left:6px;right:6px;width:auto;max-width:none;padding:3px;gap:3px;flex-wrap:nowrap}.focusbar button{flex:1;padding:0 4px;font-size:11px;min-height:44px;white-space:normal;line-height:1.15;text-align:center}
@@ -257,7 +257,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
   #stageWrap{grid-column:1;grid-row:2}
   #panel{position:fixed;right:0;top:var(--hdr,52px);bottom:0;width:min(340px,48vw);grid-column:auto;grid-row:auto;z-index:20;transform:translateX(var(--drawX,0));transition:transform .25s;border-left:1px solid var(--line2);box-shadow:-8px 0 24px rgba(20,33,61,.15);padding-right:var(--safe-r)}
   #panel.closed{--drawX:100%}
-  #sheetHandle{display:flex;position:absolute;left:-30px;top:50%;width:30px;height:76px;margin-top:-38px;background:#fff;border:1px solid var(--line2);border-right:0;border-radius:12px 0 0 12px;align-items:center;justify-content:center;cursor:pointer}#sheetHandle i{width:5px;height:34px;border-radius:3px;background:#B6BFCC}
+  #sheetHandle{display:flex;position:absolute;left:-44px;top:50%;width:44px;height:76px;margin:-38px 0 0;background:#fff;border:1px solid var(--line2);border-right:0;border-radius:12px 0 0 12px;align-items:center;justify-content:center;cursor:pointer}#sheetHandle i{width:5px;height:34px;border-radius:3px;background:#B6BFCC}
   #statusCard{order:1}#rodsCard{order:2}#heroCard{order:3}#gaugeCard{order:4}
   .focusbar{bottom:6px;right:var(--drawW,0px)}.focusbar button{min-height:44px;padding:0 10px}.hlbar{top:4px;right:calc(var(--drawW,0px) + 8px)}.hlbar .hn{display:none}.hlbar .hlt{display:none}
   .legend{display:none}#lensBox .lensLeg{display:none}#lensBox{padding:6px}

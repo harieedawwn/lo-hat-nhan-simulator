@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const url = process.argv[2] || 'http://127.0.0.1:5173/';
+const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
+await ctx.addInitScript("localStorage.setItem('pwr.tour','1')");
+const p = await ctx.newPage(); await p.goto(url); await p.waitForTimeout(500); await p.click('#goNormal'); await p.waitForTimeout(1500);
+const meas = () => p.evaluate(() => new Promise((res) => { const ts = []; let n = 0; function f(t) { ts.push(t); if (++n < 150) requestAnimationFrame(f); else res((1000 / ((ts[ts.length - 1] - ts[0]) / (ts.length - 1))).toFixed(1)); } requestAnimationFrame(f); }));
+await p.evaluate(()=>{const st=__app.stage,o=st.frame.bind(st);window.__ft=[];st.frame=(...a)=>{const t=performance.now();o(...a);window.__ft.push(performance.now()-t)}});
+const ft=async()=>{const r=await p.evaluate(()=>{const a=window.__ft.slice(-100);return a.reduce((x,y)=>x+y,0)/a.length});return r.toFixed(2)+' ms/frame'};
+console.log('baseline', await meas(), await ft());
+await p.evaluate("__app.stage.flows.puffCap=0;__app.stage.flows.puffs.length=0"); console.log('no plume', await meas(), await ft());
+await p.evaluate("__app.stage.setLens(false)"); console.log('no lens', await meas(), await ft());
+await p.evaluate("__app.stage.scene.update=function(){}"); console.log('no scene svg updates', await meas(), await ft());
+await p.evaluate("__app.stage.flows.draw=function(){}"); console.log('no flows draw', await meas(), await ft());
+await b.close();
