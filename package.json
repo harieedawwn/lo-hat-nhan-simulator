@@ -1,0 +1,21 @@
+{
+  "name": "lo-hat-nhan-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Mô phỏng nhà máy điện hạt nhân PWR 1000 MW (Vật lí 12)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "e2e": "node e2e/run.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/be-vietnam-pro": "^5.3.0",
+    "playwright": "^1.63.0",
+    "vite": "^6.4.5",
+    "vitest": "^3.2.7"
+  }
+}
