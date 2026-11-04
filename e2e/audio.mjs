@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
+const p = await b.newPage(); const errs = [];
+p.on('pageerror', (e) => errs.push(e.message)); p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
+await p.goto(process.argv[2] || 'http://127.0.0.1:5173/'); await p.waitForTimeout(500);
+await p.evaluate("localStorage.setItem('pwr.tour','1')"); await p.click('#goNormal'); await p.waitForTimeout(500);
+const r = await p.evaluate('__app.renderAudioTest()'); console.log('offline render', JSON.stringify(r));
+console.log('live ctx', await p.evaluate(() => __app.sound.ctx && __app.sound.ctx.state));
+await p.evaluate('__app.setRodTarget(95)'); await p.waitForTimeout(3000); await p.evaluate('__app.scram()'); await p.waitForTimeout(3500);
+console.log('errors', errs); await b.close();
