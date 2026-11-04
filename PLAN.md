@@ -3,11 +3,11 @@
 Stack: Vite + JS ES modules (không framework), Vitest, Playwright. Base "./".
 
 ## Milestones
-- [ ] 1. Scaffold + mô hình (src/sim/model.js) + test + Pages deploy (trang tối thiểu)
-- [ ] 2. Minh hoạ nhà máy (SVG 1 file, hạt Canvas, lăng kính phản ứng dây chuyền, camera) + vòng art-direction ×2
-- [ ] 3. Bảng điều khiển, responsive, màn hình khởi động, trình duyệt trong app (Zalo), hướng dẫn + tour + vòng art-direction
-- [ ] 4. Âm thanh Web Audio thủ tục
-- [ ] 5. README, ảnh OG, icon, manifest
+- [x] 1. Scaffold + mô hình (src/sim/model.js) + test + Pages deploy (trang tối thiểu)
+- [x] 2. Minh hoạ nhà máy (SVG 1 file, hạt Canvas, lăng kính phản ứng dây chuyền, camera) + vòng art-direction ×2
+- [x] 3. Bảng điều khiển, responsive, màn hình khởi động, trình duyệt trong app (Zalo), hướng dẫn + tour + vòng art-direction
+- [x] 4. Âm thanh Web Audio thủ tục
+- [x] 5. README, ảnh OG, icon, manifest
 - [ ] 6. Hoàn thiện, e2e Playwright, kiểm tra URL thật
 
 ## Quyết định chính
@@ -18,5 +18,9 @@ Stack: Vite + JS ES modules (không framework), Vitest, Playwright. Base "./".
 - Nhãn vẽ ở lớp màn hình, tự tránh chồng chéo theo độ ưu tiên.
 - Ống vòng 3 đi ngầm không cắt vòng 2 (bình ngưng 2 chặng: cấp & hồi cùng phía phải).
 
+## Ghi chú
+- Không truy cập được URL github.io từ sandbox (proxy chặn): xác minh triển khai qua GitHub Actions API.
+- `main` được tạo từ nhánh làm việc vì kho ban đầu trống (không có nhánh mặc định để mở PR).
+
 ## Tiếp theo
-Milestone 1.
+Milestone 6: e2e Playwright, đo hiệu năng, art-direction vòng 2, kiểm tra cuối.
