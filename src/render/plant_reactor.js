@@ -68,8 +68,8 @@ function vessel() {
 <rect x="184" y="780" width="132" height="70" fill="url(#gPrimCold)"/>
 <rect x="184" y="500" width="24" height="120" fill="#EE9A92" opacity=".0"/>
 </g>
-<rect x="184" y="500" width="24" height="310" fill="#EE9A92" opacity=".55" clip-path="url(#clipVesselIn)"/>
-<rect x="292" y="600" width="24" height="210" fill="#EE9A92" opacity=".55" clip-path="url(#clipVesselIn)"/>
+<g data-part="water" class="part"><rect x="184" y="500" width="24" height="310" fill="#EE9A92" opacity=".55" clip-path="url(#clipVesselIn)"/>
+<rect x="292" y="600" width="24" height="210" fill="#EE9A92" opacity=".55" clip-path="url(#clipVesselIn)"/></g>
 <rect x="292" y="500" width="24" height="100" fill="#8D2C3A" opacity=".5" clip-path="url(#clipVesselIn)"/>
 <path d="M208,504 V806 M292,504 V806" stroke="#46556C" stroke-width="4"/>
 <path d="M208,806 H292" stroke="#46556C" stroke-width="4"/>

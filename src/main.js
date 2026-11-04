@@ -35,10 +35,11 @@ function applyLayout() {
   root.style.setProperty('--hdr', (body.classList.contains('immersive') ? 0 : top.offsetHeight) + 'px');
   SHEET_H = parseInt(getComputedStyle(root).getPropertyValue('--sheet-h')) || 262;
   let pb = 0, pr = 0;
-  if (m === 'phPort') { pb = SHEET_H; setSheet(sheetOpen, false); }
-  if (m === 'phLand') { pr = drawerOpen ? Math.min(340, innerWidth * 0.48) : 0; }
+  let pt = 0;
+  if (m === 'phPort') { pb = SHEET_H + 56; pt = 52; setSheet(sheetOpen, false); }
+  if (m === 'phLand') { pr = drawerOpen ? Math.min(340, innerWidth * 0.48) : 0; pb = 58; }
   root.style.setProperty('--drawW', pr + 'px');
-  stage.setPads(0, pb, pr);
+  stage.setPads(pt, pb, pr);
   $('panel').classList.toggle('closed', m === 'phLand' && !drawerOpen);
 }
 function setSheet(open, animate = true) {
@@ -211,7 +212,7 @@ let started = false;
 function boot() {
   $('boot').classList.add('gone'); $('app').hidden = false;
   const m = layoutMode();
-  stage.camera.initialFocus = m === 'phPort' ? 'reactor' : 'overview';
+  stage.camera.initialFocus = m === 'phPort' ? 'reactor' : m === 'phLand' ? 'main' : 'overview';
   applyLayout();
   stage.resize();
   if (m === 'phPort' || m === 'phLand') setLens(false);
@@ -242,6 +243,7 @@ function boot() {
     $('start').hidden = true; applyLayout();
     if (soundOn && isIOS && !isInApp) toast('Nếu không nghe tiếng, hãy tắt chế độ im lặng của iPhone.', null, 6000);
     if (store.get('tour') !== '1') setTimeout(() => tour.start(), 700);
+    else if (layoutMode() === 'phPort' && store.get('rot') !== '1') setTimeout(() => { if (!document.hidden) toast('Mẹo: xoay ngang điện thoại để xem sơ đồ rộng hơn.', { label: 'Đóng', fn: () => { $('toast').hidden = true; store.set('rot', '1'); } }); }, 3500);
     lastT = performance.now();
   };
   $('goFull').onclick = () => go(true); $('goNormal').onclick = () => go(false);

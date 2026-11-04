@@ -127,7 +127,7 @@ export class Panel {
     if (rec.disabled === can) rec.disabled = !can;
     const slider = $('rodSlider'); if (slider.disabled !== s.scram) slider.disabled = s.scram;
     let hint = '';
-    if (s.scram) hint = can ? 'Nhà máy đã ổn định. Bấm “Khôi phục”; thanh vẫn ở 0 % – rút lại từ từ để khởi động.' : `Chờ ổn định để khôi phục: p_f < 1 % (hiện ${fmt(s.pf * 100, 1)} %) và T_nóng < ${fmt(294)} °C (hiện ${fmt(s.tHot, 0)} °C).`;
+    if (s.scram) hint = can ? 'Nhà máy đã ổn định. Bấm “Khôi phục”; thanh vẫn ở 0 % – rút lại từ từ để khởi động.' : `Chờ ổn định để khôi phục: pf < 1 % (hiện ${fmt(s.pf * 100, 1)} %) và T_nóng < ${fmt(294)} °C (hiện ${fmt(s.tHot, 0)} °C).`;
     this.setText('recoverHint', hint);
     // chuỗi năng lượng
     this.setText('hTh', fmt(d.pTh)); this.setW('#chain [data-k=th] .bar i', (d.pTh / 3750) * 100);

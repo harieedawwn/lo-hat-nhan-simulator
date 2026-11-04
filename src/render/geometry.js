@@ -26,7 +26,7 @@ export const PIPES = [
   // Vòng 2
   { id: 'steam', loop: 2, cls: 'steam', w: 18, part: 'steamline', d: poly([[520, 336], [520, 325], [770, 325], [770, 585], [815, 585], [815, 604]], 14) },
   { id: 'cross', loop: 2, cls: 'steam', w: 14, part: 'turbine', d: poly([[890, 604], [890, 558], [1020, 558], [1020, 592]], 12) },
-  { id: 'dump', loop: 2, cls: 'steam', w: 12, part: 'dump', d: poly([[770, 585], [770, 736], [946, 736]], 12) },
+  { id: 'dump', loop: 2, cls: 'steam', w: 12, part: 'steamdump', d: poly([[770, 585], [770, 736], [946, 736]], 12) },
   { id: 'cond', loop: 2, cls: 'water', w: 13, part: 'feedpump', d: 'M946,866 L878,866' },
   { id: 'feed', loop: 2, cls: 'water', w: 12, part: 'feedpump', d: poly([[860, 848], [860, 820], [745, 820], [745, 480], [612, 480], [612, 455], [588, 455]], 14) },
   // Vòng 3
@@ -81,6 +81,7 @@ export const ELEC = [
 
 export const FOCUS = {
   overview: { x: 0, y: 90, w: 2450, h: 1010 },
+  main: { x: 40, y: 130, w: 1500, h: 790 },
   reactor: { x: 50, y: 150, w: 690, h: 800 },
   turbine: { x: 690, y: 440, w: 700, h: 480 },
   tower: { x: 1780, y: 40, w: 680, h: 1000 },

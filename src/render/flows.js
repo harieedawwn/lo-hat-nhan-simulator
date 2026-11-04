@@ -148,8 +148,6 @@ export class Flows {
       p.age += dt; p.y -= p.vy * dt * (1 - p.age / p.life * 0.5); p.x += (8 + p.age * 2.5) * dt;
       if (p.age >= p.life) this.puffs.splice(i, 1);
     }
-    // bong bóng bình điều áp
-    for (const b of this.pbub) { b.y -= 16 * dt; if (b.y < 364) { b.y = 468; b.x = 378 + rng() * 40; } }
   }
   draw(ctx, view) {
     const dr = this.drive, dens = this.density;
@@ -177,10 +175,6 @@ export class Flows {
     ctx.beginPath();
     for (const b of this.bub) { if (!b.on) continue; const x = b.x + Math.sin(b.ph) * 2; ctx.moveTo(x + b.r, b.y); ctx.arc(x, b.y, b.r, 0, 6.283); }
     ctx.fill(); ctx.stroke();
-    // bong bóng bình điều áp
-    ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.beginPath();
-    for (const b of this.pbub) { if (b.y < 364) continue; ctx.moveTo(b.x + 2, b.y); ctx.arc(b.x, b.y, 2, 0, 6.283); }
-    ctx.fill();
     // giọt ngưng tụ + giọt phun
     ctx.fillStyle = 'rgba(70,140,215,.9)'; ctx.beginPath();
     for (const c of this.cdrip) { if (!c.on) continue; ctx.moveTo(c.x + 1.3, c.y); ctx.arc(c.x, c.y, 1.3, 0, 6.283); }

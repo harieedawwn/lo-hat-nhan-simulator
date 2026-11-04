@@ -18,7 +18,7 @@ Học sinh tự rút/đưa thanh điều khiển, nhìn phản ứng dây chuy�
 - **Mọi chuyển động do mô hình điều khiển**: hạt dòng chảy đúng chiều và đúng lưu lượng, bọt sôi chỉ ở phía vòng 2, thanh điều khiển rơi khi SCRAM, tuabin tăng tốc – hòa lưới – tự do quay chậm dần, xung điện theo P<sub>điện</sub>, đám hơi trắng (không phóng xạ) theo nhiệt thải.
 - **Kính lúp “Bên trong lõi lò”**: neutron nhanh bị nước làm chậm thành neutron nhiệt, ²³⁵U phân hạch thành hai mảnh và 2–3 neutron, ²³⁸U gần như thụ động, thanh điều khiển hấp thụ neutron.
 - **Bảng điều khiển**: trạng thái (Bình thường / Cảnh báo / Quá nhiệt / SCRAM), chuỗi Nhiệt → Hơi → Tuabin → Điện, đồng hồ công suất điện, thanh điều khiển, nhiệt kế 40–350 °C kèm dải phóng đại 280–350 °C, hệ số k, tách phân hạch/dư nhiệt, cân bằng năng lượng, biểu đồ 60 giây và **Góc tính toán**.
-- **Thẻ thông tin** cho 27 bộ phận (chạm để mở): chức năng, số liệu thật, thuộc vòng nào, có phóng xạ hay không, “Bạn có biết?”.
+- **Thẻ thông tin** cho 28 bộ phận (chạm để mở): chức năng, số liệu thật, thuộc vòng nào, có phóng xạ hay không, “Bạn có biết?”.
 - **Âm thanh thủ tục** (Web Audio, không tải tệp), hướng dẫn nhanh 4 bước, phím tắt cho giáo viên, chế độ nhãn ẩn để hỏi bài.
 - **Chạy tốt trên điện thoại**, kể cả trong trình duyệt của Zalo; có chế độ toàn màn hình hoặc “bao phủ” khi iPhone không hỗ trợ.
 

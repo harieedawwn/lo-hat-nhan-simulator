@@ -24,6 +24,7 @@ export class Stage {
     this.labSvg = host.querySelector('#lab');
     this.vign = host.querySelector('#vignette');
     this.quality = 2; this.dpr = 1; this.dirty = true;
+    this.reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
     this.scene = new Scene(this.svg);
     this.flows = new Flows(2);
     this.labels = new Labels(this.labSvg, (p) => this.onPick(p));
@@ -110,7 +111,7 @@ export class Stage {
     this.flows.drawPlume(ctx, c, k);
     // viền đỏ khi quá nhiệt / SCRAM
     const red = s.status === 'overheat' || s.status === 'scram';
-    this.vign.style.opacity = red ? (0.55 + 0.45 * Math.sin(performance.now() / (s.status === 'overheat' ? 110 : 260))).toFixed(2) : '0';
+    this.vign.style.opacity = red ? (this.reduce ? '0.7' : (0.55 + 0.45 * Math.sin(performance.now() / (s.status === 'overheat' ? 110 : 260))).toFixed(2)) : '0';
   }
   obstacles() {
     const h = this.host.getBoundingClientRect(), out = [];
