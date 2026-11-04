@@ -8,7 +8,7 @@ Stack: Vite + JS ES modules (không framework), Vitest, Playwright. Base "./".
 - [x] 3. Bảng điều khiển, responsive, màn hình khởi động, trình duyệt trong app (Zalo), hướng dẫn + tour + vòng art-direction
 - [x] 4. Âm thanh Web Audio thủ tục
 - [x] 5. README, ảnh OG, icon, manifest
-- [ ] 6. Hoàn thiện, e2e Playwright, kiểm tra URL thật
+- [x] 6. Hoàn thiện, e2e Playwright, kiểm tra URL thật
 
 ## Quyết định chính
 - Mô hình thuần, không DOM; bước cố định dt=0,05 s; tối đa 10 bước/khung; tốc độ 0,5×/1×/2×.
@@ -22,5 +22,6 @@ Stack: Vite + JS ES modules (không framework), Vitest, Playwright. Base "./".
 - Không truy cập được URL github.io từ sandbox (proxy chặn): xác minh triển khai qua GitHub Actions API.
 - `main` được tạo từ nhánh làm việc vì kho ban đầu trống (không có nhánh mặc định để mở PR).
 
-## Tiếp theo
-Milestone 6: e2e Playwright, đo hiệu năng, art-direction vòng 2, kiểm tra cuối.
+## Trạng thái
+Hoàn thành 6/6. e2e: `node e2e/run.mjs` (50+ kiểm tra), âm thanh OfflineAudioContext < 0 dBFS.
+Chưa làm được: WebKit (không cài được trong sandbox), kiểm tra URL github.io thật (proxy chặn máy chủ).
