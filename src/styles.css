@@ -235,7 +235,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
   #toolbar{order:2;margin-left:auto}.tb span{display:none}.tb{padding:0;justify-content:center;min-width:44px}#tbSpeed span{display:inline}
   .hide-phone{display:none!important}.show-phone{display:inline-flex}
   #stageWrap{grid-column:1;grid-row:2}
-  #panel{position:fixed;left:0;right:0;bottom:0;top:auto;height:calc(100dvh - var(--hdr,110px) - 8px);grid-column:auto;grid-row:auto;border-left:0;border-radius:20px 20px 0 0;border-top:1px solid var(--line2);box-shadow:0 -10px 30px rgba(20,33,61,.18);transform:translateY(var(--sheetY,calc(100% - var(--sheet-h))));transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform;z-index:20;padding-bottom:0}
+  #panel{position:fixed;left:0;right:0;bottom:0;top:auto;height:calc(100vh - var(--hdr,110px) - 8px);height:calc(100dvh - var(--hdr,110px) - 8px);grid-column:auto;grid-row:auto;border-left:0;border-radius:20px 20px 0 0;border-top:1px solid var(--line2);box-shadow:0 -10px 30px rgba(20,33,61,.18);transform:translateY(var(--sheetY,calc(100% - var(--sheet-h))));transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform;z-index:20;padding-bottom:0}
   #panel.dragging{transition:none}
   #sheetHandle{display:flex;justify-content:center;align-items:center;height:44px;margin-bottom:-14px;flex:none;touch-action:none;cursor:grab}#sheetHandle i{width:44px;height:5px;border-radius:3px;background:#B6BFCC}
   .pscroll{padding-top:2px}#statusCard{order:1;padding:8px 12px}#rodsCard{order:2}#heroCard{order:3}#gaugeCard{order:4}

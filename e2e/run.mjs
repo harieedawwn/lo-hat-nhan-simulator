@@ -15,7 +15,7 @@ async function page(w, h, { touch = false, ua, q = '?zarsrc=31&utm_source=zalo',
   const p = await ctx.newPage(); const errs = [];
   p.on('console', (m) => { if (m.type() === 'error') errs.push(m.text()); });
   p.on('pageerror', (e) => errs.push('PAGEERR ' + e.message));
-  if (skipTour) await ctx.addInitScript("try{localStorage.setItem('pwr.tour','1')}catch(e){}");
+  if (skipTour) await ctx.addInitScript("try{localStorage.setItem('pwr.tour','1');localStorage.setItem('pwr.rot','1')}catch(e){}");
   await p.goto(base + q); await p.waitForSelector('#start:not([hidden])', { timeout: 8000 });
   p.errs = errs; return p;
 }
@@ -62,7 +62,15 @@ for (const [name, w, h, touch] of [['điện thoại dọc 390×844', 390, 844, 
   await p.screenshot({ path: 'e2e/out/start-zalo.png' });
   await p.click('#goFull'); await p.waitForTimeout(1500);
   ok('Zalo UA: “Xem ngay tại đây” vào mô phỏng', !(await p.isVisible('#start')) && await p.isVisible('#stage'));
-  // 3. Lỗi từ script ngoài không hiện gì
+  // 2b. Zalo Android: nút “Mở bằng trình duyệt” thử intent rồi hiện hướng dẫn sao chép
+{
+  const p = await page(412, 860, { touch: true, ua: 'Mozilla/5.0 (Linux; Android 13; Pixel 6 Build/TP1A; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/110.0.0.0 Mobile Safari/537.36 Zalo/23.07.01' });
+  ok('Zalo Android: hiện ghi chú, không hiện hướng dẫn iOS', (await p.isVisible('#inappNote')) && !(await p.isVisible('#iosGuide')));
+  await p.click('#btnOpenExt'); await p.waitForTimeout(2200);
+  ok('Zalo Android: không mở được thì hiện hướng dẫn sao chép liên kết', await p.isVisible('#extHint'));
+  await p.context().close();
+}
+// 3. Lỗi từ script ngoài không hiện gì
   await p.evaluate(() => { const s = document.createElement('script'); s.textContent = "throw new ReferenceError('zaloJSV2 is not defined')"; document.head.appendChild(s); window.dispatchEvent(new ErrorEvent('error', { message: 'Script error.', filename: '' })); Promise.reject(new Error('webkit.messageHandlers.zalo is undefined')); });
   await p.waitForTimeout(600);
   ok('Lỗi từ script lạ (zaloJSV2) bị bỏ qua, không có toast', !(await p.isVisible('#toast')));

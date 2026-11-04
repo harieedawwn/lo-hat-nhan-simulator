@@ -60,6 +60,7 @@ export class Labels {
     });
     svg.addEventListener('click', (e) => { const g = e.target.closest('.lbl'); if (g) onPick(g.dataset.part); });
   }
+  remeasure() { this.cv.font = this.font; for (const it of this.items) it.w = this.cv.measureText(it.L.t).width; }
   setVisible(v) { this.visible = v; this.svg.classList.toggle('off', !v); }
   /** cam: {x,y,s}; cw,ch: kích thước; hide: tập các nhãn bị ẩn (độ ưu tiên) */
   layout(cam, cw, ch, obst) {

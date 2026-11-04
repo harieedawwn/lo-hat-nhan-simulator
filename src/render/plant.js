@@ -18,6 +18,6 @@ ${reactorBuilding()}
 ${hallEquip()}
 ${condenser()}
 ${undergroundL3()}
-<g id="folk">${person(742, 900)}${person(1658, 900, -1, 0.95)}${person(1852, 900, 1, 0.9)}${person(2214, 900, -1, 1)}${truck(1768, 900)}</g>
+<g id="folk">${person(742, 900)}${person(1658, 900, -1, 0.95)}${person(1880, 900, 1, 0.9)}${person(2214, 900, -1, 1)}${truck(1768, 900)}</g>
 </g>`;
 }

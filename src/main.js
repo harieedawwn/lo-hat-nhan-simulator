@@ -267,5 +267,5 @@ function loop(now) {
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden) { sound.suspend && sound.suspend(); } else { lastT = performance.now(); sound.resume && sound.resume(); } });
 window.__app = { renderAudioTest: () => Sound.renderTest(3), get s() { return s; }, get d() { return d; }, stage, panel, sound, gov, setRodTarget: (v) => { setRodTarget(s, v); syncSlider(true); }, scram: () => scram(s, 'manual'), recover: () => recover(s), load, setSpeed, derive };
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { stage.dirty = true; });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { stage.labels.remeasure(); stage.dirty = true; });
 boot();

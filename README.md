@@ -98,7 +98,7 @@ npm install
 npm run dev      # chạy thử tại http://localhost:5173
 npm test         # kiểm thử mô hình và các phép tính
 npm run build    # bản dựng vào dist/
-npm run e2e      # kiểm thử Playwright (cần npm run dev hoặc preview ở cổng 5173)
+npm run build && npm run e2e   # kiểm thử Playwright trên bản dựng (hoặc: node e2e/run.mjs <url>)
 ```
 
 ## Cấu trúc

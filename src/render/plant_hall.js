@@ -140,7 +140,7 @@ ${upT}${lowT}
 </g>
 <g data-part="steamdump" class="part" id="dumpGroup">${PIPES.filter((p) => p.id === 'dump').map(pipeSvg).join('')}</g>
 <g data-part="feedpump" class="part">
-${PIPES.filter((p) => p.id === 'cond' || p.id === 'feed').map(pipeSvg).join('')}
+${PIPES.filter((p) => p.id === 'cond').map(pipeSvg).join('')}
 <ellipse cx="860" cy="888" rx="34" ry="5" fill="url(#gAO)"/>
 <rect x="822" y="854" width="22" height="24" rx="3" fill="url(#gPaintBlueH)" ${S}/>
 <rect x="840" y="862" width="8" height="8" fill="#8C98AB"/>
