@@ -62,7 +62,7 @@ export class Labels {
   }
   setVisible(v) { this.visible = v; this.svg.classList.toggle('off', !v); }
   /** cam: {x,y,s}; cw,ch: kích thước; hide: tập các nhãn bị ẩn (độ ưu tiên) */
-  layout(cam, cw, ch, vis) {
+  layout(cam, cw, ch, obst) {
     const sx = (x) => cam.x + cam.s * x, sy = (y) => cam.y + cam.s * y;
     for (const bd of this.badges) {
       const x = sx(bd.b.x), y = sy(bd.b.y), ok = x > -20 && x < cw + 20 && y > -20 && y < ch + 20;
@@ -71,7 +71,8 @@ export class Labels {
     }
     if (!this.visible) return;
     const sk = cw < 520 ? 1.6 : cw < 900 ? 1.25 : 1; const maxP = cam.s * sk < 0.5 ? 1 : cam.s * sk < 0.85 ? 2 : 3;
-    const placed = [];
+    const placed = (obst || []).map((o) => ({ x: o.x, y: o.y, w: o.w, h: o.h }));
+    for (const bd of this.badges) { if (bd.g.style.display === 'none') continue; const bx = sx(bd.b.x), by = sy(bd.b.y); placed.push({ x: bx - 13, y: by - 13, w: 26, h: 26 }); }
     const order = [...this.items].sort((a, b) => a.L.p - b.L.p);
     const H = 22;
     for (const it of order) {
@@ -80,7 +81,7 @@ export class Labels {
       const ax = sx(L.x), ay = sy(L.y);
       if (ax < 4 || ax > cw - 4 || ay < 4 || ay > ch - 4) ok = false;
       let best = null;
-      const twoLine = L.live && vis?.live !== false;
+      const twoLine = !!L.live;
       const bw = it.w + 18, bh = twoLine ? H + 15 : H;
       if (ok) {
         const D = 26 + (cam.s < 0.6 ? 10 : 0);

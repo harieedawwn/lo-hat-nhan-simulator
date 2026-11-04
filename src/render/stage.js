@@ -17,7 +17,7 @@ export class Stage {
 <canvas id="fx" aria-hidden="true"></canvas>
 <svg id="lab" xmlns="${NS}" aria-hidden="true"></svg>
 <div id="vignette" aria-hidden="true"></div>
-<div id="lensBox"><div class="lensHead"><b>Bên trong lõi lò</b><span id="lensK" class="num"></span></div><canvas id="lensCv" aria-label="Mô phỏng phản ứng dây chuyền ở mức hạt nhân"></canvas>
+<div id="lensBox"><div class="lensHead"><b>Bên trong lõi lò</b><span id="lensK" class="num"></span><button id="lensClose" aria-label="Ẩn kính lúp">×</button></div><canvas id="lensCv" aria-label="Mô phỏng phản ứng dây chuyền ở mức hạt nhân"></canvas>
 <ul class="lensLeg"><li><i style="background:#F08A24"></i>neutron nhanh</li><li><i style="background:#1D6FE0"></i>neutron chậm (nhiệt)</li><li><i style="background:#E0603C"></i>²³⁵U (phân hạch)</li><li><i style="background:#7B8AA3"></i>²³⁸U</li><li><i style="background:#2B3A55"></i>thanh điều khiển</li></ul></div>`;
     this.svg = host.querySelector('#svg'); this.cam = host.querySelector('#cam');
     this.fx = host.querySelector('#fx'); this.ctx = this.fx.getContext('2d');
@@ -99,7 +99,7 @@ export class Stage {
     const c = this.camera;
     if (this.dirty) {
       this.cam.setAttribute('transform', `translate(${c.x.toFixed(2)} ${c.y.toFixed(2)}) scale(${c.s.toFixed(4)})`);
-      this.labels.layout(c, this.cw, this.ch);
+      this.labels.layout(c, this.cw, this.ch, this.obstacles());
       this.dirty = false;
     }
     const ctx = this.ctx, k = this.dpr;
@@ -110,6 +110,16 @@ export class Stage {
     // viền đỏ khi quá nhiệt / SCRAM
     const red = s.status === 'overheat' || s.status === 'scram';
     this.vign.style.opacity = red ? (0.55 + 0.45 * Math.sin(performance.now() / (s.status === 'overheat' ? 110 : 260))).toFixed(2) : '0';
+  }
+  obstacles() {
+    const h = this.host.getBoundingClientRect(), out = [];
+    for (const sel of ['#lensBox', '.hlbar', '.focusbar', '#legend', '.chip']) {
+      const el = (sel === '#lensBox' ? this.host : this.host.parentElement).querySelector(sel);
+      if (!el || el.offsetParent === null) continue;
+      const r = el.getBoundingClientRect(); if (r.width < 2) continue;
+      out.push({ x: r.left - h.left - 4, y: r.top - h.top - 4, w: r.width + 8, h: r.height + 8 });
+    }
+    return out;
   }
   lensKTxt(s) { const v = 'k = ' + s.k.toFixed(3).replace('.', ','); if (v !== this._k) { this._k = v; this.lensK.textContent = v; } }
   lensLeadUpdate() {

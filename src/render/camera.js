@@ -20,7 +20,8 @@ export class Camera {
     this.cw = w; this.ch = h; this.padTop = padTop; this.padBottom = padBottom; this.padRight = padRight;
     this.minS = this.fitScale(FOCUS.overview) * 0.85;
     this.maxS = Math.max(2.2, this.fitScale(FOCUS.overview) * 7);
-    if (!this.inited) { this.inited = true; this.focus('overview', 0); } else { this.clamp(); this.onChange(); }
+    if (!this.inited && w > 120 && h > 120) { this.inited = true; this.focus(this.initialFocus || 'overview', 0); }
+    else if (this.inited) { this.clamp(); this.onChange(); }
   }
   viewH() { return Math.max(60, this.ch - this.padTop - this.padBottom); }
   viewW() { return Math.max(60, this.cw - this.padRight); }
