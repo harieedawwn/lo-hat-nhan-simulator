@@ -78,7 +78,7 @@ export class Flows {
   }
   setQuality(q) { // 0 thấp, 1 trung bình, 2 cao
     this.qual = q;
-    this.puffCap = [26, 44, 66][q];
+    this.puffCap = [18, 34, 56][q];
     this.nSub = [2, 3, 3][q];
     this.density = [0.45, 0.75, 1][q];
     this.nBub = [20, 40, 70][q];
@@ -96,7 +96,7 @@ export class Flows {
     dr.pe = Math.min(1.3, s.pe / 1000);
     dr.waste = Math.min(1.3, d.waste / 2000);
     dr.pow = Math.min(1.3, s.p);
-    this.plumeI = s.p < 0.001 && d.waste < 1 ? 0 : 0.35 + 0.65 * Math.min(1.2, d.waste / 2000);
+    this.plumeI = s.p < 0.001 && d.waste < 1 ? 0 : 0.14 + 0.86 * Math.min(1.2, d.waste / 2000);
   }
   prewarm(s, d) {
     this.setDrive(s, d);
@@ -145,12 +145,12 @@ export class Flows {
     }
     // đám hơi (không phóng xạ) trên tháp
     const I = this.plumeI ?? 0;
-    this.puffAcc += dt * (0.6 + 5.5 * I) * (this.puffCap / 66) * (I > 0 ? 1 : 0);
+    this.puffAcc += dt * (0.4 + 6 * I) * (this.puffCap / 56) * (I > 0 ? 1 : 0);
     while (this.puffAcc >= 1 && this.puffs.length < this.puffCap) {
       this.puffAcc -= 1;
       // mỗi đám hơi là một cụm 2–3 khối tròn mềm, nở dần khi bốc lên
       const sub = Array.from({ length: 3 }, (_, j) => ({ dx: j ? (rng() - 0.5) * 1.3 : 0, dy: j ? -rng() * 0.7 : 0, k: j ? 0.55 + rng() * 0.3 : 1 }));
-      this.puffs.push({ x: TC + (rng() - 0.5) * 220 * (0.6 + 0.4 * I), y: 466, age: 0, life: 10 + rng() * 5, vy: 34 + rng() * 22, r0: (54 + rng() * 26) * (0.7 + 0.3 * I), g: 7 + rng() * 6, a: 0.62 + 0.36 * Math.min(1, I), ph: rng() * 6.28, sub });
+      this.puffs.push({ x: TC + (rng() - 0.5) * 220 * (0.6 + 0.4 * I), y: 466, age: 0, life: 10 + rng() * 5, vy: 34 + rng() * 22, r0: (44 + rng() * 26) * (0.55 + 0.45 * I), g: 7 + rng() * 6, a: 0.3 + 0.5 * I, ph: rng() * 6.28, sub });
     }
     if (this.puffAcc > 2) this.puffAcc = 2;
     for (let i = this.puffs.length - 1; i >= 0; i--) {
