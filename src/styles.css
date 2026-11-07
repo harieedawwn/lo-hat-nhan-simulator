@@ -6,7 +6,7 @@
 @font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:700;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 :root{
-  --ink:#14213D; --ink2:#3E4F6C; --ink3:#66758F; --bg:#F4F2EC; --card:#FFFFFF; --line:#DCE2EA; --line2:#C6CEDA;
+  --brand-red:#D32F2F; --ink:#14213D; --ink2:#3E4F6C; --ink3:#66758F; --bg:#F4F2EC; --card:#FFFFFF; --line:#DCE2EA; --line2:#C6CEDA;
   --ok:#2E8B57; --warn:#C98A12; --bad:#C62828; --scram:#8E1B1B; --accent:#1D5FA8; --gold:#C99A3E;
   --l1:#A3162E; --l1c:#E5645B; --l2:#8FA0B5; --l2w:#2F76C4; --l3:#12919A; --l3w:#58C0A0;
   --r:14px; --sheet-h:236px; --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px); --safe-l:env(safe-area-inset-left,0px); --safe-r:env(safe-area-inset-right,0px);
@@ -60,8 +60,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 #app{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto minmax(0,1fr);height:100vh;height:100dvh;width:100%;overflow:hidden;position:relative}
 #top{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:8px 14px 8px calc(14px + var(--safe-l));padding-top:calc(8px + var(--safe-t));background:linear-gradient(#FFFEFB,#F6F4EE);border-bottom:1px solid var(--line);z-index:6;flex-wrap:nowrap}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:38px;height:38px;flex:none}
-.titles h1{margin:0;font-size:17px;line-height:1.2;font-weight:700;letter-spacing:-.005em}.titles .sub{margin:1px 0 0;font-size:12.5px;color:var(--ink2)}
-.school{margin:0;margin-left:auto;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.titles h1{margin:0;font-size:16px;line-height:1.2;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--brand-red);text-shadow:0 1px 0 #fff,0 2px 6px rgba(211,47,47,.18);display:inline-block;background:#fff;border:1px solid rgba(211,47,47,.22);border-radius:10px;padding:4px 12px;box-shadow:0 3px 10px rgba(20,33,61,.10)}.titles .sub{margin:1px 0 0;font-size:12.5px;color:var(--ink2)}
+.school{margin:0;margin-left:auto;font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--brand-red);background:transparent;border:0;padding:6px 4px;white-space:nowrap;text-shadow:0 1px 4px rgba(211,47,47,.18)}
 #toolbar{display:flex;gap:4px;align-items:center}
 .tb{display:inline-flex;align-items:center;gap:6px;min-width:44px;min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:12px;background:transparent;font-size:12.5px;font-weight:600;color:var(--ink);transition:background .15s,border-color .15s,transform .1s}
 .tb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
@@ -172,8 +172,8 @@ details.card>summary h2{margin:0}details.card>summary::after{content:"+";font-si
 /* ============ màn hình khởi động ============ */
 #start{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:max(16px,var(--safe-t)) 16px max(16px,var(--safe-b));background:radial-gradient(1200px 600px at 20% -10%,#E3EEF8,transparent),linear-gradient(#F7F5EF,#ECE9E0)}
 .st-in{width:100%;max-width:560px;margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
-.st-logo{width:52px;height:52px}#start h2{margin:6px 0 0;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
-.st-sub{margin:0;color:var(--ink2);font-size:15px}.st-school{margin:4px 0 6px;font-weight:700;font-size:14.5px;background:#fff;border:1px solid var(--line2);border-radius:999px;padding:6px 14px}
+.st-logo{width:52px;height:52px}#start h2{margin:8px 0 2px;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--brand-red);background:#fff;border:1px solid rgba(211,47,47,.22);border-radius:12px;padding:8px 18px;box-shadow:0 4px 14px rgba(20,33,61,.12);text-shadow:0 2px 8px rgba(211,47,47,.15)}
+.st-sub{margin:0;color:var(--ink2);font-size:15px}.st-school{margin:4px 0 6px;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--brand-red);text-shadow:0 1px 4px rgba(211,47,47,.18)}
 .st-prev{width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:linear-gradient(#DCE8F2,#E9E2D2);aspect-ratio:900/380;box-shadow:0 10px 30px rgba(20,33,61,.12)}.st-prev img{display:block;width:100%;height:100%;object-fit:cover}
 .st-sound{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:14px;font-weight:600}
 .st-sound button{min-height:44px;min-width:64px;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:#fff;font-weight:600}.st-sound button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -231,7 +231,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
   :root{--sheet-h:292px;--lens:128px}
   #app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
   #top{flex-wrap:wrap;gap:2px 8px;padding:6px 10px}.logo{width:30px;height:30px}.titles h1{font-size:14.5px}.titles .sub{font-size:11.5px}
-  .school{order:3;margin:0;width:100%;text-align:center;font-size:12px;padding:3px 10px;border:0;background:transparent;color:var(--ink2);font-weight:700}
+  .school{order:3;margin:0;width:100%;text-align:center;font-size:11.5px;padding:3px 10px;border:0;background:transparent;color:var(--brand-red);font-weight:800}
   #toolbar{order:2;margin-left:auto}.tb span{display:none}.tb{padding:0;justify-content:center;min-width:44px}#tbSpeed span{display:inline}
   .hide-phone{display:none!important}.show-phone{display:inline-flex}
   #stageWrap{grid-column:1;grid-row:2}

@@ -68,15 +68,33 @@ export const FLOWS = [
 
 /** Dây dẫn truyền tải (xung năng lượng). */
 export const TOWER_A = 1730, TOWER_C = 2398;
+/** Các cột điện: 2 cột trong khung + các cột ra ngoài biên thế giới để không bao giờ thấy đầu dây. */
+export const TOWERS = [TOWER_A, TOWER_C, 3066, 3734, 4402];
+export const LINE_END = 5200;
 export const ARM_Y = [575, 615, 655];
+/** 3 sứ cao áp của MBA (3 pha) và 3 chuỗi sứ của trạm phân phối. */
+export const HV_BUSH = [1441, 1459, 1477], BUSH_Y = 736;
+export const SW_INS = [1566, 1590, 1614], INS_Y = 712;
 export function span(x0, y0, x1, y1, sag) {
   return `M${x0},${y0} Q${(x0 + x1) / 2},${(y0 + y1) / 2 + sag * 2} ${x1},${y1}`;
 }
+const q = (x0, y0, x1, y1, sag) => `Q${(x0 + x1) / 2},${(y0 + y1) / 2 + sag * 2} ${x1},${y1}`;
+/** Đoạn 500 kV: sứ MBA → chuỗi sứ trạm phân phối. */
+export const yardPhase = (i) => span(HV_BUSH[i], BUSH_Y, SW_INS[i], INS_Y, 3);
+/** Đoạn trạm phân phối → các cột → ra ngoài biên (M = nhảy qua xà cột). */
+export function linePhase(i) {
+  const y = ARM_Y[i] + 14;
+  let d = span(SW_INS[i], INS_Y, TOWER_A - 58, y, 6);
+  for (let k = 0; k < TOWERS.length; k++) {
+    const x1 = k + 1 < TOWERS.length ? TOWERS[k + 1] - 58 : LINE_END;
+    d += ` M${TOWERS[k] + 58},${y} ${q(TOWERS[k] + 58, y, x1, y, k + 1 < TOWERS.length ? 40 : 30)}`;
+  }
+  return d;
+}
 export const ELEC = [
-  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10) },
-  { id: 'hv', d: poly([[1462, 742], [1462, 692], [1590, 692], [1636, 692]], 8) },
-  ...ARM_Y.map((y, i) => ({ id: 'tx' + i, d: span(1636, 692 - i * 0, TOWER_A - 58, y + 14, 6) })),
-  ...ARM_Y.map((y, i) => ({ id: 'ty' + i, d: span(TOWER_A + 58, y + 14, TOWER_C - 58, y + 14, 38) })),
+  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, speed: 130 },
+  // phía 500 kV: dòng nhỏ hơn nhiều (P = UI) → hạt thưa và chậm hơn
+  ...ARM_Y.map((_, i) => ({ id: 'ph' + i, d: `${yardPhase(i)} ${linePhase(i).replace(/^M[^Q]*/, '')}`, gap: 34, speed: 96 })),
 ];
 
 export const FOCUS = {

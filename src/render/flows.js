@@ -36,7 +36,7 @@ export class Flows {
   constructor(quality = 1) {
     this.q = quality;
     this.flows = FLOWS.map((f) => this.mk(f));
-    this.elec = ELEC.map((e) => this.mk({ id: e.id, d: e.d, gap: e.id === 'bus' ? 16 : 26, speed: 130, spread: 0, size: 2.6 }));
+    this.elec = ELEC.map((e) => this.mk({ id: e.id, d: e.d, gap: e.gap, speed: e.speed, spread: 0, size: 2.6 }));
     this.drive = {};
     this.puffCap = 80; this.puffs = [];
     this.sprite = this.mkSprite();
@@ -67,11 +67,19 @@ export class Flows {
     r2.addColorStop(0, 'rgba(150,170,196,.8)'); r2.addColorStop(0.6, 'rgba(165,184,208,.45)'); r2.addColorStop(1, 'rgba(165,184,208,0)');
     g2.fillStyle = r2; g2.fillRect(0, 0, 128, 128);
     this.sprite2 = c2;
+    // viền tối nhẹ (steamEdge) để tách khối hơi khỏi nền trời
+    const c3 = document.createElement('canvas'); c3.width = c3.height = 128;
+    const g3 = c3.getContext('2d');
+    const r3 = g3.createRadialGradient(64, 64, 30, 64, 64, 63);
+    r3.addColorStop(0, 'rgba(137,150,168,0)'); r3.addColorStop(0.72, 'rgba(137,150,168,.55)'); r3.addColorStop(0.86, 'rgba(120,134,154,.42)'); r3.addColorStop(1, 'rgba(137,150,168,0)');
+    g3.fillStyle = r3; g3.fillRect(0, 0, 128, 128);
+    this.sprite3 = c3;
     return c;
   }
   setQuality(q) { // 0 thấp, 1 trung bình, 2 cao
     this.qual = q;
-    this.puffCap = [18, 34, 56][q];
+    this.puffCap = [26, 44, 66][q];
+    this.nSub = [2, 3, 3][q];
     this.density = [0.45, 0.75, 1][q];
     this.nBub = [20, 40, 70][q];
     this.nDrop = [30, 60, 110][q];
@@ -88,7 +96,7 @@ export class Flows {
     dr.pe = Math.min(1.3, s.pe / 1000);
     dr.waste = Math.min(1.3, d.waste / 2000);
     dr.pow = Math.min(1.3, s.p);
-    this.plumeI = s.p < 0.001 && d.waste < 1 ? 0 : 0.14 + 0.86 * Math.min(1.2, d.waste / 2000);
+    this.plumeI = s.p < 0.001 && d.waste < 1 ? 0 : 0.35 + 0.65 * Math.min(1.2, d.waste / 2000);
   }
   prewarm(s, d) {
     this.setDrive(s, d);
@@ -105,7 +113,7 @@ export class Flows {
       for (let i = 0; i < fl.cnt; i++) { fl.pos[i] += v; if (fl.pos[i] >= fl.len) fl.pos[i] -= fl.len; }
     }
     const pe = dr.pe ?? 0;
-    for (const fl of this.elec) { if (pe < 0.01) continue; const v = 130 * dt; for (let i = 0; i < fl.cnt; i++) { fl.pos[i] += v; if (fl.pos[i] >= fl.len) fl.pos[i] -= fl.len; } }
+    for (const fl of this.elec) { if (pe < 0.01) continue; const v = fl.f.speed * dt; for (let i = 0; i < fl.cnt; i++) { fl.pos[i] += v; if (fl.pos[i] >= fl.len) fl.pos[i] -= fl.len; } }
     // bọt sôi trong bình sinh hơi
     const pow = dr.pow ?? 0, nb = Math.floor(this.nBub * Math.min(1, pow * 1.05));
     for (let i = 0; i < this.bub.length; i++) {
@@ -137,15 +145,18 @@ export class Flows {
     }
     // đám hơi (không phóng xạ) trên tháp
     const I = this.plumeI ?? 0;
-    this.puffAcc += dt * (0.4 + 6 * I) * (this.puffCap / 56) * (I > 0 ? 1 : 0);
+    this.puffAcc += dt * (0.6 + 5.5 * I) * (this.puffCap / 66) * (I > 0 ? 1 : 0);
     while (this.puffAcc >= 1 && this.puffs.length < this.puffCap) {
       this.puffAcc -= 1;
-      this.puffs.push({ x: TC + (rng() - 0.5) * 230 * (0.5 + 0.5 * I), y: 462, age: 0, life: 9 + rng() * 5, vy: 38 + rng() * 26, r0: (44 + rng() * 26) * (0.55 + 0.45 * I), g: 5 + rng() * 6, a: 0.3 + 0.5 * I, k: 0 });
+      // mỗi đám hơi là một cụm 2–3 khối tròn mềm, nở dần khi bốc lên
+      const sub = Array.from({ length: 3 }, (_, j) => ({ dx: j ? (rng() - 0.5) * 1.3 : 0, dy: j ? -rng() * 0.7 : 0, k: j ? 0.55 + rng() * 0.3 : 1 }));
+      this.puffs.push({ x: TC + (rng() - 0.5) * 220 * (0.6 + 0.4 * I), y: 466, age: 0, life: 10 + rng() * 5, vy: 34 + rng() * 22, r0: (54 + rng() * 26) * (0.7 + 0.3 * I), g: 7 + rng() * 6, a: 0.62 + 0.36 * Math.min(1, I), ph: rng() * 6.28, sub });
     }
     if (this.puffAcc > 2) this.puffAcc = 2;
     for (let i = this.puffs.length - 1; i >= 0; i--) {
       const p = this.puffs[i];
-      p.age += dt; p.y -= p.vy * dt * (1 - p.age / p.life * 0.5); p.x += (8 + p.age * 2.5) * dt;
+      p.age += dt; p.y -= p.vy * dt * (1 - p.age / p.life * 0.55);
+      p.x += (10 + p.age * 3.2 + 4 * Math.sin(p.ph + p.age * 0.7)) * dt; // gió nhẹ sang phải
       if (p.age >= p.life) this.puffs.splice(i, 1);
     }
   }
@@ -189,6 +200,7 @@ export class Flows {
     const pe = dr.pe ?? 0;
     if (pe > 0.01) {
       const rr = Math.min(1, pe) * dens;
+      const vx0 = -view.x / view.s - 10, vx1 = vx0 + (view.cw || 4000) / view.s + 20;
       for (const fl of this.elec) {
         for (let pass = 0; pass < 2; pass++) {
           ctx.fillStyle = pass ? 'rgba(255,200,60,.95)' : 'rgba(255,196,60,.25)';
@@ -198,7 +210,7 @@ export class Flows {
             if (fl.rank[i] > rr) continue;
             let idx = fl.pos[i] / STEP | 0; if (idx >= fl.n) idx = fl.n - 1;
             const x = fl.a[idx * 4], y = fl.a[idx * 4 + 1];
-            if (x > 1800 && x < 2180 && y > 470 && y < 900) { const h = Math.sqrt(12544 + Math.pow(0.55 * (y - 650), 2)); if (Math.abs(x - TC) < h) continue; }
+            if (x < vx0 || x > vx1) continue;
             ctx.moveTo(x + rad, y); ctx.arc(x, y, rad, 0, 6.283);
           }
           ctx.fill();
@@ -212,23 +224,32 @@ export class Flows {
   drawPlume(ctx, cam, dpr) {
     if (!this.puffs.length) return;
     const W = ctx.canvas.width, H = ctx.canvas.height;
-    const x0 = Math.max(0, Math.floor((cam.x + cam.s * 1600) * dpr)), x1 = Math.min(W, Math.ceil((cam.x + cam.s * 2700) * dpr));
-    const y0 = Math.max(0, Math.floor((cam.y + cam.s * -300) * dpr)), y1 = Math.min(H, Math.ceil((cam.y + cam.s * 500) * dpr));
+    const x0 = Math.max(0, Math.floor((cam.x + cam.s * 1580) * dpr)), x1 = Math.min(W, Math.ceil((cam.x + cam.s * 2950) * dpr));
+    const y0 = Math.max(0, Math.floor((cam.y + cam.s * -520) * dpr)), y1 = Math.min(H, Math.ceil((cam.y + cam.s * 520) * dpr));
     const w = x1 - x0, h = y1 - y0; if (w < 8 || h < 8) return;
     const sc = [0.25, 0.33, 0.4][this.qual];
     const pc = this.pc || (this.pc = document.createElement('canvas')), pw = Math.ceil(w * sc), ph = Math.ceil(h * sc);
     if (pc.width !== pw || pc.height !== ph) { pc.width = pw; pc.height = ph; }
     const g = pc.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, pw, ph);
     const k = cam.s * dpr * sc; g.setTransform(k, 0, 0, k, (cam.x * dpr - x0) * sc, (cam.y * dpr - y0) * sc);
-    const shade = this.qual > 1;
-    for (const p of this.puffs) {
-      const u = p.age / p.life;
-      const a = p.a * Math.min(1, u * 6) * (1 - u) * (1 - u * 0.4);
-      if (a < 0.01) continue;
-      const r = p.r0 + p.g * p.age * 2.2;
-      if (shade) { g.globalAlpha = a * 0.32; g.drawImage(this.sprite2, p.x - r + r * 0.12, p.y - r + r * 0.2, r * 2, r * 2); }
-      g.globalAlpha = Math.min(1, a);
-      g.drawImage(this.sprite, p.x - r, p.y - r, r * 2, r * 2);
+    const nSub = this.nSub || 3, shade = this.qual > 0;
+    // 2 lượt: viền/bóng trước, thân trắng sau → viền chỉ lộ ở mép ngoài của cả đám
+    for (let pass = 0; pass < 2; pass++) {
+      for (const p of this.puffs) {
+        const u = p.age / p.life;
+        const a = p.a * Math.min(1, u * 5) * (1 - u) * (1 - u * 0.3);
+        if (a < 0.01) continue;
+        const R = p.r0 + p.g * p.age * 2.4;
+        for (let j = 0; j < nSub; j++) {
+          const sb = p.sub[j], r = R * sb.k, x = p.x + sb.dx * R, y = p.y + sb.dy * R;
+          if (pass === 0) {
+            if (shade) { g.globalAlpha = a * 0.4; g.drawImage(this.sprite2, x - r + r * 0.12, y - r + r * 0.22, r * 2, r * 2); }
+            g.globalAlpha = a * 0.9; g.drawImage(this.sprite3, x - r * 1.04, y - r * 1.04, r * 2.08, r * 2.08);
+          } else {
+            g.globalAlpha = Math.min(1, a * 1.15); g.drawImage(this.sprite, x - r, y - r, r * 2, r * 2);
+          }
+        }
+      }
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
     ctx.drawImage(pc, 0, 0, pw, ph, x0, y0, w, h);

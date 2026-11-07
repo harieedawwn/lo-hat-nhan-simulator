@@ -1,4 +1,4 @@
-import { GROUND, PIPES, TOWER_A, TOWER_C, ARM_Y, span } from './geometry.js';
+import { GROUND, PIPES, TOWERS, ARM_Y, HV_BUSH, BUSH_Y, yardPhase, linePhase } from './geometry.js';
 import { pipeSvg } from './plant_reactor.js';
 
 const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
@@ -21,7 +21,7 @@ ${rad}
 <path d="M1396,812 H1484 M1396,840 H1484 M1396,868 H1484" stroke="#1B2B48" stroke-opacity=".25"/>
 <rect x="1388" y="782" width="104" height="10" rx="4" fill="#6E9985" ${S}/>
 <rect x="1402" y="756" width="16" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1402,764 H1418 M1402,772 H1418" stroke="#8D9AAE"/>
-<rect x="1454" y="738" width="16" height="46" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.2"/><path d="M1454,748 H1470 M1454,758 H1470 M1454,768 H1470" stroke="#B49A76"/>
+${HV_BUSH.map((x) => `<rect x="${x - 5}" y="${BUSH_Y + 2}" width="10" height="46" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="M${x - 6},${BUSH_Y + 12} H${x + 6} M${x - 6},${BUSH_Y + 22} H${x + 6} M${x - 6},${BUSH_Y + 32} H${x + 6}" stroke="#B49A76" stroke-width="1.6"/><circle cx="${x}" cy="${BUSH_Y + 1}" r="2.4" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`).join('')}
 <rect x="1498" y="768" width="22" height="32" rx="5" fill="#6E9985" ${S}/>
 <circle cx="1410" cy="760" r="6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>
 </g>
@@ -33,7 +33,7 @@ ${insulator(1566, 692)}${insulator(1590, 692)}${insulator(1614, 692)}
 <g transform="translate(1566,830)"><rect x="-9" y="0" width="18" height="70" rx="3" fill="url(#gCylHd)" ${S}/>${insulator(0, -34, 5, 12)}</g>
 <g transform="translate(1596,830)"><rect x="-9" y="0" width="18" height="70" rx="3" fill="url(#gCylHd)" ${S}/>${insulator(0, -34, 5, 12)}</g>
 <rect x="1552" y="880" width="56" height="20" fill="url(#gConcD)" ${S}/>
-<path d="M1536,700 H1650" stroke="#46556C" stroke-width="1.2" stroke-dasharray="3 3" opacity="0"/>
+<g fill="none" stroke="#2B3A55" stroke-width="1.6">${ARM_Y.map((_, i) => `<path d="${yardPhase(i)}"/>`).join('')}</g>
 </g>
 </g>`;
 }
@@ -49,15 +49,17 @@ export function transmission() {
     const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
     return `<g stroke="#46556C" stroke-width="1.6" fill="none"><path d="M${cx - 4},${top} L${cx - bw - 4},${GROUND} M${cx + 4},${top} L${cx + bw + 4},${GROUND}" stroke-width="3"/>${lat.join('')}${arms}<path d="M${cx},${top - 18} V${top}" stroke-width="2.4"/><path d="M${cx - 30},${top + 24} L${cx},${top - 18} L${cx + 30},${top + 24}" stroke-width="1.6"/></g>`;
   };
-  const wires = [
-    ...ARM_Y.map((y, i) => `<path d="${span(1636, 692, TOWER_A - 58, y + 14, 6)}"/>`),
-    ...ARM_Y.map((y) => `<path d="${span(TOWER_A + 58, y + 14, TOWER_C - 58, y + 14, 40)}"/>`),
-    ...ARM_Y.map((y) => `<path d="${span(TOWER_C + 58, y + 14, TOWER_C + 400, y + 14, 30)}"/>`),
-  ].join('');
   return `<g id="lines" data-part="lines" class="part">
-<ellipse cx="${TOWER_A}" cy="902" rx="50" ry="5" fill="url(#gAO)"/><ellipse cx="${TOWER_C}" cy="902" rx="50" ry="5" fill="url(#gAO)"/>
-${tower(TOWER_A)}${tower(TOWER_C)}
-<g fill="none" stroke="#2B3A55" stroke-width="1.8">${wires}</g>
+${TOWERS.map((x) => `<ellipse cx="${x}" cy="902" rx="50" ry="5" fill="url(#gAO)"/>`).join('')}
+${TOWERS.map((x) => tower(x)).join('')}
+</g>`;
+}
+
+/** Dây dẫn 3 pha: vẽ SAU tháp làm mát để đi liền mạch phía trước tháp. */
+export function transmissionWires() {
+  return `<g id="linesW" data-part="lines" class="part" fill="none">
+<g stroke="#1B2B48" stroke-opacity=".18" stroke-width="4">${ARM_Y.map((_, i) => `<path d="${linePhase(i)}"/>`).join('')}</g>
+<g stroke="#2B3A55" stroke-width="1.8">${ARM_Y.map((_, i) => `<path d="${linePhase(i)}"/>`).join('')}</g>
 </g>`;
 }
 

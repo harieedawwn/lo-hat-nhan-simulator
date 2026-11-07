@@ -20,6 +20,7 @@ export const LABELS = [
   { id: 'cond', t: 'Bình ngưng (ranh giới vòng 2 | vòng 3)', x: 1020, y: 790, dirs: 'dl', p: 1, part: 'condenser' },
   { id: 'feed', t: 'Bơm cấp nước', x: 860, y: 880, dirs: 'dl', p: 2, part: 'feedpump' },
   { id: 'dump', t: 'Đường xả hơi về bình ngưng', x: 850, y: 736, dirs: 'dl', p: 3, part: 'steamdump' },
+  { id: 'bus', t: 'Thanh dẫn 24 kV', x: 1348, y: 540, dirs: 'udr', p: 2, part: 'busduct' },
   { id: 'tr', t: 'Máy biến áp tăng áp (24 kV → 500 kV)', x: 1440, y: 800, dirs: 'dr', p: 1, part: 'transformer' },
   { id: 'sw', t: 'Trạm phân phối', x: 1566, y: 840, dirs: 'dr', p: 3, part: 'switchyard' },
   { id: 'lines', t: 'Đường dây truyền tải', x: 1790, y: 600, dirs: 'ru', p: 1, part: 'lines', live: (s) => `${fmt0(s.pe)} MWe` },
