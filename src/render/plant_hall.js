@@ -46,22 +46,35 @@ ${clere}${wins}
 </g>`;
 }
 
-function bladeRows(x0, x1, axisY, n, minLen, maxLen, flip = false, id) {
-  const rows = [];
-  for (let i = 0; i < n; i++) {
-    const x = x0 + ((x1 - x0) * i) / (n - 1);
-    const t = flip ? 1 - i / (n - 1) : i / (n - 1);
-    const len = minLen + (maxLen - minLen) * t;
-    rows.push(`<rect x="${(x - 1.3).toFixed(1)}" y="${(axisY - 14 - len).toFixed(1)}" width="2.6" height="${len.toFixed(1)}" fill="#3F4D63"/><rect x="${(x - 1.3).toFixed(1)}" y="${(axisY + 14).toFixed(1)}" width="2.6" height="${len.toFixed(1)}" fill="#3F4D63"/>`);
-    // cánh tĩnh xen kẽ
-    const xs = x + (x1 - x0) / (n - 1) / 2;
-    if (i < n - 1) {
-      const t2 = flip ? 1 - (i + 0.5) / (n - 1) : (i + 0.5) / (n - 1);
-      const l2 = minLen + (maxLen - minLen) * t2;
-      rows.push(`<rect x="${(xs - 1).toFixed(1)}" y="${(axisY - 14 - l2 - 4).toFixed(1)}" width="2" height="${(l2 * 0.85).toFixed(1)}" fill="#8896AB"/><rect x="${(xs - 1).toFixed(1)}" y="${(axisY + 14 + l2 * 0.15 + 4).toFixed(1)}" width="2" height="${(l2 * 0.85).toFixed(1)}" fill="#8896AB"/>`);
-    }
+const AXIS = 640;
+const lerp = (a, b, t) => a + (b - a) * t;
+/** Các tầng cánh động (cùng trục). x: vị trí tầng, len: chiều dài cánh, N: số cánh, a/b: nửa dây cung theo trục / theo phương tiếp tuyến. */
+function mkStages(xs, l0, l1, N, a, b) { return xs.map((x, i) => ({ x, len: lerp(l0, l1, xs.length > 1 ? i / (xs.length - 1) : 0), N, a, b })); }
+const HP_X = [818, 834, 850, 866, 882];
+const LP_L = [1010, 1000.6, 991.2, 981.8, 972.4, 963], LP_R = [1030, 1039.4, 1048.8, 1058.2, 1067.6, 1077];
+export const ROTOR = {
+  AX: AXIS, R: 14,
+  stages: [
+    ...mkStages(HP_X, 6, 14.5, 14, 2.1, 3.6),            // HP: hơi vào trái, giãn nở → cánh dài dần sang phải
+    ...mkStages(LP_L, 9, 23.5, 16, 2.5, 4.4),            // LP kép: hơi vào giữa, ra hai đầu
+    ...mkStages(LP_R, 9, 23.5, 16, 2.5, 4.4),
+  ],
+  gen: { x: 1176, w: 108, R: 18 },
+};
+/** Hình cánh kiểu airfoil trong toạ độ địa phương: x∈[-1,1] (dây cung), y∈[0,1] (gốc → đỉnh). */
+const BLADE = 'M-1,0 C-1.15,.45 -.95,.8 -.7,1 L.75,1 C1.05,.7 1.2,.35 1,0 Z';
+const slots = (N) => (N >> 1) + 2;
+function bladePool(cls, from = 0, to = ROTOR.stages.length) {
+  return ROTOR.stages.slice(from, to).map((st) => Array.from({ length: slots(st.N) }, () => `<path class="${cls}" d="${BLADE}" transform="scale(0)" vector-effect="non-scaling-stroke"/>`).join('')).join('');
+}
+/** Cánh tĩnh gắn vỏ (đứng yên) nằm giữa các tầng động – để thấy rõ phần quay. */
+function stators(xs, l0, l1, R) {
+  const out = [];
+  for (let i = 0; i < xs.length - 1; i++) {
+    const x = (xs[i] + xs[i + 1]) / 2, l = lerp(l0, l1, (i + 0.5) / (xs.length - 1)) + 3;
+    out.push(`<rect x="${(x - 0.9).toFixed(1)}" y="${(AXIS - R - l - 1).toFixed(1)}" width="1.8" height="${(l * 0.8).toFixed(1)}" fill="#8896AB"/><rect x="${(x - 0.9).toFixed(1)}" y="${(AXIS + R + 1 + l * 0.2).toFixed(1)}" width="1.8" height="${(l * 0.8).toFixed(1)}" fill="#8896AB"/>`);
   }
-  return rows.join('');
+  return out.join('');
 }
 
 function casing(id, x, y, w, h, part) {
@@ -71,12 +84,13 @@ function casing(id, x, y, w, h, part) {
 
 export function hallEquip() {
   const AX = 640;
-  const hpRotor = `<rect x="806" y="${AX - 14}" width="88" height="28" fill="url(#gCylV)" ${S}/>`;
-  const lpRotor = `<rect x="955" y="${AX - 14}" width="130" height="28" fill="url(#gCylV)" ${S}/>`;
-  const genRotor = `<rect x="1176" y="${AX - 18}" width="108" height="36" fill="url(#gCylV)" ${S}/>`;
-  const stripes = (id, x, w, h) => `<g clip-path="url(#clip${id})"><g id="str${id}"><rect x="${x - 30}" y="${AX - h / 2}" width="${w + 60}" height="${h}" fill="url(#pStripe)"/></g></g>`;
-  const clips = `<defs><clipPath id="clipHP"><rect x="806" y="${AX - 14}" width="88" height="28"/></clipPath><clipPath id="clipLP"><rect x="955" y="${AX - 14}" width="130" height="28"/></clipPath><clipPath id="clipGen"><rect x="1176" y="${AX - 18}" width="108" height="36"/></clipPath></defs>`;
-  const lpBlades = bladeRows(960, 1012, AX, 6, 8, 26, false) + bladeRows(1028, 1080, AX, 6, 8, 26, true);
+  const drum = (x, w, R) => `<rect x="${x}" y="${AX - R}" width="${w}" height="${2 * R}" fill="url(#gCylV)" ${S}/><rect x="${x}" y="${AX - R}" width="${w}" height="${2 * R}" fill="url(#gCylShade)"/>`;
+  const clips = `<defs>${'<linearGradient id="gCylShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2B48" stop-opacity=".55"/><stop offset=".22" stop-color="#1B2B48" stop-opacity=".08"/><stop offset=".4" stop-color="#fff" stop-opacity=".42"/><stop offset=".55" stop-color="#fff" stop-opacity=".1"/><stop offset=".85" stop-color="#1B2B48" stop-opacity=".2"/><stop offset="1" stop-color="#1B2B48" stop-opacity=".6"/></linearGradient>'}</defs>`;
+  const bladeCss = 'stroke="#1B2B48" stroke-opacity=".45" stroke-width=".6"';
+  const G = ROTOR.gen;
+  const genRotor = `<g id="genRotor"><rect id="genTop" x="${G.x}" y="${AX - G.R}" width="${G.w}" height="${G.R}" fill="#D2463F"/><rect id="genBot" x="${G.x}" y="${AX}" width="${G.w}" height="${G.R}" fill="#2F67B8"/>
+<rect x="${G.x}" y="${AX - G.R}" width="${G.w}" height="${2 * G.R}" fill="url(#gCylShade)"/><rect x="${G.x}" y="${AX - G.R}" width="${G.w}" height="${2 * G.R}" fill="none" ${S}/>
+<g font-family="Be Vietnam Pro,sans-serif" font-weight="800" font-size="12" text-anchor="middle" fill="#fff" stroke="#1B2B48" stroke-opacity=".55" stroke-width=".6" paint-order="stroke"><text id="genTxtTop" x="${G.x + G.w / 2}" y="${AX - 5}">N</text><text id="genTxtBot" x="${G.x + G.w / 2}" y="${AX + 13}">S</text></g></g>`;
   const windings = (x, dir) => `<path d="M${x},604 q${dir * 18},18 0,36 M${x + dir * 6},604 q${dir * 18},18 0,36 M${x},640 q${dir * 18},18 0,36 M${x + dir * 6},640 q${dir * 18},18 0,36" fill="none" stroke="#E08A2B" stroke-width="3" stroke-linecap="round"/>`;
   return `${clips}
 <g id="hallEquip">
@@ -84,12 +98,16 @@ export function hallEquip() {
 <ellipse cx="1020" cy="694" rx="260" ry="5" fill="url(#gAO)"/>
 <g id="msr"><rect x="905" y="546" width="96" height="24" rx="12" fill="url(#gCylV)" ${S}/><path d="M914,558 H992" stroke="#5D6D86" stroke-width="1" stroke-dasharray="3 3"/></g>
 ${casing('hp', 796, 600, 108, 80)}
-${hpRotor}${stripes('HP', 806, 88, 28)}
-${bladeRows(816, 886, AX, 8, 6, 15, false)}
+${stators(HP_X, 6, 14.5, 14)}
+<g id="bladesBackHP" fill="#3F4D63">${bladePool('bb', 0, HP_X.length)}</g>
+${drum(806, 88, 14)}
 <rect id="blurHP" x="810" y="606" width="80" height="68" fill="#C7D3E3" opacity="0"/>
 <rect x="796" y="600" width="12" height="80" fill="url(#gCylHd)" ${S}/><rect x="892" y="600" width="12" height="80" fill="url(#gCylHd)" ${S}/>
 ${casing('lp', 945, 590, 150, 100)}
-${lpRotor}${stripes('LP', 955, 130, 28)}${lpBlades}
+${stators(LP_L, 9, 23.5, 14)}${stators(LP_R, 9, 23.5, 14)}
+<g id="bladesBackLP" fill="#3F4D63">${bladePool('bb', HP_X.length)}</g>
+${drum(955, 130, 14)}
+<g id="bladesFront" ${bladeCss}>${bladePool('bf')}</g>
 <rect id="blurLP" x="958" y="596" width="124" height="88" fill="#C7D3E3" opacity="0"/>
 <rect x="945" y="590" width="12" height="100" fill="url(#gCylHd)" ${S}/><rect x="1083" y="590" width="12" height="100" fill="url(#gCylHd)" ${S}/>
 <path d="M948,690 L1092,690 L1082,712 L958,712 Z" fill="url(#gCylV)" ${S}/>
@@ -105,8 +123,7 @@ ${PIPES.filter((p) => p.id === 'cross').map(pipeSvg).join('')}
 <g id="statorL" fill="#9AA6B8" ${S}><rect x="1178" y="604" width="104" height="13"/><rect x="1178" y="663" width="104" height="13"/></g>
 <path d="M1184,604 V617 M1192,604 V617 M1200,604 V617 M1208,604 V617 M1216,604 V617 M1224,604 V617 M1232,604 V617 M1240,604 V617 M1248,604 V617 M1256,604 V617 M1264,604 V617 M1272,604 V617 M1184,663 V676 M1192,663 V676 M1200,663 V676 M1208,663 V676 M1216,663 V676 M1224,663 V676 M1232,663 V676 M1240,663 V676 M1248,663 V676 M1256,663 V676 M1264,663 V676 M1272,663 V676" stroke="#46556C" stroke-width=".8" opacity=".7"/>
 ${windings(1176, -1)}${windings(1284, 1)}
-${genRotor}${stripes('Gen', 1176, 108, 36)}
-<g font-family="Be Vietnam Pro,sans-serif" font-weight="700" font-size="11" text-anchor="middle"><text x="1200" y="${AX + 4}" fill="#C62828" opacity=".85">N</text><text x="1260" y="${AX + 4}" fill="#1D4E9E" opacity=".85">S</text></g>
+${genRotor}
 <rect x="1310" y="608" width="34" height="64" rx="6" fill="url(#gGreenH)" ${S}/>
 <rect x="1318" y="620" width="18" height="40" fill="#EEF2F7" ${S}/>
 <rect x="1280" y="578" width="12" height="14" fill="#C9CED6" ${S}/>

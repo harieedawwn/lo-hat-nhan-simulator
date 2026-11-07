@@ -20,8 +20,12 @@ export const LABELS = [
   { id: 'cond', t: 'Bình ngưng (ranh giới vòng 2 | vòng 3)', x: 1020, y: 790, dirs: 'dl', p: 1, part: 'condenser' },
   { id: 'feed', t: 'Bơm cấp nước', x: 860, y: 880, dirs: 'dl', p: 2, part: 'feedpump' },
   { id: 'dump', t: 'Đường xả hơi về bình ngưng', x: 850, y: 736, dirs: 'dl', p: 3, part: 'steamdump' },
+  { id: 'bus', t: 'Thanh dẫn 24 kV', x: 1348, y: 540, dirs: 'udr', p: 2, part: 'busduct' },
+  { id: 'tagIn', t: 'VÀO 24 kV · dòng lớn', x: 1404, y: 766, dirs: 'ldu', p: 3, part: 'transformer', sm: 1 },
+  { id: 'tagOut', t: 'RA 500 kV · dòng nhỏ', x: 1446, y: 668, dirs: 'lu', p: 3, part: 'transformer', sm: 1 },
+  { id: 'brk', t: 'Máy cắt điện', x: 1573, y: 708, dirs: 'dr', p: 2, part: 'switchyard' },
   { id: 'tr', t: 'Máy biến áp tăng áp (24 kV → 500 kV)', x: 1440, y: 800, dirs: 'dr', p: 1, part: 'transformer' },
-  { id: 'sw', t: 'Trạm phân phối', x: 1566, y: 840, dirs: 'dr', p: 3, part: 'switchyard' },
+  { id: 'sw', t: 'Trạm phân phối', x: 1612, y: 800, dirs: 'rd', p: 3, part: 'switchyard' },
   { id: 'lines', t: 'Đường dây truyền tải', x: 1790, y: 600, dirs: 'ru', p: 1, part: 'lines', live: (s) => `${fmt0(s.pe)} MWe` },
   { id: 'tower', t: 'Tháp làm mát', x: 1870, y: 660, dirs: 'lu', p: 1, part: 'tower' },
   { id: 'plume', t: 'Hơi nước bốc lên – không phóng xạ', x: 1990, y: 330, dirs: 'ru', p: 1, part: 'plume' },
@@ -45,11 +49,12 @@ export class Labels {
     this.svg = svg; this.onPick = onPick; this.visible = true; this.items = [];
     this.cv = document.createElement('canvas').getContext('2d');
     this.font = '600 12.5px "Be Vietnam Pro",system-ui,sans-serif';
-    this.cv.font = this.font;
+    this.fontSm = '700 10.5px "Be Vietnam Pro",system-ui,sans-serif';
     for (const L of LABELS) {
-      const g = document.createElementNS(NS, 'g'); g.setAttribute('class', 'lbl'); g.dataset.part = L.part;
+      const g = document.createElementNS(NS, 'g'); g.setAttribute('class', L.sm ? 'lbl sm' : 'lbl'); g.dataset.part = L.part;
       g.innerHTML = '<path class="lead"/><circle class="dot" r="3.2"/><rect class="bg" rx="6"/><text class="t"></text><text class="live"></text>';
       svg.appendChild(g);
+      this.cv.font = L.sm ? this.fontSm : this.font;
       const w = this.cv.measureText(L.t).width;
       this.items.push({ L, g, w, lead: g.children[0], dot: g.children[1], bg: g.children[2], tx: g.children[3], live: g.children[4], on: false, txt: '' });
       g.children[3].textContent = L.t;
@@ -60,7 +65,7 @@ export class Labels {
     });
     svg.addEventListener('click', (e) => { const g = e.target.closest('.lbl'); if (g) onPick(g.dataset.part); });
   }
-  remeasure() { this.cv.font = this.font; for (const it of this.items) it.w = this.cv.measureText(it.L.t).width; }
+  remeasure() { for (const it of this.items) { this.cv.font = it.L.sm ? this.fontSm : this.font; it.w = this.cv.measureText(it.L.t).width; } }
   setVisible(v) { this.visible = v; this.svg.classList.toggle('off', !v); }
   /** cam: {x,y,s}; cw,ch: kích thước; hide: tập các nhãn bị ẩn (độ ưu tiên) */
   layout(cam, cw, ch, obst) {
@@ -83,7 +88,7 @@ export class Labels {
       if (ax < 4 || ax > cw - 4 || ay < 4 || ay > ch - 4) ok = false;
       let best = null;
       const twoLine = !!L.live;
-      const bw = it.w + 18, bh = twoLine ? H + 15 : H;
+      const sm = !!L.sm, bw = it.w + (sm ? 12 : 18), bh = sm ? 17 : twoLine ? H + 15 : H;
       if (ok) {
         const D = 26 + (cam.s < 0.6 ? 10 : 0);
         for (const d of L.dirs) {
@@ -107,7 +112,7 @@ export class Labels {
       it.lead.setAttribute('d', `M${ax.toFixed(1)},${ay.toFixed(1)} L${cx.toFixed(1)},${cy.toFixed(1)}`);
       it.dot.setAttribute('cx', ax.toFixed(1)); it.dot.setAttribute('cy', ay.toFixed(1));
       it.bg.setAttribute('x', best.rx.toFixed(1)); it.bg.setAttribute('y', best.ry.toFixed(1)); it.bg.setAttribute('width', bw); it.bg.setAttribute('height', bh);
-      it.tx.setAttribute('x', (best.rx + 9).toFixed(1)); it.tx.setAttribute('y', (best.ry + 15).toFixed(1));
+      it.tx.setAttribute('x', (best.rx + (sm ? 6 : 9)).toFixed(1)); it.tx.setAttribute('y', (best.ry + (sm ? 12 : 15)).toFixed(1));
       it.live.setAttribute('x', (best.rx + 9).toFixed(1)); it.live.setAttribute('y', (best.ry + 29).toFixed(1));
       it.live.style.display = twoLine ? '' : 'none';
     }

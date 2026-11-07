@@ -4,9 +4,11 @@
 @font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:600;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:700;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-vietnamese-700-normal.woff2) format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
 @font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:700;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:800;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-vietnamese-800-normal.woff2) format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Be Vietnam Pro";font-style:normal;font-weight:800;font-display:swap;src:url(./assets/fonts/be-vietnam-pro-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 :root{
-  --ink:#14213D; --ink2:#3E4F6C; --ink3:#66758F; --bg:#F4F2EC; --card:#FFFFFF; --line:#DCE2EA; --line2:#C6CEDA;
+  --brand-red:#D32F2F; --ink:#14213D; --ink2:#3E4F6C; --ink3:#66758F; --bg:#F4F2EC; --card:#FFFFFF; --line:#DCE2EA; --line2:#C6CEDA;
   --ok:#2E8B57; --warn:#C98A12; --bad:#C62828; --scram:#8E1B1B; --accent:#1D5FA8; --gold:#C99A3E;
   --l1:#A3162E; --l1c:#E5645B; --l2:#8FA0B5; --l2w:#2F76C4; --l3:#12919A; --l3w:#58C0A0;
   --r:14px; --sheet-h:236px; --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px); --safe-l:env(safe-area-inset-left,0px); --safe-r:env(safe-area-inset-right,0px);
@@ -33,6 +35,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 #lab .lead{stroke:#14213D;stroke-width:1.2;fill:none;stroke-opacity:.7}
 #lab .dot{fill:#14213D;stroke:#fff;stroke-width:1.3}
 #lab.off .lbl{display:none!important}
+#lab .sm .t{font:700 10.5px "Be Vietnam Pro",system-ui,sans-serif;fill:#8A2A12}#lab .sm .bg{fill:rgba(255,246,222,.96);stroke:#C99A3E;stroke-opacity:.8}#lab .sm .lead{stroke-dasharray:2 2}
 #lab .bdg circle{stroke:#fff;stroke-width:2.2}
 #lab .bdg text{font:700 14px "Be Vietnam Pro",sans-serif;fill:#fff;text-anchor:middle}
 #lab .bdg.l1 circle{fill:#A3162E}#lab .bdg.l2 circle{fill:#5C6F8A}#lab .bdg.l3 circle{fill:#12919A}
@@ -58,11 +61,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 #boot.gone{display:none}
 [hidden]{display:none!important}
 #app{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto minmax(0,1fr);height:100vh;height:100dvh;width:100%;overflow:hidden;position:relative}
-#top{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:8px 14px 8px calc(14px + var(--safe-l));padding-top:calc(8px + var(--safe-t));background:linear-gradient(#FFFEFB,#F6F4EE);border-bottom:1px solid var(--line);z-index:6;flex-wrap:nowrap}
-.brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:38px;height:38px;flex:none}
-.titles h1{margin:0;font-size:17px;line-height:1.2;font-weight:700;letter-spacing:-.005em}.titles .sub{margin:1px 0 0;font-size:12.5px;color:var(--ink2)}
-.school{margin:0;margin-left:auto;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;white-space:nowrap}
-#toolbar{display:flex;gap:4px;align-items:center}
+#top{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(max-content,1fr);grid-template-areas:"brand title school" "brand title tools";align-items:center;gap:0 18px;padding:6px 14px 6px calc(14px + var(--safe-l));padding-top:calc(6px + var(--safe-t));background:linear-gradient(#FFFEFB,#F6F4EE);border-bottom:1px solid var(--line);box-shadow:inset 0 3px 0 var(--brand-red);z-index:6}
+.brand{grid-area:brand;display:flex;align-items:center;gap:10px;min-width:0}.logo{width:38px;height:38px;flex:none}
+.brand .sub{margin:0;font-size:12px;line-height:1.3;color:var(--ink2);font-weight:600;min-width:0}.brand .sub span{display:block;font-weight:400;color:var(--ink3)}
+/* tên thí nghiệm: chữ đỏ in hoa trong khung trắng, đặt giữa */
+.apptitle{grid-area:title;justify-self:center;margin:0;font-size:21px;line-height:1.15;font-weight:800;letter-spacing:.045em;text-transform:uppercase;text-align:center;color:var(--brand-red);background:#fff;border:1px solid rgba(211,47,47,.18);border-radius:12px;padding:7px 22px 8px;box-shadow:0 4px 14px rgba(20,33,61,.12),0 1px 0 #fff inset;text-shadow:0 1px 0 rgba(255,255,255,.9),0 2px 8px rgba(211,47,47,.16);white-space:nowrap}
+/* tên trường: chữ đỏ in hoa, góc trên bên phải */
+.school{grid-area:school;justify-self:end;align-self:end;margin:0;font-size:12.5px;line-height:1.2;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-red);padding:2px 6px 0;white-space:nowrap;text-shadow:0 1px 4px rgba(211,47,47,.18)}
+#toolbar{grid-area:tools;justify-self:end;display:flex;gap:4px;align-items:center}
 .tb{display:inline-flex;align-items:center;gap:6px;min-width:44px;min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:12px;background:transparent;font-size:12.5px;font-weight:600;color:var(--ink);transition:background .15s,border-color .15s,transform .1s}
 .tb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .tb:hover{background:#fff;border-color:var(--line2)}.tb:active{transform:scale(.96)}
@@ -172,8 +178,8 @@ details.card>summary h2{margin:0}details.card>summary::after{content:"+";font-si
 /* ============ màn hình khởi động ============ */
 #start{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:max(16px,var(--safe-t)) 16px max(16px,var(--safe-b));background:radial-gradient(1200px 600px at 20% -10%,#E3EEF8,transparent),linear-gradient(#F7F5EF,#ECE9E0)}
 .st-in{width:100%;max-width:560px;margin:auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
-.st-logo{width:52px;height:52px}#start h2{margin:6px 0 0;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
-.st-sub{margin:0;color:var(--ink2);font-size:15px}.st-school{margin:4px 0 6px;font-weight:700;font-size:14.5px;background:#fff;border:1px solid var(--line2);border-radius:999px;padding:6px 14px}
+.st-logo{width:52px;height:52px}#start h2{margin:8px 0 2px;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--brand-red);background:#fff;border:1px solid rgba(211,47,47,.22);border-radius:12px;padding:8px 18px;box-shadow:0 4px 14px rgba(20,33,61,.12);text-shadow:0 2px 8px rgba(211,47,47,.15)}
+.st-sub{margin:0;color:var(--ink2);font-size:15px}.st-school{margin:4px 0 6px;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--brand-red);text-shadow:0 1px 4px rgba(211,47,47,.18)}
 .st-prev{width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--line2);background:linear-gradient(#DCE8F2,#E9E2D2);aspect-ratio:900/380;box-shadow:0 10px 30px rgba(20,33,61,.12)}.st-prev img{display:block;width:100%;height:100%;object-fit:cover}
 .st-sound{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:14px;font-weight:600}
 .st-sound button{min-height:44px;min-width:64px;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:#fff;font-weight:600}.st-sound button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -214,7 +220,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
 .tc-btn{display:flex;justify-content:flex-end;gap:8px}.tc-btn button{min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line2);background:#fff;font-weight:700}.tc-btn .next{background:var(--ink);color:#fff;border-color:var(--ink)}
 
 /* ============ phản ứng theo kích thước ============ */
-@media (max-width:1100px) and (min-width:761px) and (orientation:landscape){#app{grid-template-columns:minmax(0,1fr) 336px}.school{display:none}.tb span{display:none}.tb{padding:0 8px}}
+@media (max-width:1100px) and (min-width:761px) and (orientation:landscape){#app{grid-template-columns:minmax(0,1fr) 336px}#top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"brand title tools" "brand school tools";gap:0 12px}.brand .sub{display:none}.apptitle{font-size:16px;padding:5px 14px}.school{justify-self:center;font-size:11px;padding:3px 0 0}.tb span{display:none}.tb{padding:0 8px}}
 @media (max-width:1700px) and (min-width:1101px){.tb span{display:none}}
 .tb span{white-space:nowrap}.gcap{margin:0;text-align:center;font-size:11.5px;color:var(--ink3)}
 /* máy tính bảng dọc */
@@ -224,15 +230,16 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
   .pscroll{display:grid;grid-template-columns:1fr 1fr;align-content:start}
   .pscroll>.card,.pscroll>details{min-width:0}#statusCard,#trendCard,#calcCard,#assumeCard,.credit{grid-column:1/-1}
   .tb span{display:none}
-  #top{flex-wrap:wrap;gap:4px 10px}.school{order:3;width:100%;margin:0;text-align:center;border:0;background:transparent}#toolbar{margin-left:auto;flex-wrap:wrap}
+  #top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"brand title tools" "brand school tools";gap:0 10px}.brand .sub{display:none}.apptitle{font-size:16px;padding:5px 12px;white-space:normal}.school{justify-self:center;font-size:11px;padding:3px 0 0;white-space:normal;text-align:center}#toolbar{flex-wrap:wrap;justify-content:flex-end}
 }
 /* điện thoại dọc */
 @media (max-width:760px) and (orientation:portrait){
   :root{--sheet-h:292px;--lens:128px}
   #app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
-  #top{flex-wrap:wrap;gap:2px 8px;padding:6px 10px}.logo{width:30px;height:30px}.titles h1{font-size:14.5px}.titles .sub{font-size:11.5px}
-  .school{order:3;margin:0;width:100%;text-align:center;font-size:12px;padding:3px 10px;border:0;background:transparent;color:var(--ink2);font-weight:700}
-  #toolbar{order:2;margin-left:auto}.tb span{display:none}.tb{padding:0;justify-content:center;min-width:44px}#tbSpeed span{display:inline}
+  #top{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"brand title" "school school" "tools tools";gap:2px 8px;padding:6px 10px}.logo{width:30px;height:30px}.brand .sub{display:none}
+  .apptitle{justify-self:stretch;font-size:15px;letter-spacing:.03em;padding:6px 10px;white-space:normal}
+  .school{justify-self:center;font-size:11px;padding:3px 0 0;white-space:normal;text-align:center}
+  #toolbar{justify-self:center}.tb span{display:none}.tb{padding:0;justify-content:center;min-width:44px}#tbSpeed span{display:inline}
   .hide-phone{display:none!important}.show-phone{display:inline-flex}
   #stageWrap{grid-column:1;grid-row:2}
   #panel{position:fixed;left:0;right:0;bottom:0;top:auto;height:calc(100vh - var(--hdr,110px) - 8px);height:calc(100dvh - var(--hdr,110px) - 8px);grid-column:auto;grid-row:auto;border-left:0;border-radius:20px 20px 0 0;border-top:1px solid var(--line2);box-shadow:0 -10px 30px rgba(20,33,61,.18);transform:translateY(var(--sheetY,calc(100% - var(--sheet-h))));transition:transform .28s cubic-bezier(.2,.8,.2,1);will-change:transform;z-index:20;padding-bottom:0}
@@ -253,7 +260,7 @@ kbd{display:inline-block;padding:1px 7px;border:1px solid var(--line2);border-bo
 /* điện thoại ngang */
 @media (max-height:520px) and (orientation:landscape){
   #app{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);--lens:150px}
-  #top{padding:2px 10px;gap:8px}.logo{width:26px;height:26px}.titles h1{font-size:13px}.titles .sub{display:none}.school{font-size:11px;padding:2px 8px}.tb{min-height:44px;padding:0 8px}.tb span{display:none}
+  #top{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"brand title tools" "brand school tools";padding:2px 10px;gap:0 8px}.logo{width:26px;height:26px}.brand .sub{display:none}.apptitle{font-size:13px;padding:3px 10px;border-radius:9px}.school{justify-self:center;font-size:10px;padding:1px 0 0}.tb{min-height:44px;padding:0 8px}.tb span{display:none}
   #stageWrap{grid-column:1;grid-row:2}
   #panel{position:fixed;right:0;top:var(--hdr,52px);bottom:0;width:min(340px,48vw);grid-column:auto;grid-row:auto;z-index:20;transform:translateX(var(--drawX,0));transition:transform .25s;border-left:1px solid var(--line2);box-shadow:-8px 0 24px rgba(20,33,61,.15);padding-right:var(--safe-r)}
   #panel.closed{--drawX:100%}
