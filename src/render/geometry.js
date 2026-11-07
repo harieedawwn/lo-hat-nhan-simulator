@@ -67,34 +67,81 @@ export const FLOWS = [
 ];
 
 /** Dây dẫn truyền tải (xung năng lượng). */
-export const TOWER_A = 1730, TOWER_C = 2398;
+export const TOWER_A = 1768, TOWER_C = 2398;
 /** Các cột điện: 2 cột trong khung + các cột ra ngoài biên thế giới để không bao giờ thấy đầu dây. */
 export const TOWERS = [TOWER_A, TOWER_C, 3066, 3734, 4402];
 export const LINE_END = 5200;
 export const ARM_Y = [575, 615, 655];
-/** 3 sứ cao áp của MBA (3 pha) và 3 chuỗi sứ của trạm phân phối. */
-export const HV_BUSH = [1441, 1459, 1477], BUSH_Y = 736;
-export const SW_INS = [1566, 1590, 1614], INS_Y = 712;
 export function span(x0, y0, x1, y1, sag) {
   return `M${x0},${y0} Q${(x0 + x1) / 2},${(y0 + y1) / 2 + sag * 2} ${x1},${y1}`;
 }
 const q = (x0, y0, x1, y1, sag) => `Q${(x0 + x1) / 2},${(y0 + y1) / 2 + sag * 2} ${x1},${y1}`;
-/** Đoạn 500 kV: sứ MBA → chuỗi sứ trạm phân phối. */
-export const yardPhase = (i) => span(HV_BUSH[i], BUSH_Y, SW_INS[i], INS_Y, 3);
-/** Đoạn trạm phân phối → các cột → ra ngoài biên (M = nhảy qua xà cột). */
-export function linePhase(i) {
-  const y = ARM_Y[i] + 14;
-  let d = span(SW_INS[i], INS_Y, TOWER_A - 58, y, 6);
-  for (let k = 0; k < TOWERS.length; k++) {
-    const x1 = k + 1 < TOWERS.length ? TOWERS[k + 1] - 58 : LINE_END;
-    d += ` M${TOWERS[k] + 58},${y} ${q(TOWERS[k] + 58, y, x1, y, k + 1 < TOWERS.length ? 40 : 30)}`;
+
+/* ---- Khu MBA → máy cắt → giàn → TOWER_A ----
+ * 3 pha xếp theo CHIỀU SÂU: pha k (0 = trước) lệch DEPTH·k. Mọi thiết bị và dây của pha k
+ * là bản tịnh tiến của pha 0; đoạn đi lên dốc ≤ 0,6 nên các bản tịnh tiến không giao nhau.
+ * Tại TOWER_A pha sau cùng lên xà trên cùng → dây xoè ra, không bắt chéo. */
+export const DEPTH = [7, -9];
+export const PHASE_ALPHA = [1, 0.62, 0.38];
+export const GANTRY = { xl: 1536, xr: 1636, y: 640, end: 1662 };
+/** Toạ độ pha trước (k = 0). */
+export const YARD = {
+  lv: [1410, 760],            // sứ hạ áp MBA – cửa VÀO 24 kV
+  bush: [1446, 664],          // đầu sứ cao áp MBA – cửa RA 500 kV
+  bushBase: 784,
+  brkIn: [1560, 660], brkOut: [1586, 660],   // 2 sứ của máy cắt (vào / ra)
+  chainA: [1658, 636], tip: [1666, 636],      // chuỗi sứ néo trên đầu xà giàn → điểm néo dây
+};
+export const off = (p, k) => [p[0] + DEPTH[0] * k, p[1] + DEPTH[1] * k];
+/** Pha k lên xà nào của cột: pha sau cùng lên xà trên cùng. */
+export const armOf = (k) => 2 - k;
+
+// các đoạn Bezier bậc 3 [p0, c1, c2, p1] của pha trước
+const C = (p0, c1, c2, p1) => [p0, c1, c2, p1];
+const IN_SEGS = [   // sứ cao áp MBA → vượt qua đỉnh cột giàn trái → sứ vào máy cắt
+  C([1446, 664], [1478, 650], [1510, 626], [1542, 621]),
+  C([1542, 621], [1554, 619], [1560, 636], [1560, 660]),
+];
+const OUT_SEGS = [  // sứ ra máy cắt → lèo vượt lên xà giàn → điểm néo
+  C([1586, 660], [1614, 653], [1636, 631], [1654, 626]),
+  C([1654, 626], [1662, 624], [1666, 629], [1666, 636]),
+];
+const shift = (segs, k) => segs.map((sg) => sg.map((p) => off(p, k)));
+const segD = (segs) => `M${segs[0][0]} ${segs.map((sg) => `C${sg[1]} ${sg[2]} ${sg[3]}`).join(' ')}`;
+export const bez = (sg, t) => {
+  const u = 1 - t, a = u * u * u, b = 3 * u * u * t, c = 3 * u * t * t, d = t * t * t;
+  const dx = 3 * u * u * (sg[1][0] - sg[0][0]) + 6 * u * t * (sg[2][0] - sg[1][0]) + 3 * t * t * (sg[3][0] - sg[2][0]);
+  const dy = 3 * u * u * (sg[1][1] - sg[0][1]) + 6 * u * t * (sg[2][1] - sg[1][1]) + 3 * t * t * (sg[3][1] - sg[2][1]);
+  return { x: a * sg[0][0] + b * sg[1][0] + c * sg[2][0] + d * sg[3][0], y: a * sg[0][1] + b * sg[1][1] + c * sg[2][1] + d * sg[3][1], a: Math.atan2(dy, dx) };
+};
+/** Đoạn dây néo trên giàn → mũi xà TOWER_A (pha k). */
+export const toTowerSeg = (k) => {
+  const p0 = off(YARD.tip, k), p1 = [TOWER_A - 58, ARM_Y[armOf(k)] + 14];
+  const m = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 + 3];
+  return C(p0, [(p0[0] + 2 * m[0]) / 3, (p0[1] + 2 * m[1]) / 3], [(p1[0] + 2 * m[0]) / 3, (p1[1] + 2 * m[1]) / 3], p1);
+};
+export const inSegs = (k) => shift(IN_SEGS, k);
+export const outSegs = (k) => shift(OUT_SEGS, k);
+/** Dây lèo MBA → máy cắt (pha k). */
+export const yardIn = (k) => segD(inSegs(k));
+/** Dây lèo máy cắt → điểm néo trên giàn (pha k). */
+export const yardOut = (k) => segD(outSegs(k));
+/** Điểm néo trên giàn → TOWER_A → các cột → ra ngoài biên (M = nhảy qua xà cột). */
+export function linePhase(k) {
+  const y = ARM_Y[armOf(k)] + 14;
+  let d = segD([toTowerSeg(k)]);
+  for (let j = 0; j < TOWERS.length; j++) {
+    const x1 = j + 1 < TOWERS.length ? TOWERS[j + 1] - 58 : LINE_END;
+    d += ` M${TOWERS[j] + 58},${y} ${q(TOWERS[j] + 58, y, x1, y, j + 1 < TOWERS.length ? 40 : 30)}`;
   }
   return d;
 }
+/** Đường hạt của pha k: sứ MBA → máy cắt (nhảy qua thân, M) → giàn → các cột. */
+export const phasePath = (k) => `${yardIn(k)} M${off(YARD.brkOut, k)} ${yardOut(k).replace(/^M[^C]*/, '')} ${linePhase(k).replace(/^M[^C]*/, '')}`;
 export const ELEC = [
-  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, speed: 130 },
+  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, speed: 130, alpha: 1 },
   // phía 500 kV: dòng nhỏ hơn nhiều (P = UI) → hạt thưa và chậm hơn
-  ...ARM_Y.map((_, i) => ({ id: 'ph' + i, d: `${yardPhase(i)} ${linePhase(i).replace(/^M[^Q]*/, '')}`, gap: 34, speed: 96 })),
+  ...[0, 1, 2].map((k) => ({ id: 'ph' + k, d: phasePath(k), gap: 34, speed: 96, alpha: PHASE_ALPHA[k] })),
 ];
 
 export const FOCUS = {

@@ -35,6 +35,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 #lab .lead{stroke:#14213D;stroke-width:1.2;fill:none;stroke-opacity:.7}
 #lab .dot{fill:#14213D;stroke:#fff;stroke-width:1.3}
 #lab.off .lbl{display:none!important}
+#lab .sm .t{font:700 10.5px "Be Vietnam Pro",system-ui,sans-serif;fill:#8A2A12}#lab .sm .bg{fill:rgba(255,246,222,.96);stroke:#C99A3E;stroke-opacity:.8}#lab .sm .lead{stroke-dasharray:2 2}
 #lab .bdg circle{stroke:#fff;stroke-width:2.2}
 #lab .bdg text{font:700 14px "Be Vietnam Pro",sans-serif;fill:#fff;text-anchor:middle}
 #lab .bdg.l1 circle{fill:#A3162E}#lab .bdg.l2 circle{fill:#5C6F8A}#lab .bdg.l3 circle{fill:#12919A}

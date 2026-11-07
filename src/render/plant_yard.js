@@ -1,4 +1,4 @@
-import { GROUND, PIPES, TOWERS, ARM_Y, HV_BUSH, BUSH_Y, yardPhase, linePhase } from './geometry.js';
+import { GROUND, PIPES, TOWERS, ARM_Y, DEPTH, PHASE_ALPHA, GANTRY, YARD, inSegs, toTowerSeg, bez, yardIn, yardOut, linePhase } from './geometry.js';
 import { pipeSvg } from './plant_reactor.js';
 
 const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
@@ -7,6 +7,59 @@ const half = (y) => Math.sqrt(112 * 112 + Math.pow(0.55 * (y - 650), 2));
 
 function insulator(x, y, n = 4, h = 10) {
   return Array.from({ length: n }, (_, i) => `<ellipse cx="${x}" cy="${y + i * (h / n * 2.2)}" rx="6" ry="2.6" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
+}
+
+const PH = [2, 1, 0]; // vẽ pha sau trước, pha trước sau cùng
+const tr = (k) => `transform="translate(${DEPTH[0] * k},${DEPTH[1] * k})" opacity="${PHASE_ALPHA[k]}"`;
+/** Nét dây theo lớp sâu: pha trước đậm, pha sau mảnh và nhạt. */
+export const wireStyle = (k) => `stroke="#2B3A55" stroke-width="${[1.9, 1.5, 1.2][k]}" stroke-opacity="${PHASE_ALPHA[k]}"`;
+
+/** 3 sứ cao áp (3 pha) trên nắp MBA = cửa RA 500 kV. */
+function hvBushings() {
+  // mỗi sứ đứng trên nắp MBA (chân kéo về nắp, đỉnh lệch theo chiều sâu)
+  return PH.map((k) => {
+    const [x, y] = YARD.bush, h = YARD.bushBase - y - 2 - DEPTH[1] * k;
+    const sheds = Array.from({ length: Math.floor((h - 4) / 8) }, (_, i) => `M${x - 6},${y + 8 + i * 8} H${x + 6}`).join(' ');
+    return `<g ${tr(k)}><rect x="${x - 4.5}" y="${y + 2}" width="9" height="${h}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="${sheds}" stroke="#B49A76" stroke-width="1.8"/><circle cx="${x}" cy="${y + 1}" r="2.6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/></g>`;
+  }).join('');
+}
+
+/** Máy cắt điện (một pha): sứ VÀO + sứ RA nối bằng bể máy cắt nằm ngang, đặt trên giá đỡ. */
+function breaker(k) {
+  const [xi, y] = YARD.brkIn, [xo] = YARD.brkOut, yb = y + 36, gy = GROUND - DEPTH[1] * k;
+  const bush = (x) => `<rect x="${x - 4}" y="${y + 2}" width="8" height="${yb - y - 2}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1"/><path d="${Array.from({ length: 5 }, (_, i) => `M${x - 5.5},${y + 8 + i * 6} H${x + 5.5}`).join(' ')}" stroke="#B49A76" stroke-width="1.6"/><circle cx="${x}" cy="${y}" r="2.4" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`;
+  return `<rect x="${xi - 4}" y="${yb + 14}" width="6" height="${gy - yb - 14}" fill="url(#gCylHd)" ${S}/><rect x="${xo - 2}" y="${yb + 14}" width="6" height="${gy - yb - 14}" fill="url(#gCylHd)" ${S}/>
+<path d="M${xi - 1},${yb + 30} L${xo + 1},${yb + 60} M${xo + 1},${yb + 30} L${xi - 1},${yb + 60}" stroke="#8C98AB" stroke-width="1.4"/>
+<rect x="${xi - 9}" y="${yb}" width="${xo - xi + 18}" height="15" rx="6" fill="url(#gCylV)" stroke="#1B2B48" stroke-opacity=".7" stroke-width="1.3"/>
+<rect x="${(xi + xo) / 2 - 6}" y="${yb + 15}" width="12" height="16" rx="2" fill="#6E9985" ${S}/>
+${bush(xi)}${bush(xo)}`;
+}
+
+/** Chuỗi sứ néo trên đầu xà giàn (một pha). */
+function strainChain() {
+  const [xa, y] = YARD.chainA, [xt] = YARD.tip;
+  const discs = [0, 1, 2].map((i) => `<ellipse cx="${xa + 1 + i * 3}" cy="${y}" rx="1.4" ry="3.4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".7"/>`).join('');
+  return `<path d="M${xa - 2},${GANTRY.y} V${y} H${xt}" stroke="#46556C" stroke-width="1.6" fill="none"/>${discs}`;
+}
+
+/** Mũi tên chiều năng lượng đặt trên dây. */
+function chevron(p) {
+  const deg = (p.a * 180 / Math.PI).toFixed(1);
+  return `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${deg})"><path d="M-4,-4.5 L1.5,0 L-4,4.5" fill="none" stroke="#1B2B48" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".55"/><path d="M-4,-4.5 L1.5,0 L-4,4.5" fill="none" stroke="#F4B83A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+}
+
+function switchyard() {
+  const { xl, xr, y, end } = GANTRY, [dx, dy] = DEPTH;
+  const top = `<path d="M${xl - 6},${y} H${end} l${2 * dx},${2 * dy} H${xl - 6 + 2 * dx} Z" fill="#C9CED6" fill-opacity=".55" stroke="#46556C" stroke-opacity=".35" stroke-width="1"/>`;
+  const frame = `<g stroke="#46556C" fill="none"><path d="M${xl},900 V${y} M${xr},900 V${y}" stroke-width="5"/><path d="M${xl},${y + 40} L${xl + 22},${y + 6} M${xr},${y + 40} L${xr - 22},${y + 6}" stroke-width="2"/></g>
+<rect x="${xl - 6}" y="${y}" width="${end - xl + 6}" height="7" fill="#46556C" stroke="#1B2B48" stroke-opacity=".5"/>`;
+  const wires = PH.map((k) => `<g fill="none" ${wireStyle(k)}><path d="${yardIn(k)}"/><path d="${yardOut(k)}"/></g>`).join('');
+  return `${top}${frame}
+<rect x="1546" y="884" width="58" height="16" fill="url(#gConcD)" ${S}/>
+${PH.map((k) => `<g ${tr(k)}>${breaker(k)}</g>`).join('')}
+${PH.map((k) => `<g ${tr(k)}>${strainChain()}</g>`).join('')}
+${wires}
+${chevron(bez(inSegs(0)[0], 0.45))}`;
 }
 
 export function transformerYard() {
@@ -21,19 +74,12 @@ ${rad}
 <path d="M1396,812 H1484 M1396,840 H1484 M1396,868 H1484" stroke="#1B2B48" stroke-opacity=".25"/>
 <rect x="1388" y="782" width="104" height="10" rx="4" fill="#6E9985" ${S}/>
 <rect x="1402" y="756" width="16" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1402,764 H1418 M1402,772 H1418" stroke="#8D9AAE"/>
-${HV_BUSH.map((x) => `<rect x="${x - 5}" y="${BUSH_Y + 2}" width="10" height="46" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="M${x - 6},${BUSH_Y + 12} H${x + 6} M${x - 6},${BUSH_Y + 22} H${x + 6} M${x - 6},${BUSH_Y + 32} H${x + 6}" stroke="#B49A76" stroke-width="1.6"/><circle cx="${x}" cy="${BUSH_Y + 1}" r="2.4" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`).join('')}
+${hvBushings()}
 <rect x="1498" y="768" width="22" height="32" rx="5" fill="#6E9985" ${S}/>
 <circle cx="1410" cy="760" r="6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>
 </g>
 <g data-part="switchyard" class="part">
-<path d="M1536,900 V690 M1636,900 V690" stroke="#46556C" stroke-width="5"/>
-<path d="M1530,690 H1642" stroke="#46556C" stroke-width="5"/>
-<path d="M1536,720 L1556,690 M1636,720 L1616,690" stroke="#46556C" stroke-width="2"/>
-${insulator(1566, 692)}${insulator(1590, 692)}${insulator(1614, 692)}
-<g transform="translate(1566,830)"><rect x="-9" y="0" width="18" height="70" rx="3" fill="url(#gCylHd)" ${S}/>${insulator(0, -34, 5, 12)}</g>
-<g transform="translate(1596,830)"><rect x="-9" y="0" width="18" height="70" rx="3" fill="url(#gCylHd)" ${S}/>${insulator(0, -34, 5, 12)}</g>
-<rect x="1552" y="880" width="56" height="20" fill="url(#gConcD)" ${S}/>
-<g fill="none" stroke="#2B3A55" stroke-width="1.6">${ARM_Y.map((_, i) => `<path d="${yardPhase(i)}"/>`).join('')}</g>
+${switchyard()}
 </g>
 </g>`;
 }
@@ -58,8 +104,8 @@ ${TOWERS.map((x) => tower(x)).join('')}
 /** Dây dẫn 3 pha: vẽ SAU tháp làm mát để đi liền mạch phía trước tháp. */
 export function transmissionWires() {
   return `<g id="linesW" data-part="lines" class="part" fill="none">
-<g stroke="#1B2B48" stroke-opacity=".18" stroke-width="4">${ARM_Y.map((_, i) => `<path d="${linePhase(i)}"/>`).join('')}</g>
-<g stroke="#2B3A55" stroke-width="1.8">${ARM_Y.map((_, i) => `<path d="${linePhase(i)}"/>`).join('')}</g>
+${[2, 1, 0].map((k) => `<path d="${linePhase(k)}" stroke="#1B2B48" stroke-opacity="${(0.16 * PHASE_ALPHA[k]).toFixed(2)}" stroke-width="4"/><path d="${linePhase(k)}" ${wireStyle(k)}/>`).join('')}
+${chevron(bez(toTowerSeg(0), 0.5))}
 </g>`;
 }
 

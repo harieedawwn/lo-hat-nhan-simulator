@@ -36,7 +36,7 @@ export class Flows {
   constructor(quality = 1) {
     this.q = quality;
     this.flows = FLOWS.map((f) => this.mk(f));
-    this.elec = ELEC.map((e) => this.mk({ id: e.id, d: e.d, gap: e.gap, speed: e.speed, spread: 0, size: 2.6 }));
+    this.elec = ELEC.map((e) => this.mk({ id: e.id, d: e.d, gap: e.gap, speed: e.speed, alpha: e.alpha ?? 1, spread: 0, size: 2.6 }));
     this.drive = {};
     this.puffCap = 80; this.puffs = [];
     this.sprite = this.mkSprite();
@@ -202,6 +202,7 @@ export class Flows {
       const rr = Math.min(1, pe) * dens;
       const vx0 = -view.x / view.s - 10, vx1 = vx0 + (view.cw || 4000) / view.s + 20;
       for (const fl of this.elec) {
+        ctx.globalAlpha = fl.f.alpha; // pha sau (theo chiều sâu) nhạt hơn
         for (let pass = 0; pass < 2; pass++) {
           ctx.fillStyle = pass ? 'rgba(255,200,60,.95)' : 'rgba(255,196,60,.25)';
           ctx.beginPath();
