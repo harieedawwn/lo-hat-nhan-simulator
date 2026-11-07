@@ -120,8 +120,8 @@ ${PIPES.filter((p) => p.id === 'cross').map(pipeSvg).join('')}
 <g data-part="generator" class="part">
 <rect x="1150" y="590" width="160" height="100" rx="12" fill="url(#gPaintBlue)" stroke="#1B2B48" stroke-width="1.6"/>
 <rect x="1160" y="600" width="140" height="80" rx="6" fill="#EEF2F7" ${S}/>
-<g id="statorL" fill="#9AA6B8" ${S}><rect x="1178" y="604" width="104" height="13"/><rect x="1178" y="663" width="104" height="13"/></g>
-<path d="M1184,604 V617 M1192,604 V617 M1200,604 V617 M1208,604 V617 M1216,604 V617 M1224,604 V617 M1232,604 V617 M1240,604 V617 M1248,604 V617 M1256,604 V617 M1264,604 V617 M1272,604 V617 M1184,663 V676 M1192,663 V676 M1200,663 V676 M1208,663 V676 M1216,663 V676 M1224,663 V676 M1232,663 V676 M1240,663 V676 M1248,663 V676 M1256,663 V676 M1264,663 V676 M1272,663 V676" stroke="#46556C" stroke-width=".8" opacity=".7"/>
+<g id="statorL" fill="#C8642A" stroke="#8A3E14" stroke-opacity=".9" stroke-width="1.4"><rect x="1178" y="604" width="104" height="13"/><rect x="1178" y="663" width="104" height="13"/></g>
+<path d="M1184,604 V617 M1192,604 V617 M1200,604 V617 M1208,604 V617 M1216,604 V617 M1224,604 V617 M1232,604 V617 M1240,604 V617 M1248,604 V617 M1256,604 V617 M1264,604 V617 M1272,604 V617 M1184,663 V676 M1192,663 V676 M1200,663 V676 M1208,663 V676 M1216,663 V676 M1224,663 V676 M1232,663 V676 M1240,663 V676 M1248,663 V676 M1256,663 V676 M1264,663 V676 M1272,663 V676" stroke="#8A3E14" stroke-width=".8" opacity=".7"/>
 ${windings(1176, -1)}${windings(1284, 1)}
 ${genRotor}
 <rect x="1310" y="608" width="34" height="64" rx="6" fill="url(#gGreenH)" ${S}/>

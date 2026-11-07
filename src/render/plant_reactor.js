@@ -130,8 +130,6 @@ function steamGen() {
 <g stroke="#46556C" stroke-width="1.2" opacity=".8"><path d="M479,640 H561 M479,705 H561"/></g>
 </g>
 ${cans}
-<path d="M456,352 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8" fill="none" stroke="#5D6D86" stroke-width="2.4"/>
-<path d="M456,372 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8 l12,8 l12,-8" fill="none" stroke="#5D6D86" stroke-width="2.4"/>
 <path d="${shell}" fill="none" stroke="#1B2B48" stroke-opacity=".55" stroke-width="1.2"/>
 <rect x="464" y="776" width="112" height="12" fill="#46556C" ${S}/>
 <path d="M464,788 L576,788 L576,812 A56,36 0 0 1 464,812 Z" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>

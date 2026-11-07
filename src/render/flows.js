@@ -6,7 +6,7 @@ const STEAM_NOM = 3000 / 1.81;     // kg/s định mức
 const TC = 1990;
 
 const COL = {
-  1: 'rgba(255,232,228,.92)', steam: 'rgba(86,104,132,.62)', water: 'rgba(228,240,252,.95)', 3: 'rgba(232,252,252,.95)',
+  1: 'rgba(255,232,228,.92)', steam: 'rgba(96,178,232,.85)', water: 'rgba(228,240,252,.95)', 3: 'rgba(232,252,252,.95)',
 };
 
 function sample(d) {
