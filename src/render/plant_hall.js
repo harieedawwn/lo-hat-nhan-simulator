@@ -1,11 +1,12 @@
 import { PIPES } from './geometry.js';
 import { pipeSvg } from './plant_reactor.js';
 
-const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
+const S = 'stroke="#1E2A44" stroke-width="1.6"'; // nhân vật chính
+const SB = 'stroke="#A3B0C2" stroke-width="1"'; // bối cảnh
 const roofY = (x) => 504 - 34 * Math.max(0, 1 - Math.abs(x - 1036) / 340);
 
 export function valve(id, x, y, rot = 0) {
-  return `<g id="${id}" transform="translate(${x},${y}) rotate(${rot})"><path d="M-8,-6 L8,6 V-6 L-8,6 Z" class="vbody" fill="#fff" stroke="#1B2B48" stroke-width="1.4" stroke-linejoin="round"/><path d="M0,0 V-10 M-5,-10 H5" stroke="#1B2B48" stroke-width="1.6"/></g>`;
+  return `<g id="${id}" transform="translate(${x},${y}) rotate(${rot})"><path d="M-8,-6 L8,6 V-6 L-8,6 Z" class="vbody" fill="#fff" stroke="#1B2B48" stroke-width="1.4" stroke-linejoin="round"/><path d="M0,0 V-10 M-5,-10 H5" stroke="#1E2A44" stroke-width="1.6"/></g>`;
 }
 
 /** Nhà tuabin: kết cấu, tường, mái giàn thép (bản vẽ cắt). */
@@ -21,27 +22,24 @@ export function hallBack() {
   }
   const wins = Array.from({ length: 12 }, (_, i) => {
     const x = 742 + i * 50;
-    return `<rect x="${x}" y="596" width="38" height="70" fill="url(#gGlass)" stroke="#6E7F97" stroke-width="1.2"/><path d="M${x + 4},662 L${x + 20},600 M${x + 14},662 L${x + 30},600" stroke="#fff" stroke-opacity=".6" stroke-width="3"/><path d="M${x},631 H${x + 38}" stroke="#6E7F97" stroke-width="1"/>`;
+    return `<rect x="${x}" y="596" width="38" height="70" fill="url(#gGlass)" stroke="#A3B0C2" stroke-width="1" opacity=".8"/><path d="M${x + 4},662 L${x + 20},600 M${x + 14},662 L${x + 30},600" stroke="#fff" stroke-opacity=".5" stroke-width="3"/><path d="M${x},631 H${x + 38}" stroke="#A3B0C2" stroke-width="1"/>`;
   }).join('');
-  const clere = Array.from({ length: 14 }, (_, i) => `<rect x="${734 + i * 44}" y="526" width="32" height="16" fill="url(#gGlass)" stroke="#6E7F97" stroke-width="1"/>`).join('');
+  const clere = Array.from({ length: 14 }, (_, i) => `<rect x="${734 + i * 44}" y="526" width="32" height="16" fill="url(#gGlass)" stroke="#A3B0C2" stroke-width="1" opacity=".8"/>`).join('');
   return `<g id="hallBack" data-part="hall" class="part">
 <ellipse cx="1036" cy="906" rx="360" ry="9" fill="url(#gAO)"/>
-<path d="M720,900 V${roofY(720) + 8} L1036,${roofY(1036) + 8} L1352,${roofY(1352) + 8} V900 Z" fill="#E7EBF1" ${S}/>
-<path d="M720,712 H1352 V900 H720 Z" fill="url(#gConcD)" opacity=".85"/>
-<path d="M720,712 H1352 V900 H720 Z" fill="url(#pPanel)"/>
+<path d="M720,900 V${roofY(720) + 8} L1036,${roofY(1036) + 8} L1352,${roofY(1352) + 8} V900 Z" fill="#F1F4F8" ${SB}/>
+<path d="M720,712 H1352 V900 H720 Z" fill="#E3E9F0"/>
 ${clere}${wins}
-<g stroke="#46556C" stroke-width="2" fill="none">${truss.join('')}<path d="M722,520 H1350" stroke-width="4"/></g>
-<path d="M696,504 L1036,470 L1376,504 L1376,513 L1036,479 L696,513 Z" fill="#6F7E97" stroke="#1B2B48" stroke-opacity=".7" stroke-width="1.4"/>
-<path d="M696,504 L1036,470 L1376,504" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.4"/>
-<rect x="700" y="900" width="672" height="36" fill="url(#gConcD)" ${S}/><rect x="700" y="900" width="672" height="36" fill="url(#pRebar)"/>
-<rect x="706" y="500" width="14" height="400" fill="url(#gConc)" ${S}/><rect x="1352" y="500" width="14" height="400" fill="url(#gConc)" ${S}/>
-<rect x="706" y="500" width="14" height="400" fill="url(#pRebar)"/><rect x="1352" y="500" width="14" height="400" fill="url(#pRebar)"/>
-<rect x="720" y="690" width="225" height="22" fill="url(#gConcV)" ${S}/><rect x="1095" y="690" width="257" height="22" fill="url(#gConcV)" ${S}/>
-<rect x="905" y="712" width="20" height="188" fill="url(#gConc)" ${S}/>
-<rect x="1160" y="712" width="150" height="188" fill="url(#gConc)" ${S}/><rect x="1160" y="712" width="150" height="188" fill="url(#pRebar)"/>
-<path d="M1190,900 V850 A30,30 0 0 1 1250,850 V900 Z" fill="#9AA5B6" ${S} opacity=".8"/>
-<path d="M722,696 H946 M1094,696 H1350" stroke="#8D9AAE" stroke-width="1"/>
-<g stroke="#46556C" stroke-width="2.4" fill="none"><path d="M726,690 V664 M726,664 H760 M760,664 V690 M744,664 V690"/><path d="M1330,690 V664 H1346 V690"/></g>
+<g stroke="#A3B0C2" stroke-width="1.2" fill="none">${truss.join('')}<path d="M722,520 H1350" stroke="#8C99AD" stroke-width="2.4"/></g>
+<path d="M696,504 L1036,470 L1376,504 L1376,513 L1036,479 L696,513 Z" fill="#C5CFDB" stroke="#A3B0C2" stroke-width="1"/>
+<rect x="700" y="900" width="672" height="36" fill="#DCE2E9" ${SB}/>
+<rect x="706" y="500" width="14" height="400" fill="#E3E9F0" ${SB}/><rect x="1352" y="500" width="14" height="400" fill="#E3E9F0" ${SB}/>
+<rect x="720" y="690" width="225" height="22" fill="#DCE2E9" ${SB}/><rect x="1095" y="690" width="257" height="22" fill="#DCE2E9" ${SB}/>
+<rect x="905" y="712" width="20" height="188" fill="#E3E9F0" ${SB}/>
+<rect x="1160" y="712" width="150" height="188" fill="#E3E9F0" ${SB}/>
+<path d="M1190,900 V850 A30,30 0 0 1 1250,850 V900 Z" fill="#C5CFDB" ${SB}/>
+<path d="M722,696 H946 M1094,696 H1350" stroke="#A3B0C2" stroke-width="1"/>
+<g stroke="#8C99AD" stroke-width="1.4" fill="none"><path d="M726,690 V664 M726,664 H760 M760,664 V690 M744,664 V690"/><path d="M1330,690 V664 H1346 V690"/></g>
 <g id="hallStair" stroke="#46556C" stroke-width="1.6" fill="none"><path d="M740,900 L740,712 M752,900 L752,712" stroke-opacity=".0"/></g>
 </g>`;
 }
@@ -78,7 +76,7 @@ function stators(xs, l0, l1, R) {
 }
 
 function casing(id, x, y, w, h, part) {
-  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#EEF2F7" stroke="#1B2B48" stroke-width="1.6"/>
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#EEF2F7" stroke="#1E2A44" stroke-width="1.6"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="url(#gTowerShade)"/>
 <rect x="${x}" y="${y}" width="${w}" height="9" rx="4" fill="url(#gCylV)" ${S}/><rect x="${x}" y="${y + h - 9}" width="${w}" height="9" rx="4" fill="url(#gCylV)" ${S}/>`;
 }
 
@@ -118,10 +116,10 @@ ${drum(955, 130, 14)}
 ${PIPES.filter((p) => p.id === 'cross').map(pipeSvg).join('')}
 </g>
 <g data-part="generator" class="part">
-<rect x="1150" y="590" width="160" height="100" rx="12" fill="url(#gPaintBlue)" stroke="#1B2B48" stroke-width="1.6"/>
+<rect x="1150" y="590" width="160" height="100" rx="12" fill="url(#gPaintBlue)" stroke="#1E2A44" stroke-width="1.6"/>
 <rect x="1160" y="600" width="140" height="80" rx="6" fill="#EEF2F7" ${S}/>
-<g id="statorL" fill="#C8642A" stroke="#8A3E14" stroke-opacity=".9" stroke-width="1.4"><rect x="1178" y="604" width="104" height="13"/><rect x="1178" y="663" width="104" height="13"/></g>
-<path d="M1184,604 V617 M1192,604 V617 M1200,604 V617 M1208,604 V617 M1216,604 V617 M1224,604 V617 M1232,604 V617 M1240,604 V617 M1248,604 V617 M1256,604 V617 M1264,604 V617 M1272,604 V617 M1184,663 V676 M1192,663 V676 M1200,663 V676 M1208,663 V676 M1216,663 V676 M1224,663 V676 M1232,663 V676 M1240,663 V676 M1248,663 V676 M1256,663 V676 M1264,663 V676 M1272,663 V676" stroke="#8A3E14" stroke-width=".8" opacity=".7"/>
+<g id="statorL" fill="#E2A53B" stroke="#8A5A14" stroke-width="1.4"><rect x="1178" y="604" width="104" height="13"/><rect x="1178" y="663" width="104" height="13"/></g>
+<path d="M1184,604 V617 M1192,604 V617 M1200,604 V617 M1208,604 V617 M1216,604 V617 M1224,604 V617 M1232,604 V617 M1240,604 V617 M1248,604 V617 M1256,604 V617 M1264,604 V617 M1272,604 V617 M1184,663 V676 M1192,663 V676 M1200,663 V676 M1208,663 V676 M1216,663 V676 M1224,663 V676 M1232,663 V676 M1240,663 V676 M1248,663 V676 M1256,663 V676 M1264,663 V676 M1272,663 V676" stroke="#8A5A14" stroke-width=".8" opacity=".7"/>
 ${windings(1176, -1)}${windings(1284, 1)}
 ${genRotor}
 <rect x="1310" y="608" width="34" height="64" rx="6" fill="url(#gGreenH)" ${S}/>
@@ -143,10 +141,10 @@ export function condenser() {
   return `<g id="condGroup">
 <g data-part="condenser" class="part">
 <ellipse cx="1020" cy="886" rx="110" ry="6" fill="url(#gAO)"/>
-<rect x="945" y="724" width="150" height="124" rx="6" fill="#F4F7FB" stroke="#1B2B48" stroke-width="1.6"/>
+<rect x="945" y="724" width="150" height="124" rx="6" fill="#F4F7FB" stroke="#1E2A44" stroke-width="1.6"/>
 <rect x="945" y="724" width="150" height="8" fill="url(#gCylV)" ${S}/>
 <rect id="sgCondSteam" x="948" y="732" width="144" height="18" fill="#E5EAF1" opacity=".9"/>
-<rect x="947" y="750" width="146" height="94" fill="#EAF0F7"/>
+<rect x="947" y="750" width="146" height="94" fill="#EAF0F7"/><rect x="945" y="724" width="150" height="124" rx="6" fill="url(#gTowerShade)"/>
 ${upT}${lowT}
 <path d="M947,798 H1093" stroke="#8795A8" stroke-width="1" stroke-dasharray="4 3"/>
 <rect x="945" y="848" width="150" height="34" rx="4" fill="url(#gCylV)" ${S}/>
@@ -162,7 +160,7 @@ ${PIPES.filter((p) => p.id === 'cond').map(pipeSvg).join('')}
 <ellipse cx="860" cy="888" rx="34" ry="5" fill="url(#gAO)"/>
 <rect x="822" y="854" width="22" height="24" rx="3" fill="url(#gPaintBlueH)" ${S}/>
 <rect x="840" y="862" width="8" height="8" fill="#8C98AB"/>
-<circle cx="862" cy="866" r="17" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
+<circle cx="862" cy="866" r="17" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/>
 <circle cx="862" cy="866" r="12" fill="#CFE0F3" ${S}/>
 <g id="imp2" transform="translate(862,866)">${[0, 90, 180, 270].map((a) => `<path d="M0,0 C5,-3 8,-7 9,-11" stroke="#46556C" stroke-width="2" fill="none" stroke-linecap="round" transform="rotate(${a})"/>`).join('')}</g>
 </g>

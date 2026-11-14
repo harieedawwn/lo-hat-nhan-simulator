@@ -39,9 +39,9 @@ Mỗi phase: chụp ảnh trước → sửa → `npm test && npm run build` →
 - [x] Commit, push.
 
 ## Phase 3 – Nhà tuabin (`plant_hall.js`)
-- [ ] Khung kèo mái, dải cửa sổ, cột nhà: lớp *bối cảnh* (nhạt, mảnh) để tuabin – máy phát nổi lên.
-- [ ] Tuabin cao/hạ áp, máy phát (stato đồng, rôto N đỏ/S xanh), bình ngưng: khối sáng–tối rõ, viền mực.
-- [ ] Commit, push.
+- [x] Khung kèo mái, dải cửa sổ, cột nhà: lớp *bối cảnh* (nhạt, mảnh) để tuabin – máy phát nổi lên.
+- [x] Tuabin cao/hạ áp, máy phát (stato đồng, rôto N đỏ/S xanh), bình ngưng: khối sáng–tối rõ, viền mực.
+- [x] Commit, push.
 
 ## Phase 4 – Khu điện & đường dây (`plant_yard.js`, `geometry.js` nếu cần)
 Giữ nguyên **cấu trúc mạch** (máy phát → 2 thanh dẫn 24 kV → MBA → máy cắt → giàn → cột → đường dây, và dây 500 kV đã thêm). Chỉ làm gọn:
