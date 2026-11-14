@@ -51,9 +51,9 @@ Giữ nguyên **cấu trúc mạch** (máy phát → 2 thanh dẫn 24 kV → MBA
 - [x] Kiểm tra lại dao động xoay chiều của hạt điện vẫn chạy đúng. Commit, push.
 
 ## Phase 5 – Tháp làm mát, nước, cảnh quan (`plant_yard.js`, `plant_env.js`)
-- [ ] Vỏ tháp hyperbol: khối tròn bằng gradient ngang (sáng trái, tối phải), không hoa văn cốt thép; lớp đệm, vòi phun, bể nước gọn.
-- [ ] Sông/hồ, cây, người, xe: hài hoà bảng màu, không tranh chú ý.
-- [ ] Commit, push.
+- [x] Vỏ tháp hyperbol: khối tròn bằng gradient ngang (sáng trái, tối phải), không hoa văn cốt thép; lớp đệm, vòi phun, bể nước gọn.
+- [x] Sông/hồ, cây, người, xe: hài hoà bảng màu, không tranh chú ý.
+- [x] Commit, push.
 
 ## Phase 6 – Hạt, nhãn, hoàn thiện
 - [ ] `flows.js`: giảm mật độ hạt dòng chảy ~30 % (không đổi tốc độ, chiều, cách điều khiển); hạt điện giữ nguyên.

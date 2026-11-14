@@ -153,16 +153,15 @@ export function coolingTower() {
   return `<g id="towerGroup">
 <g data-part="tower" class="part">
 <ellipse cx="${TC}" cy="904" rx="205" ry="9" fill="url(#gAO)"/>
-<path d="${outer}" fill="url(#gTowerOut)" stroke="#1B2B48" stroke-opacity=".7" stroke-width="1.6"/>
-<path d="${outer}" fill="url(#pRebar)" opacity=".8"/>
-<path d="${inner}" fill="url(#gTowerIn)" stroke="#1B2B48" stroke-opacity=".5" stroke-width="1.2"/>
+<path d="${outer}" fill="url(#gTowerOut)" stroke="#1E2A44" stroke-width="1.6"/>
+<path d="${inner}" fill="url(#gTowerIn)" stroke="#1E2A44" stroke-opacity=".45" stroke-width="1"/>
 <path d="${inner}" fill="url(#gTowerShade)"/>
-<g stroke="#7F8CA0" stroke-width="1" opacity=".22">${[500, 540, 580, 620, 660, 700, 740, 780].map((y) => `<path d="M${(TC - half(y) + wallT).toFixed(1)},${y} H${(TC + half(y) - wallT).toFixed(1)}"/>`).join('')}</g>
+<g stroke="#7F8CA0" stroke-width="1" opacity=".12">${[500, 560, 620, 680, 740].map((y) => `<path d="M${(TC - half(y) + wallT).toFixed(1)},${y} H${(TC + half(y) - wallT).toFixed(1)}"/>`).join('')}</g>
 <g stroke="#fff" stroke-opacity=".28" stroke-width="3" fill="none"><path d="M${TC - 100},560 Q${TC - 66},700 ${TC - 120},880"/></g>
 <ellipse cx="${TC}" cy="470" rx="${rimW.toFixed(1)}" ry="9" fill="#C7CCD5" stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"/>
 <ellipse cx="${TC}" cy="470" rx="${(rimW - 10).toFixed(1)}" ry="6" fill="#EEF1F5" stroke="#1B2B48" stroke-opacity=".3"/>
 <rect x="${TC - hr + wallT}" y="842" width="${2 * (hr - wallT)}" height="58" fill="#DDE3EA" opacity=".0"/>
-<rect x="${TC - 140}" y="800" width="280" height="42" fill="url(#pFill)" stroke="#5D6D86" stroke-width="1.4" opacity=".95"/>
+<rect x="${TC - 140}" y="800" width="280" height="42" fill="url(#pFill)" stroke="#8795A8" stroke-width="1" opacity=".8"/>
 <rect x="${TC - 140}" y="800" width="280" height="42" fill="#8FB5C9" opacity=".18"/>
 <g id="airIn" stroke="#6E9AB5" stroke-width="1.6" fill="none" opacity=".7"><path d="M${TC - 178},880 q16,-12 36,-12 M${TC + 178},880 q-16,-12 -36,-12"/></g>
 ${piers}
@@ -176,8 +175,7 @@ ${noz}
 <rect x="${TC - 164}" y="896" width="328" height="58" rx="3" fill="url(#gConcD)" ${S}/>
 <rect x="${TC - 156}" y="906" width="312" height="42" fill="url(#gWaterBasin)" stroke="#0A4F55" stroke-opacity=".5"/>
 <path d="M${TC - 152},910 H${TC + 152}" stroke="#fff" stroke-opacity=".75" stroke-width="2"/>
-<path d="M${TC - 120},920 q12,-4 24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0" stroke="#fff" stroke-opacity=".5" fill="none" stroke-width="1.3"/>
-<rect x="${TC - 164}" y="896" width="328" height="58" fill="url(#pRebar)"/>
+<path d="M${TC - 120},920 q12,-4 24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0 t24,0" stroke="#fff" stroke-opacity=".35" fill="none" stroke-width="1.3"/>
 </g>
 </g>`;
 }

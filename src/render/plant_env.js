@@ -33,9 +33,9 @@ ${lg('gGlass', [[0, '#CFE5F5'], [1, '#9FC6E4']], 'x1="0" y1="0" x2="1" y2="1"')}
 ${lg('gPrimCold', [[0, '#F2B4AC'], [1, '#EE9A92']], V)}
 ${lg('gPrimHot', [[0, '#C9505F'], [1, '#D9737A']], V)}
 ${lg('gPrimMix', [[0, '#C9505F'], [0.5, '#DE7B78'], [1, '#EE9A92']], V)}
-${lg('gTowerOut', [[0, '#C2C7CF'], [0.22, '#E6E9EE'], [0.5, '#DDE1E7'], [1, '#B3B9C3']])}
-${lg('gTowerIn', [[0, '#B9C5D3'], [0.35, '#DCE4EC'], [0.7, '#E9EEF3'], [1, '#B4C0CE']])}
-${lg('gTowerShade', [[0, '#1B2B48', 0.16], [0.18, '#1B2B48', 0], [0.8, '#1B2B48', 0], [1, '#1B2B48', 0.16]])}
+${lg('gTowerOut', [[0, '#D4D9E0'], [0.2, '#F1F4F8'], [0.55, '#C5CCD7'], [1, '#8C99AD']])}
+${lg('gTowerIn', [[0, '#A9B5C6'], [0.4, '#C9D2DE'], [0.75, '#B4BFCE'], [1, '#8C99AD']])}
+${lg('gTowerShade', [[0, '#1B2B48', 0.1], [0.2, '#1B2B48', 0], [0.7, '#1B2B48', 0], [1, '#1B2B48', 0.14]])}
 <radialGradient id="gAO" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#1B2B48" stop-opacity=".24"/><stop offset="1" stop-color="#1B2B48" stop-opacity="0"/></radialGradient>
 <radialGradient id="gGlowA" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFC24A" stop-opacity=".95"/><stop offset=".35" stop-color="#FFB020" stop-opacity=".45"/><stop offset="1" stop-color="#FFB020" stop-opacity="0"/></radialGradient>
 <radialGradient id="gGlowR" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FF4A44" stop-opacity=".95"/><stop offset=".35" stop-color="#E5322D" stop-opacity=".45"/><stop offset="1" stop-color="#E5322D" stop-opacity="0"/></radialGradient>
@@ -70,7 +70,7 @@ const rnd = (() => { let s = 7; return () => ((s = (s * 16807) % 2147483647) / 2
 
 /** Nền: trời, đồi xa, mây, đất, lớp cắt đất, hồ. Vẽ rộng hơn khung để lấp đầy mọi tỉ lệ màn hình. */
 export function background() {
-  const hills = `<path d="M-2000,${GROUND} L-2000,720 C-1400,700 -900,760 -400,730 C100,700 300,640 600,690 C900,740 1200,700 1500,660 C1800,620 2100,700 2400,680 C3000,650 4000,720 4600,700 L4600,${GROUND} Z" fill="#D6E2ED" opacity=".6"/>
+  const hills = `<path d="M-2000,${GROUND} L-2000,720 C-1400,700 -900,760 -400,730 C100,700 300,640 600,690 C900,740 1200,700 1500,660 C1800,620 2100,700 2400,680 C3000,650 4000,720 4600,700 L4600,${GROUND} Z" fill="#DCE8F2" opacity=".55"/>
 <path d="M-2000,${GROUND} L-2000,790 C-1200,770 -600,800 0,780 C500,760 900,810 1400,790 C1900,770 2300,800 2700,780 C3300,760 4000,800 4600,790 L4600,${GROUND} Z" fill="#C9D8E6" opacity=".7"/>`;
   const cloud = (x, y, s, o) => `<g transform="translate(${x},${y}) scale(${s})" opacity="${o}" fill="#fff"><ellipse cx="0" cy="0" rx="80" ry="18"/><ellipse cx="-30" cy="-14" rx="36" ry="20"/><ellipse cx="22" cy="-18" rx="44" ry="24"/></g>`;
   const stones = Array.from({ length: 70 }, () => {
@@ -112,7 +112,7 @@ export function lake() {
 
 export function trees() {
   const tree = (x, s = 1, k = 0) => {
-    const c = ['#6C8F5C', '#7DA06A', '#5E8452'][k % 3];
+    const c = ['#7C9C6C', '#8AA97A', '#6E9060'][k % 3];
     return `<g transform="translate(${x},${GROUND}) scale(${s})"><ellipse cx="0" cy="2" rx="26" ry="4" fill="url(#gAO)"/><rect x="-3" y="-34" width="6" height="36" fill="#7A5C3E"/><circle cx="0" cy="-58" r="26" fill="${c}"/><circle cx="-14" cy="-44" r="18" fill="${c}"/><circle cx="15" cy="-46" r="19" fill="${c}"/><circle cx="-6" cy="-66" r="12" fill="#fff" opacity=".12"/></g>`;
   };
   return `<g id="trees">${[18, 42, 1500, 1840 + 0, 2215, 2330].map((x, i) => (x === 1840 ? '' : tree(x, 0.8 + (i % 3) * 0.18, i))).join('')}</g>`;
