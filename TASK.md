@@ -28,12 +28,12 @@ Toạ độ dưới đây là toạ độ thế giới SVG (2450×1100, mặt đ
 
 ## Phase 2 – Dây mới phía 500 kV: MBA → lên → máy cắt → cột điện (ảnh 3, 4)
 Nét đen chủ repo vẽ: từ nắp MBA (phía phải, gần bình dầu phụ) **đi thẳng lên**, rồi **nối qua máy cắt điện**, rồi từ máy cắt **kéo sang cột điện** (TOWER_A, x = 1768) ở **một xà thấp hơn các xà hiện có**, tiếp tục qua các cột sau như dây hiện có.
-- [ ] **2a. Sứ ra mới** trên nắp MBA tại x≈1478 (nắp MBA x 1388–1492, sứ cao áp hiện có quanh x 1446–1460), cao lên tới y≈664 giống `hvBushings()`.
-- [ ] **2b. Một cực máy cắt riêng** cho dây mới, dùng lại `breaker()`, đặt sao cho tách biệt, không chồng các cực đang có (ví dụ pha “trước” `k = −1` → tịnh tiến `−DEPTH`, hoặc dịch sang phải ~30 px – chọn cách nhìn rõ nhất, xác nhận bằng ảnh chụp). Kèm chuỗi sứ néo trên giàn như `strainChain()`.
-- [ ] **2c. Dây**: sứ mới → (đường cong Bezier đi lên rồi sang, giống `IN_SEGS`) → sứ vào máy cắt mới → (giống `OUT_SEGS`) → điểm néo trên giàn → xà mới của TOWER_A tại `y = 695` → qua mọi cột trong `TOWERS` tới `LINE_END` (như `linePhase`). Thêm xà mới `y = 695` cho **tất cả** cột trong `transmission()` (cùng kiểu xà + sứ treo). Dây không được cắt qua thân cột, MBA hay máy cắt khác.
-- [ ] **2d. Dòng điện**: thêm vào `ELEC` `{ id: 'ret5', d: <đường hạt giống phasePath>, gap: 34, amp: 4, ph: Math.PI, alpha: 1 }` – dây về của mạch thứ cấp (ngược pha pha trước `ph0`), dao động ngược chiều như cặp dây 24 kV. Thêm 1 `chevron` chỉ chiều năng lượng trên dây mới.
-- [ ] **2e. Chữ**: nhãn ngắn cho cực máy cắt mới nếu cần (tránh chồng nhãn `brk`); thẻ `switchyard`/`lines` thêm 1 câu: “Phía 500 kV dòng điện nhỏ hơn ≈ 20 lần nên electron dao động hẹp hơn; hao phí P²R/U² giảm ≈ 400 lần.”
-- [ ] **2f. Kiểm tra**: chụp `1360 520 460 400` và `1120 480 760 440` → mạch liền mạch, không chồng/cắt, đẹp. Commit “Dây 500 kV mới: MBA → máy cắt → cột”, push.
+- [x] **2a. Sứ ra mới** trên nắp MBA tại x≈1478 (nắp MBA x 1388–1492, sứ cao áp hiện có quanh x 1446–1460), cao lên tới y≈664 giống `hvBushings()`.
+- [x] **2b. Một cực máy cắt riêng** cho dây mới, dùng lại `breaker()`, đặt sao cho tách biệt, không chồng các cực đang có (ví dụ pha “trước” `k = −1` → tịnh tiến `−DEPTH`, hoặc dịch sang phải ~30 px – chọn cách nhìn rõ nhất, xác nhận bằng ảnh chụp). Kèm chuỗi sứ néo trên giàn như `strainChain()`.
+- [x] **2c. Dây**: sứ mới → (đường cong Bezier đi lên rồi sang, giống `IN_SEGS`) → sứ vào máy cắt mới → (giống `OUT_SEGS`) → điểm néo trên giàn → xà mới của TOWER_A tại `y = 695` → qua mọi cột trong `TOWERS` tới `LINE_END` (như `linePhase`). Thêm xà mới `y = 695` cho **tất cả** cột trong `transmission()` (cùng kiểu xà + sứ treo). Dây không được cắt qua thân cột, MBA hay máy cắt khác.
+- [x] **2d. Dòng điện**: thêm vào `ELEC` `{ id: 'ret5', d: <đường hạt giống phasePath>, gap: 34, amp: 4, ph: Math.PI, alpha: 1 }` – dây về của mạch thứ cấp (ngược pha pha trước `ph0`), dao động ngược chiều như cặp dây 24 kV. Thêm 1 `chevron` chỉ chiều năng lượng trên dây mới.
+- [x] **2e. Chữ**: nhãn ngắn cho cực máy cắt mới nếu cần (tránh chồng nhãn `brk`); thẻ `switchyard`/`lines` thêm 1 câu: “Phía 500 kV dòng điện nhỏ hơn ≈ 20 lần nên electron dao động hẹp hơn; hao phí P²R/U² giảm ≈ 400 lần.”
+- [x] **2f. Kiểm tra**: chụp `1360 520 460 400` và `1120 480 760 440` → mạch liền mạch, không chồng/cắt, đẹp. Commit “Dây 500 kV mới: MBA → máy cắt → cột”, push.
 
 ## Phase 3 – Làm đẹp đồ hoạ (nhanh, an toàn)
 Mục tiêu: đẹp hơn, **không được xấu hơn, không được sai hình**. Chỉ chỉnh màu/gradient/viền/bóng; **không đổi hình dạng, toạ độ, bố cục** bộ phận cũ.

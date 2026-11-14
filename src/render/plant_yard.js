@@ -1,4 +1,4 @@
-import { GROUND, PIPES, TOWERS, ARM_Y, DEPTH, PHASE_ALPHA, GANTRY, YARD, inSegs, toTowerSeg, bez, yardIn, yardOut, linePhase } from './geometry.js';
+import { GROUND, PIPES, TOWERS, ARM_Y, DEPTH, PHASE_ALPHA, GANTRY, YARD, inSegs, toTowerSeg, bez, yardIn, yardOut, linePhase, NEWC, NEW_T, NEW_BRK, NEW_IN, newLine, segD } from './geometry.js';
 import { pipeSvg } from './plant_reactor.js';
 
 const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
@@ -22,6 +22,13 @@ function hvBushings() {
     const sheds = Array.from({ length: Math.floor((h - 4) / 8) }, (_, i) => `M${x - 6},${y + 8 + i * 8} H${x + 6}`).join(' ');
     return `<g ${tr(k)}><rect x="${x - 4.5}" y="${y + 2}" width="9" height="${h}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="${sheds}" stroke="#B49A76" stroke-width="1.8"/><circle cx="${x}" cy="${y + 1}" r="2.6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/></g>`;
   }).join('');
+}
+
+/** Sứ cao áp thứ 2 trên nắp MBA (cửa ra của dây 500 kV mới), đứng thẳng, đỉnh y = 664. */
+function newBushing() {
+  const [x, y] = NEWC.bush, h = YARD.bushBase - y - 2;
+  const sheds = Array.from({ length: Math.floor((h - 4) / 8) }, (_, i) => `M${x - 6},${y + 8 + i * 8} H${x + 6}`).join(' ');
+  return `<rect x="${x - 4.5}" y="${y + 2}" width="9" height="${h}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="${sheds}" stroke="#B49A76" stroke-width="1.8"/><circle cx="${x}" cy="${y + 1}" r="2.6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`;
 }
 
 /** Máy cắt điện (một pha): sứ VÀO + sứ RA nối bằng bể máy cắt nằm ngang, đặt trên giá đỡ. */
@@ -59,7 +66,11 @@ function switchyard() {
 ${PH.map((k) => `<g ${tr(k)}>${breaker(k)}</g>`).join('')}
 ${PH.map((k) => `<g ${tr(k)}>${strainChain()}</g>`).join('')}
 ${wires}
-${chevron(bez(inSegs(0)[0], 0.45))}`;
+${chevron(bez(inSegs(0)[0], 0.45))}
+<g transform="translate(${NEW_T[0]},${NEW_T[1]})">${breaker(-1)}</g>
+<rect x="${NEW_BRK.inn[0] - 14}" y="884" width="46" height="16" fill="url(#gConcD)" ${S}/>
+<g fill="none" ${wireStyle(0)}><path d="${segD(NEW_IN)}"/></g>
+${chevron(bez(NEW_IN[0], 0.5))}`;
 }
 
 export function transformerYard() {
@@ -76,6 +87,7 @@ ${rad}
 <rect x="1402" y="756" width="16" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1402,764 H1418 M1402,772 H1418" stroke="#8D9AAE"/>
 <rect x="1388" y="756" width="12" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1388,764 H1400 M1388,772 H1400" stroke="#8D9AAE"/>
 ${hvBushings()}
+${newBushing()}
 <rect x="1498" y="768" width="22" height="32" rx="5" fill="#6E9985" ${S}/>
 <circle cx="1410" cy="760" r="6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>
 </g>
@@ -107,6 +119,7 @@ export function transmissionWires() {
   return `<g id="linesW" data-part="lines" class="part" fill="none">
 ${[2, 1, 0].map((k) => `<path d="${linePhase(k)}" stroke="#1B2B48" stroke-opacity="${(0.16 * PHASE_ALPHA[k]).toFixed(2)}" stroke-width="4"/><path d="${linePhase(k)}" ${wireStyle(k)}/>`).join('')}
 ${chevron(bez(toTowerSeg(0), 0.5))}
+<path d="${newLine()}" stroke="#1B2B48" stroke-opacity=".16" stroke-width="4"/><path d="${newLine()}" ${wireStyle(0)}/>
 </g>`;
 }
 
