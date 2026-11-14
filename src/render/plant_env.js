@@ -11,16 +11,16 @@ export function defs() {
     `<linearGradient id="${id}" ${attrs}>${stops.map(([o, c, a]) => `<stop offset="${o}" stop-color="${c}"${a != null ? ` stop-opacity="${a}"` : ''}/>`).join('')}</linearGradient>`;
   const V = 'x1="0" y1="0" x2="0" y2="1"';
   return `<defs>
-${lg('gSky', [[0, '#C9DCEC'], [0.5, '#E3EDF4'], [1, '#F6F2E9']], `gradientUnits="userSpaceOnUse" x1="0" y1="-600" x2="0" y2="${GROUND}"`)}
-${lg('gSoil', [[0, '#DACFBB'], [0.45, '#CCBFA7'], [1, '#B8AA90']], `gradientUnits="userSpaceOnUse" x1="0" y1="${GROUND}" x2="0" y2="1600"`)}
+${lg('gSky', [[0, '#DCEAF6'], [1, '#F4F8FC']], `gradientUnits="userSpaceOnUse" x1="0" y1="-600" x2="0" y2="${GROUND}"`)}
+${lg('gSoil', [[0, '#EADFCB'], [0.1, '#DCCDB3'], [1, '#CDBB9C']], `gradientUnits="userSpaceOnUse" x1="0" y1="${GROUND}" x2="0" y2="1600"`)}
 ${lg('gGrass', [[0, '#B4C7A0'], [1, '#97AE86']], V)}
 ${lg('gConc', [[0, '#E9EBEF'], [0.5, '#D6DAE0'], [1, '#C5CAD2']])}
 ${lg('gConcV', [[0, '#E9EBEF'], [1, '#CDD2DA']], V)}
 ${lg('gConcD', [[0, '#C9CED6'], [1, '#AEB5C0']], V)}
-${lg('gCylH', [[0, '#7F8EA6'], [0.3, '#C3CFDF'], [0.55, '#E8EEF6'], [1, '#6F7E97']])}
+${lg('gCylH', [[0, '#A9B5C6'], [0.25, '#F5F8FB'], [0.55, '#C5CFDB'], [1, '#8C99AD']])}
 ${lg('gCylHd', [[0, '#46556C'], [0.35, '#8095B1'], [0.6, '#A9B9CF'], [1, '#3F4D63']])}
-${lg('gCylV', [[0, '#E3EAF3'], [0.45, '#BCC8D8'], [1, '#6F7E97']], V)}
-${lg('gMetalV', [[0, '#F1F5FA'], [0.5, '#BFCADA'], [1, '#7E8DA5']], V)}
+${lg('gCylV', [[0, '#F5F8FB'], [0.45, '#C5CFDB'], [1, '#8C99AD']], V)}
+${lg('gMetalV', [[0, '#F5F8FB'], [0.5, '#C5CFDB'], [1, '#8C99AD']], V)}
 ${lg('gPaintBlue', [[0, '#5D83B8'], [0.5, '#7FA3D2'], [1, '#456A9E']], V)}
 ${lg('gPaintBlueH', [[0, '#3F6296'], [0.4, '#7FA3D2'], [1, '#36568A']])}
 ${lg('gGreenV', [[0, '#8FB5A0'], [0.5, '#6E9985'], [1, '#4F7966']], V)}
@@ -41,14 +41,14 @@ ${lg('gTowerShade', [[0, '#1B2B48', 0.16], [0.18, '#1B2B48', 0], [0.8, '#1B2B48'
 <radialGradient id="gGlowR" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FF4A44" stop-opacity=".95"/><stop offset=".35" stop-color="#E5322D" stop-opacity=".45"/><stop offset="1" stop-color="#E5322D" stop-opacity="0"/></radialGradient>
 <radialGradient id="gCher" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#7CC6FF" stop-opacity=".9"/><stop offset="1" stop-color="#4C9BEA" stop-opacity="0"/></radialGradient>
 <linearGradient id="gAxial" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".30"/></linearGradient>
-<pattern id="pRebar" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><path d="M0 4.5H9M4.5 0V9" stroke="#8892A0" stroke-width=".6" opacity=".35"/><circle cx="4.5" cy="4.5" r=".9" fill="#7C8696" opacity=".4"/></pattern>
+<pattern id="pRebar" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><path d="M0 4.5H9M4.5 0V9" stroke="#8892A0" stroke-width=".5" opacity=".08"/><circle cx="4.5" cy="4.5" r=".8" fill="#7C8696" opacity=".1"/></pattern>
 <pattern id="pHatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V7" stroke="#C62828" stroke-width="1.4" opacity=".42"/></pattern>
-<pattern id="pFuel" width="3.2" height="10" patternUnits="userSpaceOnUse"><rect width="1.7" height="10" fill="#3A4558" opacity=".55"/><rect x="0" width=".6" height="10" fill="#fff" opacity=".28"/></pattern>
-<pattern id="pFill" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H10M0 5H10" stroke="#8795A8" stroke-width="1.2" opacity=".75"/><path d="M0 0V10" stroke="#8795A8" stroke-width="1" opacity=".5"/></pattern>
-<pattern id="pPanel" width="26" height="40" patternUnits="userSpaceOnUse"><rect width="26" height="40" fill="none"/><path d="M0 0V40" stroke="#9AA3B2" stroke-width="1" opacity=".5"/><path d="M0 20H26" stroke="#9AA3B2" stroke-width=".6" opacity=".3"/></pattern>
-<pattern id="pStripe" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(55)"><rect width="7" height="14" fill="#2B3A55" opacity=".35"/></pattern>
-<pattern id="pStripe2" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(55)"><rect width="7" height="14" fill="#fff" opacity=".35"/></pattern>
-<pattern id="pGravel" width="14" height="10" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.2" fill="#A89B82" opacity=".7"/><circle cx="10" cy="7" r="1" fill="#9C8F76" opacity=".7"/><circle cx="7" cy="2" r=".7" fill="#B8AB92" opacity=".7"/></pattern>
+<pattern id="pFuel" width="3.2" height="10" patternUnits="userSpaceOnUse"><rect width="1.7" height="10" fill="#3A4558" opacity=".4"/><rect x="0" width=".5" height="10" fill="#fff" opacity=".22"/></pattern>
+<pattern id="pFill" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H10M0 5H10" stroke="#8795A8" stroke-width=".8" opacity=".4"/><path d="M0 0V10" stroke="#8795A8" stroke-width=".7" opacity=".25"/></pattern>
+<pattern id="pPanel" width="26" height="40" patternUnits="userSpaceOnUse"><rect width="26" height="40" fill="none"/><path d="M0 0V40" stroke="#9AA3B2" stroke-width="1" opacity=".12"/><path d="M0 20H26" stroke="#9AA3B2" stroke-width=".6" opacity=".06"/></pattern>
+<pattern id="pStripe" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(55)"><rect width="7" height="14" fill="#2B3A55" opacity=".1"/></pattern>
+<pattern id="pStripe2" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(55)"><rect width="7" height="14" fill="#fff" opacity=".1"/></pattern>
+<pattern id="pGravel" width="14" height="10" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.2" fill="#A89B82" opacity=".15"/><circle cx="10" cy="7" r="1" fill="#9C8F76" opacity=".15"/><circle cx="7" cy="2" r=".7" fill="#B8AB92" opacity=".15"/></pattern>
 <clipPath id="clipRods"><rect x="200" y="368" width="100" height="440"/></clipPath>
 <clipPath id="clipVesselIn"><path d="M184,492 L184,790 A66,44 0 0 0 316,790 L316,492 A66,40 0 0 0 184,492 Z"/></clipPath>
 <clipPath id="clipSGsec"><path d="M468,780 L468,505 L448,470 L448,360 A72,28 0 0 1 592,360 L592,470 L572,505 L572,780 Z"/></clipPath>
@@ -70,8 +70,8 @@ const rnd = (() => { let s = 7; return () => ((s = (s * 16807) % 2147483647) / 2
 
 /** Nền: trời, đồi xa, mây, đất, lớp cắt đất, hồ. Vẽ rộng hơn khung để lấp đầy mọi tỉ lệ màn hình. */
 export function background() {
-  const hills = `<path d="M-2000,${GROUND} L-2000,720 C-1400,700 -900,760 -400,730 C100,700 300,640 600,690 C900,740 1200,700 1500,660 C1800,620 2100,700 2400,680 C3000,650 4000,720 4600,700 L4600,${GROUND} Z" fill="#CBD9E6" opacity=".75"/>
-<path d="M-2000,${GROUND} L-2000,790 C-1200,770 -600,800 0,780 C500,760 900,810 1400,790 C1900,770 2300,800 2700,780 C3300,760 4000,800 4600,790 L4600,${GROUND} Z" fill="#BCCDDC" opacity=".8"/>`;
+  const hills = `<path d="M-2000,${GROUND} L-2000,720 C-1400,700 -900,760 -400,730 C100,700 300,640 600,690 C900,740 1200,700 1500,660 C1800,620 2100,700 2400,680 C3000,650 4000,720 4600,700 L4600,${GROUND} Z" fill="#D6E2ED" opacity=".6"/>
+<path d="M-2000,${GROUND} L-2000,790 C-1200,770 -600,800 0,780 C500,760 900,810 1400,790 C1900,770 2300,800 2700,780 C3300,760 4000,800 4600,790 L4600,${GROUND} Z" fill="#C9D8E6" opacity=".7"/>`;
   const cloud = (x, y, s, o) => `<g transform="translate(${x},${y}) scale(${s})" opacity="${o}" fill="#fff"><ellipse cx="0" cy="0" rx="80" ry="18"/><ellipse cx="-30" cy="-14" rx="36" ry="20"/><ellipse cx="22" cy="-18" rx="44" ry="24"/></g>`;
   const stones = Array.from({ length: 70 }, () => {
     const x = -300 + rnd() * 3200, y = GROUND + 20 + rnd() * 210, rr = 1.5 + rnd() * 4;

@@ -24,13 +24,13 @@ Mỗi phase: chụp ảnh trước → sửa → `npm test && npm run build` →
 - Không SVG `filter`. Gradient chỉ khai báo trong `defs()`; dùng lại id có sẵn khi được.
 
 ## Phase 0 – Ảnh gốc
-- [ ] `npm ci` (nếu chưa), `npx vite preview --port 4173 &`, `npm run build && node e2e/shots.mjs /tmp/goc`. Xem cả 6 ảnh.
+- [x] `npm ci` (nếu chưa), `npx vite preview --port 4173 &`, `npm run build && node e2e/shots.mjs /tmp/goc`. Xem cả 6 ảnh.
 
 ## Phase 1 – Toàn cục: nền, hoa văn, bảng màu (`plant_env.js`)
-- [ ] Bỏ (hoặc giảm còn ≤ 15 % độ mờ) mọi pattern nhiễu: `pRebar`, `pPanel`, `pGravel`, `pStripe`, `pStripe2`. Giữ `pFuel` (thanh nhiên liệu) và `pFill` (lớp đệm tháp) nhưng làm mảnh/nhạt hơn.
-- [ ] Trời, đồi, mặt đất, mặt cắt dưới đất theo bảng màu; đồi xa nhạt hơn để đẩy lùi ra sau.
-- [ ] Chỉnh các gradient kim loại/sơn theo "một nguồn sáng".
-- [ ] Commit "Đồ hoạ: nền sạch, bỏ hoa văn nhiễu, bảng màu thống nhất".
+- [x] Bỏ (hoặc giảm còn ≤ 15 % độ mờ) mọi pattern nhiễu: `pRebar`, `pPanel`, `pGravel`, `pStripe`, `pStripe2`. Giữ `pFuel` (thanh nhiên liệu) và `pFill` (lớp đệm tháp) nhưng làm mảnh/nhạt hơn.
+- [x] Trời, đồi, mặt đất, mặt cắt dưới đất theo bảng màu; đồi xa nhạt hơn để đẩy lùi ra sau.
+- [x] Chỉnh các gradient kim loại/sơn theo "một nguồn sáng".
+- [x] Commit "Đồ hoạ: nền sạch, bỏ hoa văn nhiễu, bảng màu thống nhất".
 
 ## Phase 2 – Khu lò phản ứng (`plant_reactor.js`)
 - [ ] Vùng phóng xạ theo quy tắc ở trên (không còn `pHatch` gạch chéo quanh ống vòng 1 và các thiết bị).
