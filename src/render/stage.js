@@ -39,7 +39,7 @@ export class Stage {
     this.lensBox = host.querySelector('#lensBox'); this.lensK = host.querySelector('#lensK');
     this.lens = new Lens(host.querySelector('#lensCv'));
     this.lensLead = document.createElementNS(NS, 'g');
-    this.lensLead.innerHTML = '<path id="lensLine" stroke="#1D5FA8" stroke-width="1.6" stroke-dasharray="5 4" fill="none"/><circle id="lensRing" r="15" fill="rgba(29,95,168,.10)" stroke="#1D5FA8" stroke-width="2"/>';
+    this.lensLead.innerHTML = '<path id="lensLine" stroke="#1D5FA8" stroke-opacity=".45" stroke-width="1" stroke-dasharray="3 5" fill="none"/><circle id="lensRing" r="15" fill="rgba(29,95,168,.08)" stroke="#1D5FA8" stroke-opacity=".6" stroke-width="1.4"/>';
     this.labSvg.insertBefore(this.lensLead, this.labSvg.firstChild);
     this.lensFrame = 0; this.lensOn = true;
     this.ro = new ResizeObserver(() => this.resize());

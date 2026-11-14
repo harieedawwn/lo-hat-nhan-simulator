@@ -33,10 +33,10 @@ Mỗi phase: chụp ảnh trước → sửa → `npm test && npm run build` →
 - [x] Commit "Đồ hoạ: nền sạch, bỏ hoa văn nhiễu, bảng màu thống nhất".
 
 ## Phase 2 – Khu lò phản ứng (`plant_reactor.js`)
-- [ ] Vùng phóng xạ theo quy tắc ở trên (không còn `pHatch` gạch chéo quanh ống vòng 1 và các thiết bị).
-- [ ] Vỏ bọc bê tông: lớp *bối cảnh* (mặt cắt sạch, viền mảnh); thùng lò, bình sinh hơi, bình điều áp, bơm: lớp *nhân vật chính*, khối rõ.
-- [ ] Đường nét đứt xanh từ kính lúp tới lõi: mảnh, nhạt hơn.
-- [ ] Commit, push.
+- [x] Vùng phóng xạ theo quy tắc ở trên (không còn `pHatch` gạch chéo quanh ống vòng 1 và các thiết bị).
+- [x] Vỏ bọc bê tông: lớp *bối cảnh* (mặt cắt sạch, viền mảnh); thùng lò, bình sinh hơi, bình điều áp, bơm: lớp *nhân vật chính*, khối rõ.
+- [x] Đường nét đứt xanh từ kính lúp tới lõi: mảnh, nhạt hơn.
+- [x] Commit, push.
 
 ## Phase 3 – Nhà tuabin (`plant_hall.js`)
 - [ ] Khung kèo mái, dải cửa sổ, cột nhà: lớp *bối cảnh* (nhạt, mảnh) để tuabin – máy phát nổi lên.

@@ -1,6 +1,7 @@
 import { PIPES, TUBE_A, SG_X, tubePath } from './geometry.js';
 
-const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
+const S = 'stroke="#1E2A44" stroke-width="1.6"'; // nhân vật chính: viền mực
+const SB = 'stroke="#A3B0C2" stroke-width="1"'; // bối cảnh: nét mảnh
 
 export function pipeSvg(p) {
   const base = { hot: '#A3162E', cold: '#E5645B', steam: '#EEF1F5', water: '#2F76C4', cool: '#12919A', warm: '#58C0A0' }[p.cls];
@@ -19,21 +20,17 @@ function contain() {
   const inner = 'M96,884 L96,300 A284,104 0 0 1 664,300 L664,884 Z';
   return `<g id="containment" data-part="containment" class="part">
 <ellipse cx="380" cy="906" rx="360" ry="10" fill="url(#gAO)"/>
-<rect x="56" y="900" width="648" height="46" fill="url(#gConcD)" ${S}/>
-<rect x="56" y="900" width="648" height="46" fill="url(#pRebar)"/>
-<path d="${outer}" fill="url(#gConc)" ${S}/>
-<path d="${outer} ${inner}" fill="url(#pRebar)" fill-rule="evenodd"/>
-<path d="${inner}" fill="url(#gInside)" />
-<path d="${inner}" fill="none" stroke="#7088A6" stroke-width="3"/>
-<path d="M96,900 H664" stroke="#1B2B48" stroke-opacity=".4"/>
-<rect x="96" y="884" width="568" height="16" fill="url(#gConcD)" ${S}/>
-<path d="M98,300 L98,884" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>
-<g id="crane" opacity=".95">
-<rect x="98" y="296" width="26" height="8" fill="#9AA5B6" ${S}/><rect x="636" y="296" width="26" height="8" fill="#9AA5B6" ${S}/>
-<rect x="118" y="302" width="524" height="10" rx="2" fill="url(#gYellow)" ${S}/>
-<path d="M130,312 L180,302 L230,312 L280,302 L330,312 L380,302 L430,312 L480,302 L530,312 L580,302 L630,312" fill="none" stroke="#9A7420" stroke-width="1.2"/>
-<rect x="300" y="294" width="34" height="10" rx="2" fill="#E3B24B" ${S}/>
-<path d="M317,312 V340" stroke="#46556C" stroke-width="1.6" stroke-dasharray="3 2"/><path d="M317,340 q-6,0 -6,6 q0,6 6,6" fill="none" stroke="#46556C" stroke-width="2.4"/>
+<rect x="56" y="900" width="648" height="46" fill="#DCE2E9" ${SB}/>
+<path d="${outer}" fill="#E3E9F0" ${SB}/>
+<path d="${inner}" fill="url(#gInside)" stroke="#A3B0C2" stroke-width="1"/>
+<path d="M96,900 H664" stroke="#A3B0C2" stroke-width="1"/>
+<rect x="96" y="884" width="568" height="16" fill="#DCE2E9" ${SB}/>
+<g id="crane">
+<rect x="98" y="296" width="26" height="8" fill="#C5CFDB" ${SB}/><rect x="636" y="296" width="26" height="8" fill="#C5CFDB" ${SB}/>
+<rect x="118" y="302" width="524" height="10" rx="2" fill="url(#gYellow)" stroke="#8A5A14" stroke-width="1"/>
+<path d="M130,312 L180,302 L230,312 L280,302 L330,312 L380,302 L430,312 L480,302 L530,312 L580,302 L630,312" fill="none" stroke="#9A7420" stroke-width="1"/>
+<rect x="300" y="294" width="34" height="10" rx="2" fill="#E3B24B" stroke="#8A5A14" stroke-width="1"/>
+<path d="M317,312 V340" stroke="#46556C" stroke-width="1.4" stroke-dasharray="3 2"/><path d="M317,340 q-6,0 -6,6 q0,6 6,6" fill="none" stroke="#46556C" stroke-width="2.2"/>
 </g>
 </g>`;
 }
@@ -58,8 +55,8 @@ function vessel() {
   return `<g id="vesselGroup">
 <ellipse cx="250" cy="850" rx="100" ry="9" fill="url(#gAO)"/>
 <g data-part="rpv" class="part">
-<path d="${outer}" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
-<rect x="162" y="484" width="176" height="14" rx="3" fill="#5D6D86" ${S}/>
+<path d="${outer}" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/>
+<path d="M174,520 V786" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/><rect x="162" y="484" width="176" height="14" rx="3" fill="#5D6D86" ${S}/>
 <path d="${inner}" fill="url(#gPrimCold)"/>
 <g clip-path="url(#clipVesselIn)">
 <rect x="184" y="440" width="132" height="70" fill="url(#gPrimHot)" opacity=".85"/>
@@ -98,7 +95,7 @@ function pressurizer() {
   const sh = 'M366,300 A32,28 0 0 1 430,300 L430,450 A32,28 0 0 1 366,450 Z';
   return `<g id="przGroup" data-part="pressurizer" class="part">
 <ellipse cx="398" cy="482" rx="40" ry="5" fill="url(#gAO)"/>
-<path d="${sh}" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
+<path d="${sh}" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/><path d="M370,306 V446" stroke="#fff" stroke-opacity=".35" stroke-width="2.4" stroke-linecap="round"/>
 <path d="M372,300 A26,22 0 0 1 424,300 L424,450 A26,22 0 0 1 372,450 Z" fill="#F4F6FA"/>
 <g clip-path="url(#clipPrz)"><rect x="366" y="360" width="64" height="130" fill="url(#gPrimHot)"/>
 <path d="M370,360 H426" stroke="#fff" stroke-width="2" opacity=".8"/></g>
@@ -120,7 +117,7 @@ function steamGen() {
   return `<g id="sgGroup">
 <ellipse cx="520" cy="855" rx="80" ry="8" fill="url(#gAO)"/>
 <g data-part="steamgen" class="part">
-<path d="${shell}" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
+<path d="${shell}" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/><path d="M454,366 V466 M472,510 V772" stroke="#fff" stroke-opacity=".3" stroke-width="2.4" stroke-linecap="round"/>
 <g clip-path="url(#clipSGsec)">
 <rect x="440" y="320" width="160" height="130" fill="#F7F9FC"/>
 <rect id="sgSteamTint" x="440" y="320" width="160" height="130" fill="#EAF0F7"/>
@@ -130,9 +127,9 @@ function steamGen() {
 <g stroke="#46556C" stroke-width="1.2" opacity=".8"><path d="M479,640 H561 M479,705 H561"/></g>
 </g>
 ${cans}
-<path d="${shell}" fill="none" stroke="#1B2B48" stroke-opacity=".55" stroke-width="1.2"/>
+<path d="${shell}" fill="none" stroke="#1E2A44" stroke-opacity=".6" stroke-width="1.2"/>
 <rect x="464" y="776" width="112" height="12" fill="#46556C" ${S}/>
-<path d="M464,788 L576,788 L576,812 A56,36 0 0 1 464,812 Z" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
+<path d="M464,788 L576,788 L576,812 A56,36 0 0 1 464,812 Z" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/>
 <path d="M472,788 L520,788 L520,840 A46,30 0 0 1 472,812 Z" fill="#C9505F" opacity=".92"/>
 <path d="M520,788 L568,788 L568,812 A46,30 0 0 1 520,840 Z" fill="#EE9A92" opacity=".95"/>
 <rect x="518" y="788" width="4" height="56" fill="#46556C"/>
@@ -151,7 +148,7 @@ function pump1() {
 <g stroke="#1B2B48" stroke-opacity=".35" stroke-width="1">${[746, 752, 758, 764, 770, 776, 782].map((y) => `<path d="M608,${y} H636"/>`).join('')}</g>
 <rect x="604" y="732" width="36" height="9" rx="3" fill="url(#gCylHd)" ${S}/>
 <rect x="612" y="792" width="20" height="6" fill="#5D6D86" ${S}/>
-<circle cx="622" cy="822" r="29" fill="url(#gCylHd)" stroke="#1B2B48" stroke-width="1.6"/>
+<circle cx="622" cy="822" r="29" fill="url(#gCylHd)" stroke="#1E2A44" stroke-width="1.6"/><path d="M600,812 A24,24 0 0 1 614,798" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="2.4" stroke-linecap="round"/>
 <circle cx="622" cy="822" r="22" fill="#F2B4AC" ${S}/>
 <g id="imp1" transform="translate(622,822)">${imp}<circle r="4.5" fill="#46556C"/></g>
 </g>`;
@@ -162,19 +159,18 @@ function trefoilPlate() {
 }
 
 function radZone() {
-  const halo = PIPES.filter((p) => p.loop === 1).map((p) => `<path d="${p.d}" fill="none" stroke="url(#pHatch)" stroke-width="${p.w + 30}" stroke-linejoin="round"/>`).join('');
-  return `<g id="radzone" opacity=".95">${halo}
-<rect x="156" y="432" width="194" height="436" rx="14" fill="url(#pHatch)" stroke="#C62828" stroke-opacity=".45" stroke-dasharray="7 5" stroke-width="1.4"/>
-<rect x="352" y="254" width="92" height="238" rx="30" fill="url(#pHatch)" stroke="#C62828" stroke-opacity=".45" stroke-dasharray="7 5" stroke-width="1.4"/>
-<rect x="452" y="776" width="136" height="84" rx="22" fill="url(#pHatch)" stroke="#C62828" stroke-opacity=".45" stroke-dasharray="7 5" stroke-width="1.4"/>
-<rect x="584" y="788" width="76" height="86" rx="20" fill="url(#pHatch)" stroke="#C62828" stroke-opacity=".45" stroke-dasharray="7 5" stroke-width="1.4"/>
+  const halo = PIPES.filter((p) => p.loop === 1).map((p) => `<path d="${p.d}" fill="none" stroke="#D7303A" stroke-width="${p.w + 26}" stroke-linejoin="round" stroke-linecap="round"/>`).join('');
+  const boxes = [[156, 432, 194, 436, 14], [352, 254, 92, 238, 30], [452, 776, 136, 84, 22], [584, 788, 76, 86, 20]];
+  const rc = (b) => `<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" rx="${b[4]}"`;
+  return `<g id="radzone"><g opacity=".07" fill="#D7303A">${halo}${boxes.map((b) => rc(b) + '/>').join('')}</g>
+${boxes.map((b) => rc(b) + ' fill="none" stroke="rgba(198,40,40,.35)" stroke-width="1"/>').join('')}
 </g>`;
 }
 
 export function reactorBuilding() {
   const p1 = PIPES.filter((p) => p.loop === 1).map(pipeSvg).join('');
   const sgpipes = PIPES.filter((p) => p.id === 'steam' || p.id === 'feed').map(pipeSvg).join('');
-  return `<defs><linearGradient id="gInside" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF2F7"/><stop offset="1" stop-color="#DDE4EC"/></linearGradient></defs>
+  return `<defs><linearGradient id="gInside" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6F8FB"/><stop offset="1" stop-color="#EDF1F6"/></linearGradient></defs>
 ${contain()}
 ${radZone()}
 <g id="ctInside">
