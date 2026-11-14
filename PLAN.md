@@ -23,5 +23,5 @@ Stack: Vite + JS ES modules (không framework), Vitest, Playwright. Base "./".
 - `main` được tạo từ nhánh làm việc vì kho ban đầu trống (không có nhánh mặc định để mở PR).
 
 ## Trạng thái
-Hoàn thành 6/6. e2e: `node e2e/run.mjs` (50+ kiểm tra), âm thanh OfflineAudioContext < 0 dBFS.
+Hoàn thành 6/6 + bổ sung: dòng xoay chiều dao động đồng bộ rôto, dây đi–về 24 kV, dây 500 kV mới, làm đẹp màu. e2e: `node e2e/run.mjs` (50+ kiểm tra), âm thanh OfflineAudioContext < 0 dBFS.
 Chưa làm được: WebKit (không cài được trong sandbox), kiểm tra URL github.io thật (proxy chặn máy chủ).
