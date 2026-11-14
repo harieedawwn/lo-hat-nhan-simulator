@@ -90,6 +90,7 @@ export class Stage {
     this.camera.tick(dt);
     this.scene.update(s, d, simDt, this.quality);
     this.flows.setDrive(s, d);
+    this.flows.theta = this.scene.theta;   // pha điện = góc rôto
     this.flows.update(simDt);
     if (this.lensOn) {
       this.lens.update(simDt, s);

@@ -74,6 +74,7 @@ ${rad}
 <path d="M1396,812 H1484 M1396,840 H1484 M1396,868 H1484" stroke="#1B2B48" stroke-opacity=".25"/>
 <rect x="1388" y="782" width="104" height="10" rx="4" fill="#6E9985" ${S}/>
 <rect x="1402" y="756" width="16" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1402,764 H1418 M1402,772 H1418" stroke="#8D9AAE"/>
+<rect x="1388" y="756" width="12" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1388,764 H1400 M1388,772 H1400" stroke="#8D9AAE"/>
 ${hvBushings()}
 <rect x="1498" y="768" width="22" height="32" rx="5" fill="#6E9985" ${S}/>
 <circle cx="1410" cy="760" r="6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>

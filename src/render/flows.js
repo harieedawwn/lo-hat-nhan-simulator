@@ -36,7 +36,13 @@ export class Flows {
   constructor(quality = 1) {
     this.q = quality;
     this.flows = FLOWS.map((f) => this.mk(f));
-    this.elec = ELEC.map((e) => this.mk({ id: e.id, d: e.d, gap: e.gap, speed: e.speed, alpha: e.alpha ?? 1, spread: 0, size: 2.6 }));
+    this.elec = ELEC.map((e) => {
+      const fl = this.mk({ id: e.id, d: e.d, gap: e.gap, alpha: e.alpha ?? 1, spread: 0, size: 2.6 });
+      fl.amp = e.amp ?? 0; fl.ph = e.ph ?? 0;
+      for (let i = 0; i < fl.cnt; i++) fl.pos[i] = ((i + 0.5) / fl.cnt) * fl.len; // vị trí gốc s0 cố định, rải đều
+      return fl;
+    });
+    this.theta = 0;                // pha điện = góc rôto (do scene đặt mỗi khung)
     this.drive = {};
     this.puffCap = 80; this.puffs = [];
     this.sprite = this.mkSprite();
@@ -112,8 +118,6 @@ export class Flows {
       const v = fl.f.speed * (fl.f.drive === 'one' ? 1 : 0.3 + 0.7 * Math.min(f, 1.2)) * dt;
       for (let i = 0; i < fl.cnt; i++) { fl.pos[i] += v; if (fl.pos[i] >= fl.len) fl.pos[i] -= fl.len; }
     }
-    const pe = dr.pe ?? 0;
-    for (const fl of this.elec) { if (pe < 0.01) continue; const v = fl.f.speed * dt; for (let i = 0; i < fl.cnt; i++) { fl.pos[i] += v; if (fl.pos[i] >= fl.len) fl.pos[i] -= fl.len; } }
     // bọt sôi trong bình sinh hơi
     const pow = dr.pow ?? 0, nb = Math.floor(this.nBub * Math.min(1, pow * 1.05));
     for (let i = 0; i < this.bub.length; i++) {
@@ -201,15 +205,18 @@ export class Flows {
     if (pe > 0.01) {
       const rr = Math.min(1, pe) * dens;
       const vx0 = -view.x / view.s - 10, vx1 = vx0 + (view.cw || 4000) / view.s + 20;
+      const amp = Math.min(1, pe), th = this.theta;
       for (const fl of this.elec) {
-        ctx.globalAlpha = fl.f.alpha; // pha sau (theo chiều sâu) nhạt hơn
+        // i ∝ cos(θ+φ); độ dời ∝ ∫i dt ∝ sin(θ+φ); quầng sáng ∝ |i|
+        const ang = th + fl.ph, dsp = fl.amp * amp * Math.sin(ang), cur = Math.abs(Math.cos(ang));
         for (let pass = 0; pass < 2; pass++) {
+          ctx.globalAlpha = fl.f.alpha * (pass ? 1 : cur); // pha sau (theo chiều sâu) nhạt hơn
           ctx.fillStyle = pass ? 'rgba(255,200,60,.95)' : 'rgba(255,196,60,.25)';
           ctx.beginPath();
           const rad = pass ? 2.6 : 6;
           for (let i = 0; i < fl.cnt; i++) {
             if (fl.rank[i] > rr) continue;
-            let idx = fl.pos[i] / STEP | 0; if (idx >= fl.n) idx = fl.n - 1;
+            let idx = Math.round((fl.pos[i] + dsp) / STEP); idx = idx < 0 ? 0 : idx >= fl.n ? fl.n - 1 : idx;
             const x = fl.a[idx * 4], y = fl.a[idx * 4 + 1];
             if (x < vx0 || x > vx1) continue;
             ctx.moveTo(x + rad, y); ctx.arc(x, y, rad, 0, 6.283);

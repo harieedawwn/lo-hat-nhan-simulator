@@ -139,9 +139,12 @@ export function linePhase(k) {
 /** Đường hạt của pha k: sứ MBA → máy cắt (nhảy qua thân, M) → giàn → các cột. */
 export const phasePath = (k) => `${yardIn(k)} M${off(YARD.brkOut, k)} ${yardOut(k).replace(/^M[^C]*/, '')} ${linePhase(k).replace(/^M[^C]*/, '')}`;
 export const ELEC = [
-  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, speed: 130, alpha: 1 },
+  // amp: biên độ dao động (px) ∝ cường độ dòng; ph: pha ban đầu (rad). Pha điện = góc rôto θ.
+  { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, amp: 12, ph: 0, alpha: 1 },
+  // dây thứ 2 (dây về của mạch kín), cùng chiều tham số máy phát → MBA nhưng lệch π ⇒ luôn ngược chiều dây kia
+  { id: 'bus2', d: poly([[1304, 590], [1304, 556], [1394, 556], [1394, 775]], 10), gap: 15, amp: 12, ph: Math.PI, alpha: 1 },
   // phía 500 kV: dòng nhỏ hơn nhiều (P = UI) → hạt thưa và chậm hơn
-  ...[0, 1, 2].map((k) => ({ id: 'ph' + k, d: phasePath(k), gap: 34, speed: 96, alpha: PHASE_ALPHA[k] })),
+  ...[0, 1, 2].map((k) => ({ id: 'ph' + k, d: phasePath(k), gap: 34, amp: 4, ph: -2 * Math.PI * k / 3, alpha: PHASE_ALPHA[k] })),
 ];
 
 export const FOCUS = {

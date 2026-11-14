@@ -126,10 +126,11 @@ ${windings(1176, -1)}${windings(1284, 1)}
 ${genRotor}
 <rect x="1310" y="608" width="34" height="64" rx="6" fill="url(#gGreenH)" ${S}/>
 <rect x="1318" y="620" width="18" height="40" fill="#EEF2F7" ${S}/>
-<rect x="1280" y="578" width="12" height="14" fill="#C9CED6" ${S}/>
+<rect x="1280" y="578" width="12" height="14" fill="#C9CED6" ${S}/><rect x="1298" y="578" width="12" height="14" fill="#C9CED6" ${S}/>
 <rect x="1104" y="${AX - 4}" width="52" height="8" fill="#8C98AB"/>
 <rect x="1308" y="${AX - 4}" width="12" height="8" fill="#8C98AB"/>
 <g id="busG" data-part="busduct"><path d="M1285,590 V540 H1410 V775" fill="none" stroke="#1B2B48" stroke-width="9" stroke-linejoin="round"/><path d="M1285,590 V540 H1410 V775" fill="none" stroke="#C99A3E" stroke-width="6" stroke-linejoin="round"/><path d="M1285,590 V540 H1410 V775" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.6" stroke-linejoin="round" transform="translate(-1,-1)"/></g>
+<g id="busG2" data-part="busduct"><path d="M1304,590 V556 H1394 V775" fill="none" stroke="#1B2B48" stroke-width="8" stroke-linejoin="round"/><path d="M1304,590 V556 H1394 V775" fill="none" stroke="#B9763A" stroke-width="5" stroke-linejoin="round"/><path d="M1304,590 V556 H1394 V775" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.4" stroke-linejoin="round" transform="translate(-1,-1)"/></g>
 </g>
 <g id="valves">${valve('vTSV', 800, 585)}${valve('vDump', 770, 668, 90)}${valve('vMSV', 716, 325)}</g>
 </g>`;

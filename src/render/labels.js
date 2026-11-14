@@ -21,6 +21,7 @@ export const LABELS = [
   { id: 'feed', t: 'Bơm cấp nước', x: 860, y: 880, dirs: 'dl', p: 2, part: 'feedpump' },
   { id: 'dump', t: 'Đường xả hơi về bình ngưng', x: 850, y: 736, dirs: 'dl', p: 3, part: 'steamdump' },
   { id: 'bus', t: 'Thanh dẫn 24 kV', x: 1348, y: 540, dirs: 'udr', p: 2, part: 'busduct' },
+  { id: 'hz', t: '~ 50 Hz (làm chậm)', x: 1350, y: 556, dirs: 'dr', p: 3, part: 'busduct', sm: 1 },
   { id: 'tagIn', t: 'VÀO 24 kV · dòng lớn', x: 1404, y: 766, dirs: 'ldu', p: 3, part: 'transformer', sm: 1 },
   { id: 'tagOut', t: 'RA 500 kV · dòng nhỏ', x: 1446, y: 668, dirs: 'lu', p: 3, part: 'transformer', sm: 1 },
   { id: 'brk', t: 'Máy cắt điện', x: 1573, y: 708, dirs: 'dr', p: 2, part: 'switchyard' },
