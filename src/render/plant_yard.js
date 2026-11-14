@@ -71,11 +71,10 @@ function switchyard() {
 ${PH.map((k) => `<g ${tr(k)}>${breaker(k)}</g>`).join('')}
 ${PH.map((k) => `<g ${tr(k)}>${strainChain()}</g>`).join('')}
 ${wires}
-${chevron(bez(inSegs(0)[0], 0.45))}
 <g transform="translate(${NEW_T[0]},${NEW_T[1]})">${breaker(-1)}</g>
 <rect x="${NEW_BRK.inn[0] - 14}" y="884" width="46" height="16" fill="url(#gConcD)" ${S}/>
 <g fill="none">${halo(segD(NEW_IN), 0)}<path d="${segD(NEW_IN)}" ${wireStyle(0)}/></g>
-${chevron(bez(NEW_IN[0], 0.5))}`;
+`;
 }
 
 export function transformerYard() {
@@ -126,7 +125,6 @@ ${TOWERS.map((x) => tower(x)).join('')}
 export function transmissionWires() {
   return `<g id="linesW" data-part="lines" class="part" fill="none">
 ${[2, 1, 0].map((k) => `${halo(linePhase(k), k)}<path d="${linePhase(k)}" ${wireStyle(k)}/>`).join('')}
-${chevron(bez(toTowerSeg(0), 0.5))}
 ${halo(newLine(), 0)}<path d="${newLine()}" ${wireStyle(0)}/>
 </g>`;
 }

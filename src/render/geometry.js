@@ -172,7 +172,6 @@ export const ELEC = [
   // phía 500 kV: dòng nhỏ hơn nhiều (P = UI) → hạt thưa và chậm hơn
   ...[0, 1, 2].map((k) => ({ id: 'ph' + k, d: phasePath(k), gap: 34, amp: 4, ph: -2 * Math.PI * k / 3, alpha: PHASE_ALPHA[k] })),
   // dây mới phía 500 kV = dây về của mạch thứ cấp: ngược pha với pha trước (ph0) ⇒ dao động ngược chiều
-  { id: 'ret5', d: newPath(), gap: 34, amp: 4, ph: Math.PI, alpha: 1 },
 ];
 
 export const FOCUS = {
