@@ -56,7 +56,7 @@ Giữ nguyên **cấu trúc mạch** (máy phát → 2 thanh dẫn 24 kV → MBA
 - [x] Commit, push.
 
 ## Phase 6 – Hạt, nhãn, hoàn thiện
-- [ ] `flows.js`: giảm mật độ hạt dòng chảy ~30 % (không đổi tốc độ, chiều, cách điều khiển); hạt điện giữ nguyên.
-- [ ] `labels.js` + `styles.css`: nhãn gọn hơn (bóng nhẹ, viền mảnh), đường dẫn nhãn mảnh/nhạt; ở toàn cảnh chỉ hiện nhãn ưu tiên cao, nhãn còn lại hiện khi phóng to (nếu hệ nhãn có sẵn cơ chế ưu tiên `p` thì dùng nó).
-- [ ] So bộ ảnh cuối với `/tmp/goc`: nhìn toàn cảnh 2 giây phải nhận ra ngay 5 khối: lò – tuabin/máy phát – khu điện – tháp làm mát – sông; ảnh điện thoại không rối hơn.
-- [ ] `node e2e/run.mjs` (bỏ qua nếu lỗi môi trường). Cập nhật `docs/hero.png` bằng ảnh `0-toan-canh.png` mới. Commit "Hoàn thiện đồ hoạ", push, kiểm tra GitHub Actions xanh.
+- [x] `flows.js`: giảm mật độ hạt dòng chảy ~30 % (không đổi tốc độ, chiều, cách điều khiển); hạt điện giữ nguyên.
+- [x] `labels.js` + `styles.css`: nhãn gọn hơn (bóng nhẹ, viền mảnh), đường dẫn nhãn mảnh/nhạt; ở toàn cảnh chỉ hiện nhãn ưu tiên cao, nhãn còn lại hiện khi phóng to (nếu hệ nhãn có sẵn cơ chế ưu tiên `p` thì dùng nó).
+- [x] So bộ ảnh cuối với `/tmp/goc`: nhìn toàn cảnh 2 giây phải nhận ra ngay 5 khối: lò – tuabin/máy phát – khu điện – tháp làm mát – sông; ảnh điện thoại không rối hơn.
+- [x] `node e2e/run.mjs` (bỏ qua nếu lỗi môi trường). Cập nhật `docs/hero.png` bằng ảnh `0-toan-canh.png` mới. Commit "Hoàn thiện đồ hoạ", push, kiểm tra GitHub Actions xanh.

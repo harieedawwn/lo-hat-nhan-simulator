@@ -171,7 +171,7 @@ export class Flows {
       const f = dr[fl.f.drive] ?? 1;
       if (f < 0.015) continue;
       const lim = fl.f.drive === 'one' ? 1 : Math.min(1, f);
-      const rr = lim * dens;
+      const rr = lim * dens * 0.7;
       ctx.fillStyle = fl.col;
       ctx.beginPath();
       const sz = fl.f.size, sp = fl.f.spread;

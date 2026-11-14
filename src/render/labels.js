@@ -77,7 +77,7 @@ export class Labels {
       if (ok) bd.g.setAttribute('transform', `translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${Math.max(0.8, Math.min(1.2, cam.s * 1.2))})`);
     }
     if (!this.visible) return;
-    const sk = cw < 520 ? 1.6 : cw < 900 ? 1.25 : 1; const maxP = cam.s * sk < 0.5 ? 1 : cam.s * sk < 0.85 ? 2 : 3;
+    const sk = cw < 520 ? 1.6 : cw < 900 ? 1.25 : 1; const maxP = cam.s * sk < 0.62 ? 1 : cam.s * sk < 0.95 ? 2 : 3;
     const placed = (obst || []).map((o) => ({ x: o.x, y: o.y, w: o.w, h: o.h }));
     for (const bd of this.badges) { if (bd.g.style.display === 'none') continue; const bx = sx(bd.b.x), by = sy(bd.b.y); placed.push({ x: bx - 13, y: by - 13, w: 26, h: 26 }); }
     const order = [...this.items].sort((a, b) => a.L.p - b.L.p);
