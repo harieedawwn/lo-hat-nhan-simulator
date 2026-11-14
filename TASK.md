@@ -37,9 +37,9 @@ Nét đen chủ repo vẽ: từ nắp MBA (phía phải, gần bình dầu phụ
 
 ## Phase 3 – Làm đẹp đồ hoạ (nhanh, an toàn)
 Mục tiêu: đẹp hơn, **không được xấu hơn, không được sai hình**. Chỉ chỉnh màu/gradient/viền/bóng; **không đổi hình dạng, toạ độ, bố cục** bộ phận cũ.
-- [ ] **3a. Ảnh “trước”**: chụp toàn cảnh `0 90 2450 1010` (vw 1600 vh 700) và 4 vùng: lò `50 150 690 800`, tuabin `690 440 700 480`, khu điện `1120 480 760 440`, tháp `1780 40 680 1000` → lưu `/tmp/before_*.png`.
-- [ ] **3b. Chỉnh** (tối đa ~6 thay đổi nhỏ, ưu tiên `defs()` trong `plant_env.js` và màu trong các file `plant_*.js`): gradient kim loại có điểm sáng mềm hơn; bóng đổ (`gAO`) dịu và nhất quán; độ dày nét viền thống nhất; thanh dẫn đồng/vàng có ánh kim; sứ cách điện màu gốm ấm rõ khấc; màu vòng 1 đỏ / vòng 2 xanh dương / vòng 3 xanh ngọc giữ nguyên ý nghĩa, chỉ hài hoà độ bão hoà. Không thêm `filter` blur/drop-shadow SVG (nặng trên điện thoại).
-- [ ] **3c. Ảnh “sau”** cùng vùng, so sánh từng cặp. Thay đổi nào không rõ ràng đẹp hơn → hoàn tác thay đổi đó. Chạy `node e2e/perf.mjs` nếu chạy được để chắc FPS không giảm.
+- [x] **3a. Ảnh “trước”**: chụp toàn cảnh `0 90 2450 1010` (vw 1600 vh 700) và 4 vùng: lò `50 150 690 800`, tuabin `690 440 700 480`, khu điện `1120 480 760 440`, tháp `1780 40 680 1000` → lưu `/tmp/before_*.png`.
+- [x] **3b. Chỉnh** (tối đa ~6 thay đổi nhỏ, ưu tiên `defs()` trong `plant_env.js` và màu trong các file `plant_*.js`): gradient kim loại có điểm sáng mềm hơn; bóng đổ (`gAO`) dịu và nhất quán; độ dày nét viền thống nhất; thanh dẫn đồng/vàng có ánh kim; sứ cách điện màu gốm ấm rõ khấc; màu vòng 1 đỏ / vòng 2 xanh dương / vòng 3 xanh ngọc giữ nguyên ý nghĩa, chỉ hài hoà độ bão hoà. Không thêm `filter` blur/drop-shadow SVG (nặng trên điện thoại).
+- [x] **3c. Ảnh “sau”** cùng vùng, so sánh từng cặp. Thay đổi nào không rõ ràng đẹp hơn → hoàn tác thay đổi đó. Chạy `node e2e/perf.mjs` nếu chạy được để chắc FPS không giảm.
 - [ ] **3d.** Commit “Làm đẹp màu sắc, gradient”, push.
 
 ## Phase 4 – Chốt

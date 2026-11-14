@@ -6,7 +6,7 @@ const TC = 1990; // tâm tháp làm mát
 const half = (y) => Math.sqrt(112 * 112 + Math.pow(0.55 * (y - 650), 2));
 
 function insulator(x, y, n = 4, h = 10) {
-  return Array.from({ length: n }, (_, i) => `<ellipse cx="${x}" cy="${y + i * (h / n * 2.2)}" rx="6" ry="2.6" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
+  return Array.from({ length: n }, (_, i) => `<ellipse cx="${x}" cy="${y + i * (h / n * 2.2)}" rx="6" ry="2.6" fill="#E6CFA6" stroke="#8A5F3C" stroke-width=".9"/>`).join('');
 }
 
 const PH = [2, 1, 0]; // vẽ pha sau trước, pha trước sau cùng
@@ -105,7 +105,7 @@ export function transmission() {
       const w1 = 4 + ((y - top) / (GROUND - top)) * bw, w2 = 4 + ((y + 36 - top) / (GROUND - top)) * bw;
       lat.push(`<path d="M${cx - w1},${y} L${cx + w2},${y + 36} M${cx + w1},${y} L${cx - w2},${y + 36} M${cx - w1},${y} H${cx + w1}"/>`);
     }
-    const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
+    const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#E6CFA6" stroke="#8A5F3C" stroke-width=".9"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
     return `<g stroke="#46556C" stroke-width="1.6" fill="none"><path d="M${cx - 4},${top} L${cx - bw - 4},${GROUND} M${cx + 4},${top} L${cx + bw + 4},${GROUND}" stroke-width="3"/>${lat.join('')}${arms}<path d="M${cx},${top - 18} V${top}" stroke-width="2.4"/><path d="M${cx - 30},${top + 24} L${cx},${top - 18} L${cx + 30},${top + 24}" stroke-width="1.6"/></g>`;
   };
   return `<g id="lines" data-part="lines" class="part">

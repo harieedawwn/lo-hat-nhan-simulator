@@ -36,7 +36,7 @@ ${lg('gPrimMix', [[0, '#C9505F'], [0.5, '#DE7B78'], [1, '#EE9A92']], V)}
 ${lg('gTowerOut', [[0, '#C2C7CF'], [0.22, '#E6E9EE'], [0.5, '#DDE1E7'], [1, '#B3B9C3']])}
 ${lg('gTowerIn', [[0, '#B9C5D3'], [0.35, '#DCE4EC'], [0.7, '#E9EEF3'], [1, '#B4C0CE']])}
 ${lg('gTowerShade', [[0, '#1B2B48', 0.16], [0.18, '#1B2B48', 0], [0.8, '#1B2B48', 0], [1, '#1B2B48', 0.16]])}
-<radialGradient id="gAO" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#1B2B48" stop-opacity=".30"/><stop offset="1" stop-color="#1B2B48" stop-opacity="0"/></radialGradient>
+<radialGradient id="gAO" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#1B2B48" stop-opacity=".24"/><stop offset="1" stop-color="#1B2B48" stop-opacity="0"/></radialGradient>
 <radialGradient id="gGlowA" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FFC24A" stop-opacity=".95"/><stop offset=".35" stop-color="#FFB020" stop-opacity=".45"/><stop offset="1" stop-color="#FFB020" stop-opacity="0"/></radialGradient>
 <radialGradient id="gGlowR" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#FF4A44" stop-opacity=".95"/><stop offset=".35" stop-color="#E5322D" stop-opacity=".45"/><stop offset="1" stop-color="#E5322D" stop-opacity="0"/></radialGradient>
 <radialGradient id="gCher" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#7CC6FF" stop-opacity=".9"/><stop offset="1" stop-color="#4C9BEA" stop-opacity="0"/></radialGradient>
