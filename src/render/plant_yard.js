@@ -3,49 +3,54 @@ import { pipeSvg } from './plant_reactor.js';
 
 const S = 'stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"';
 const TC = 1990; // tâm tháp làm mát
+const INK = '#1E2A44';
+// sứ gốm ấm (thân + khấc), đầu cực đồng
+const POR = `fill="#EBDDC4" stroke="#A07E55" stroke-width="1"`, SHED = `stroke="#A07E55" stroke-opacity=".7" stroke-width="1.6"`;
+const CU = `fill="#E2A53B" stroke="#8A5A14" stroke-width=".9"`;
+/** Một sứ đứng: thân gốm + khấc + đầu cực đồng. */
+const bushing = (x, y, h, w = 9) => `<rect x="${x - w / 2}" y="${y + 2}" width="${w}" height="${h}" rx="2" ${POR}/><path d="${Array.from({ length: Math.max(1, Math.floor((h - 4) / 7)) }, (_, i) => `M${x - w / 2 - 1.5},${y + 7 + i * 7} H${x + w / 2 + 1.5}`).join(' ')}" ${SHED}/><rect x="${x - w / 2}" y="${y + 2}" width="2.2" height="${h}" fill="#fff" opacity=".45"/><circle cx="${x}" cy="${y + 1}" r="2.6" ${CU}/>`;
 const half = (y) => Math.sqrt(112 * 112 + Math.pow(0.55 * (y - 650), 2));
 
-function insulator(x, y, n = 4, h = 10) {
-  return Array.from({ length: n }, (_, i) => `<ellipse cx="${x}" cy="${y + i * (h / n * 2.2)}" rx="6" ry="2.6" fill="#E6CFA6" stroke="#8A5F3C" stroke-width=".9"/>`).join('');
-}
-
 const PH = [2, 1, 0]; // vẽ pha sau trước, pha trước sau cùng
-const tr = (k) => `transform="translate(${DEPTH[0] * k},${DEPTH[1] * k})" opacity="${PHASE_ALPHA[k]}"`;
-/** Nét dây theo lớp sâu: pha trước đậm, pha sau mảnh và nhạt. */
-export const wireStyle = (k) => `stroke="#2B3A55" stroke-width="${[1.9, 1.5, 1.2][k]}" stroke-opacity="${PHASE_ALPHA[k]}"`;
+/** Độ mờ thiết bị theo lớp sâu: pha sau chỉ còn bóng nhạt để pha trước nổi lên. */
+const EQ_ALPHA = [1, 0.36, 0.18];
+const tr = (k) => `transform="translate(${DEPTH[0] * k},${DEPTH[1] * k})" opacity="${EQ_ALPHA[k]}"`;
+/** Nét dây: cùng bề dày cho mọi pha, pha sau chỉ nhạt hơn. */
+export const wireStyle = (k) => `stroke="${INK}" stroke-width="1.7" stroke-opacity="${PHASE_ALPHA[k]}"`;
+/** Viền sáng dưới dây để chỗ dây vắt qua dây/thiết bị/tháp đọc rõ (trước–sau). */
+const halo = (d, k) => `<path d="${d}" stroke="#F4F8FC" stroke-opacity="${(0.85 * PHASE_ALPHA[k]).toFixed(2)}" stroke-width="4.6"/>`;
 
 /** 3 sứ cao áp (3 pha) trên nắp MBA = cửa RA 500 kV. */
 function hvBushings() {
   // mỗi sứ đứng trên nắp MBA (chân kéo về nắp, đỉnh lệch theo chiều sâu)
   return PH.map((k) => {
     const [x, y] = YARD.bush, h = YARD.bushBase - y - 2 - DEPTH[1] * k;
-    const sheds = Array.from({ length: Math.floor((h - 4) / 8) }, (_, i) => `M${x - 6},${y + 8 + i * 8} H${x + 6}`).join(' ');
-    return `<g ${tr(k)}><rect x="${x - 4.5}" y="${y + 2}" width="9" height="${h}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="${sheds}" stroke="#B49A76" stroke-width="1.8"/><circle cx="${x}" cy="${y + 1}" r="2.6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/></g>`;
+    return `<g ${tr(k)}>${bushing(x, y, h)}</g>`;
   }).join('');
 }
 
 /** Sứ cao áp thứ 2 trên nắp MBA (cửa ra của dây 500 kV mới), đứng thẳng, đỉnh y = 664. */
 function newBushing() {
-  const [x, y] = NEWC.bush, h = YARD.bushBase - y - 2;
-  const sheds = Array.from({ length: Math.floor((h - 4) / 8) }, (_, i) => `M${x - 6},${y + 8 + i * 8} H${x + 6}`).join(' ');
-  return `<rect x="${x - 4.5}" y="${y + 2}" width="9" height="${h}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1.1"/><path d="${sheds}" stroke="#B49A76" stroke-width="1.8"/><circle cx="${x}" cy="${y + 1}" r="2.6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`;
+  const [x, y] = NEWC.bush;
+  return bushing(x, y, YARD.bushBase - y - 2);
 }
 
 /** Máy cắt điện (một pha): sứ VÀO + sứ RA nối bằng bể máy cắt nằm ngang, đặt trên giá đỡ. */
 function breaker(k) {
   const [xi, y] = YARD.brkIn, [xo] = YARD.brkOut, yb = y + 36, gy = GROUND - DEPTH[1] * k;
-  const bush = (x) => `<rect x="${x - 4}" y="${y + 2}" width="8" height="${yb - y - 2}" rx="2" fill="#E8D6BC" stroke="#7A5C3E" stroke-width="1"/><path d="${Array.from({ length: 5 }, (_, i) => `M${x - 5.5},${y + 8 + i * 6} H${x + 5.5}`).join(' ')}" stroke="#B49A76" stroke-width="1.6"/><circle cx="${x}" cy="${y}" r="2.4" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>`;
-  return `<rect x="${xi - 4}" y="${yb + 14}" width="6" height="${gy - yb - 14}" fill="url(#gCylHd)" ${S}/><rect x="${xo - 2}" y="${yb + 14}" width="6" height="${gy - yb - 14}" fill="url(#gCylHd)" ${S}/>
-<path d="M${xi - 1},${yb + 30} L${xo + 1},${yb + 60} M${xo + 1},${yb + 30} L${xi - 1},${yb + 60}" stroke="#8C98AB" stroke-width="1.4"/>
-<rect x="${xi - 9}" y="${yb}" width="${xo - xi + 18}" height="15" rx="6" fill="url(#gCylV)" stroke="#1B2B48" stroke-opacity=".7" stroke-width="1.3"/>
-<rect x="${(xi + xo) / 2 - 6}" y="${yb + 15}" width="12" height="16" rx="2" fill="#6E9985" ${S}/>
+  const bush = (x) => bushing(x, y - 1, yb - y - 1, 8);
+  const leg = (x) => `<rect x="${x}" y="${yb + 14}" width="6" height="${gy - yb - 14}" fill="url(#gCylHd)" stroke="${INK}" stroke-opacity=".55" stroke-width="1"/>`;
+  return `${leg(xi - 4)}${leg(xo - 2)}
+<path d="M${xi - 1},${yb + 30} L${xo + 1},${yb + 60} M${xo + 1},${yb + 30} L${xi - 1},${yb + 60}" stroke="#A3B0C2" stroke-width="1.2"/>
+<rect x="${xi - 9}" y="${yb}" width="${xo - xi + 18}" height="15" rx="6" fill="url(#gCylV)" stroke="${INK}" stroke-width="1.6"/>
+<rect x="${(xi + xo) / 2 - 6}" y="${yb + 15}" width="12" height="16" rx="2" fill="url(#gGreenV)" stroke="${INK}" stroke-width="1.2"/>
 ${bush(xi)}${bush(xo)}`;
 }
 
 /** Chuỗi sứ néo trên đầu xà giàn (một pha). */
 function strainChain() {
   const [xa, y] = YARD.chainA, [xt] = YARD.tip;
-  const discs = [0, 1, 2].map((i) => `<ellipse cx="${xa + 1 + i * 3}" cy="${y}" rx="1.4" ry="3.4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".7"/>`).join('');
+  const discs = [0, 1, 2].map((i) => `<ellipse cx="${xa + 1 + i * 3}" cy="${y}" rx="1.4" ry="3.4" fill="#EBDDC4" stroke="#A07E55" stroke-width=".8"/>`).join('');
   return `<path d="M${xa - 2},${GANTRY.y} V${y} H${xt}" stroke="#46556C" stroke-width="1.6" fill="none"/>${discs}`;
 }
 
@@ -60,7 +65,7 @@ function switchyard() {
   const top = `<path d="M${xl - 6},${y} H${end} l${2 * dx},${2 * dy} H${xl - 6 + 2 * dx} Z" fill="#C9CED6" fill-opacity=".55" stroke="#46556C" stroke-opacity=".35" stroke-width="1"/>`;
   const frame = `<g stroke="#46556C" fill="none"><path d="M${xl},900 V${y} M${xr},900 V${y}" stroke-width="5"/><path d="M${xl},${y + 40} L${xl + 22},${y + 6} M${xr},${y + 40} L${xr - 22},${y + 6}" stroke-width="2"/></g>
 <rect x="${xl - 6}" y="${y}" width="${end - xl + 6}" height="7" fill="#46556C" stroke="#1B2B48" stroke-opacity=".5"/>`;
-  const wires = PH.map((k) => `<g fill="none" ${wireStyle(k)}><path d="${yardIn(k)}"/><path d="${yardOut(k)}"/></g>`).join('');
+  const wires = PH.map((k) => `<g fill="none">${halo(yardIn(k), k)}${halo(yardOut(k), k)}<g ${wireStyle(k)}><path d="${yardIn(k)}"/><path d="${yardOut(k)}"/></g></g>`).join('');
   return `${top}${frame}
 <rect x="1546" y="884" width="58" height="16" fill="url(#gConcD)" ${S}/>
 ${PH.map((k) => `<g ${tr(k)}>${breaker(k)}</g>`).join('')}
@@ -69,27 +74,30 @@ ${wires}
 ${chevron(bez(inSegs(0)[0], 0.45))}
 <g transform="translate(${NEW_T[0]},${NEW_T[1]})">${breaker(-1)}</g>
 <rect x="${NEW_BRK.inn[0] - 14}" y="884" width="46" height="16" fill="url(#gConcD)" ${S}/>
-<g fill="none" ${wireStyle(0)}><path d="${segD(NEW_IN)}"/></g>
+<g fill="none">${halo(segD(NEW_IN), 0)}<path d="${segD(NEW_IN)}" ${wireStyle(0)}/></g>
 ${chevron(bez(NEW_IN[0], 0.5))}`;
 }
 
 export function transformerYard() {
-  const rad = Array.from({ length: 6 }, (_, i) => `<rect x="${1384 + i * 7}" y="800" width="4" height="92" fill="url(#gCylHd)"/>`).join('') +
-    Array.from({ length: 6 }, (_, i) => `<rect x="${1480 + i * 7}" y="800" width="4" height="92" fill="url(#gCylHd)"/>`).join('');
+  // cánh tản nhiệt: 2 dãy tấm xanh lục, ống góp trên/dưới nối vào thân
+  const bank = (x0) => `<path d="M${x0 - 1},806 H${x0 + 30} M${x0 - 1},886 H${x0 + 30}" stroke="#4F7966" stroke-width="3"/>` +
+    Array.from({ length: 5 }, (_, i) => `<rect x="${x0 + i * 6.6}" y="802" width="4.4" height="88" rx="1" fill="url(#gGreenV)" stroke="${INK}" stroke-opacity=".55" stroke-width=".8"/>`).join('');
+  const rad = bank(1370) + bank(1486);
   return `<g id="yard">
 <g data-part="transformer" class="part">
 <ellipse cx="1440" cy="902" rx="82" ry="7" fill="url(#gAO)"/>
 <rect x="1372" y="896" width="140" height="8" fill="url(#gConcD)" ${S}/>
 ${rad}
-<rect x="1396" y="788" width="88" height="106" rx="6" fill="url(#gGreenV)" stroke="#1B2B48" stroke-width="1.6"/>
-<path d="M1396,812 H1484 M1396,840 H1484 M1396,868 H1484" stroke="#1B2B48" stroke-opacity=".25"/>
-<rect x="1388" y="782" width="104" height="10" rx="4" fill="#6E9985" ${S}/>
-<rect x="1402" y="756" width="16" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1402,764 H1418 M1402,772 H1418" stroke="#8D9AAE"/>
-<rect x="1388" y="756" width="12" height="28" rx="2" fill="#C9CED6" ${S}/><path d="M1388,764 H1400 M1388,772 H1400" stroke="#8D9AAE"/>
+<rect x="1396" y="788" width="88" height="106" rx="6" fill="url(#gGreenV)" stroke="${INK}" stroke-width="1.6"/>
+<rect x="1400" y="792" width="5" height="98" rx="2" fill="#fff" opacity=".28"/>
+<path d="M1396,840 H1484" stroke="${INK}" stroke-opacity=".18"/>
+<rect x="1388" y="782" width="104" height="10" rx="4" fill="#5E8B76" stroke="${INK}" stroke-width="1.4"/>
+<rect x="1402" y="756" width="16" height="28" rx="2" ${POR}/><path d="M1401,764 H1419 M1401,772 H1419" ${SHED}/>
+<rect x="1388" y="756" width="12" height="28" rx="2" ${POR}/><path d="M1387,764 H1401 M1387,772 H1401" ${SHED}/>
 ${hvBushings()}
 ${newBushing()}
-<rect x="1498" y="768" width="22" height="32" rx="5" fill="#6E9985" ${S}/>
-<circle cx="1410" cy="760" r="6" fill="#C99A3E" stroke="#1B2B48" stroke-opacity=".6"/>
+<rect x="1498" y="768" width="22" height="32" rx="5" fill="url(#gGreenV)" stroke="${INK}" stroke-width="1.3"/>
+<circle cx="1410" cy="760" r="6" ${CU}/>
 </g>
 <g data-part="switchyard" class="part">
 ${switchyard()}
@@ -105,7 +113,7 @@ export function transmission() {
       const w1 = 4 + ((y - top) / (GROUND - top)) * bw, w2 = 4 + ((y + 36 - top) / (GROUND - top)) * bw;
       lat.push(`<path d="M${cx - w1},${y} L${cx + w2},${y + 36} M${cx + w1},${y} L${cx - w2},${y + 36} M${cx - w1},${y} H${cx + w1}"/>`);
     }
-    const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#E6CFA6" stroke="#8A5F3C" stroke-width=".9"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#E9D8BF" stroke="#7A5C3E" stroke-width=".8"/>`).join('');
+    const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#EBDDC4" stroke="#A07E55" stroke-width=".9"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#EBDDC4" stroke="#A07E55" stroke-width=".9"/>`).join('');
     return `<g stroke="#46556C" stroke-width="1.6" fill="none"><path d="M${cx - 4},${top} L${cx - bw - 4},${GROUND} M${cx + 4},${top} L${cx + bw + 4},${GROUND}" stroke-width="3"/>${lat.join('')}${arms}<path d="M${cx},${top - 18} V${top}" stroke-width="2.4"/><path d="M${cx - 30},${top + 24} L${cx},${top - 18} L${cx + 30},${top + 24}" stroke-width="1.6"/></g>`;
   };
   return `<g id="lines" data-part="lines" class="part">
@@ -117,9 +125,9 @@ ${TOWERS.map((x) => tower(x)).join('')}
 /** Dây dẫn 3 pha: vẽ SAU tháp làm mát để đi liền mạch phía trước tháp. */
 export function transmissionWires() {
   return `<g id="linesW" data-part="lines" class="part" fill="none">
-${[2, 1, 0].map((k) => `<path d="${linePhase(k)}" stroke="#1B2B48" stroke-opacity="${(0.16 * PHASE_ALPHA[k]).toFixed(2)}" stroke-width="4"/><path d="${linePhase(k)}" ${wireStyle(k)}/>`).join('')}
+${[2, 1, 0].map((k) => `${halo(linePhase(k), k)}<path d="${linePhase(k)}" ${wireStyle(k)}/>`).join('')}
 ${chevron(bez(toTowerSeg(0), 0.5))}
-<path d="${newLine()}" stroke="#1B2B48" stroke-opacity=".16" stroke-width="4"/><path d="${newLine()}" ${wireStyle(0)}/>
+${halo(newLine(), 0)}<path d="${newLine()}" ${wireStyle(0)}/>
 </g>`;
 }
 
@@ -149,7 +157,7 @@ export function coolingTower() {
 <path d="${outer}" fill="url(#pRebar)" opacity=".8"/>
 <path d="${inner}" fill="url(#gTowerIn)" stroke="#1B2B48" stroke-opacity=".5" stroke-width="1.2"/>
 <path d="${inner}" fill="url(#gTowerShade)"/>
-<g stroke="#7F8CA0" stroke-width="1" opacity=".55">${[500, 540, 580, 620, 660, 700, 740, 780].map((y) => `<path d="M${(TC - half(y) + wallT).toFixed(1)},${y} H${(TC + half(y) - wallT).toFixed(1)}"/>`).join('')}</g>
+<g stroke="#7F8CA0" stroke-width="1" opacity=".22">${[500, 540, 580, 620, 660, 700, 740, 780].map((y) => `<path d="M${(TC - half(y) + wallT).toFixed(1)},${y} H${(TC + half(y) - wallT).toFixed(1)}"/>`).join('')}</g>
 <g stroke="#fff" stroke-opacity=".28" stroke-width="3" fill="none"><path d="M${TC - 100},560 Q${TC - 66},700 ${TC - 120},880"/></g>
 <ellipse cx="${TC}" cy="470" rx="${rimW.toFixed(1)}" ry="9" fill="#C7CCD5" stroke="#1B2B48" stroke-opacity=".6" stroke-width="1.4"/>
 <ellipse cx="${TC}" cy="470" rx="${(rimW - 10).toFixed(1)}" ry="6" fill="#EEF1F5" stroke="#1B2B48" stroke-opacity=".3"/>

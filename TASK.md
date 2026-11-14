@@ -45,10 +45,10 @@ Mỗi phase: chụp ảnh trước → sửa → `npm test && npm run build` →
 
 ## Phase 4 – Khu điện & đường dây (`plant_yard.js`, `geometry.js` nếu cần)
 Giữ nguyên **cấu trúc mạch** (máy phát → 2 thanh dẫn 24 kV → MBA → máy cắt → giàn → cột → đường dây, và dây 500 kV đã thêm). Chỉ làm gọn:
-- [ ] Pha "chiều sâu" phía sau nhạt hơn nữa, pha trước rõ; dây không chéo nhau, độ võng đều, bề dày thống nhất.
-- [ ] Sứ, máy cắt, MBA theo bảng màu (sứ gốm ấm, thân MBA xanh lục có cánh tản nhiệt rõ).
-- [ ] Chỗ dây truyền tải vắt ngang thân tháp làm mát: làm sao đọc được rõ (ví dụ dây đậm hơn, tháp phía sau nhạt hơn một bậc). Được phép dịch nhẹ dây/cột nếu giảm rối mà vẫn đúng mạch; nhớ cập nhật `geometry.js`.
-- [ ] Kiểm tra lại dao động xoay chiều của hạt điện vẫn chạy đúng. Commit, push.
+- [x] Pha "chiều sâu" phía sau nhạt hơn nữa, pha trước rõ; dây không chéo nhau, độ võng đều, bề dày thống nhất.
+- [x] Sứ, máy cắt, MBA theo bảng màu (sứ gốm ấm, thân MBA xanh lục có cánh tản nhiệt rõ).
+- [x] Chỗ dây truyền tải vắt ngang thân tháp làm mát: làm sao đọc được rõ (ví dụ dây đậm hơn, tháp phía sau nhạt hơn một bậc). Được phép dịch nhẹ dây/cột nếu giảm rối mà vẫn đúng mạch; nhớ cập nhật `geometry.js`.
+- [x] Kiểm tra lại dao động xoay chiều của hạt điện vẫn chạy đúng. Commit, push.
 
 ## Phase 5 – Tháp làm mát, nước, cảnh quan (`plant_yard.js`, `plant_env.js`)
 - [ ] Vỏ tháp hyperbol: khối tròn bằng gradient ngang (sáng trái, tối phải), không hoa văn cốt thép; lớp đệm, vòi phun, bể nước gọn.
