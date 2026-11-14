@@ -1,28 +1,32 @@
 # CLAUDE.md – lo-hat-nhan-simulator
 
-Mô phỏng 2D nhà máy điện hạt nhân PWR cho Vật lí 12. Vite + JS ES modules (không framework), SVG + Canvas. Mọi chữ hiển thị bằng tiếng Việt.
+Mô phỏng 2D nhà máy điện hạt nhân PWR cho Vật lí 12. Vite + JS ES modules (không framework), SVG (tĩnh) + Canvas (hạt, khói). Mọi chữ hiển thị bằng tiếng Việt.
 
 ## Lệnh
-- `npm ci` (một lần) · `npm test` (vitest) · `npm run build` · `npx vite preview --port 4173 &` (server để chụp ảnh)
-- Chụp một vùng thế giới SVG để tự kiểm tra bằng mắt:
-  `node e2e/zoomrect.mjs http://localhost:4173/ /tmp/x.png <x> <y> <w> <h> [vw=1200] [vh=700]` rồi Read `/tmp/x.png`.
-  Vùng hay dùng: điện 24 kV `1130 500 330 300` · trạm phân phối `1360 520 460 400` · cả khu điện `1120 480 760 440`.
-- Deploy: push lên `main` → GitHub Actions tự `npm test` + build + đăng GitHub Pages. KHÔNG có bước deploy thủ công.
+- `npm ci` (một lần) · `npm test` · `npm run build` · `npx vite preview --port 4173 &` (server để chụp ảnh; build lại thì preview tự dùng bản mới khi tải lại)
+- **Chụp bộ ảnh chuẩn** (toàn cảnh máy tính + điện thoại ngang + 4 vùng lò / tuabin / điện / tháp):
+  `npm run build && node e2e/shots.mjs /tmp/<tên>` rồi Read các file `.png` trong đó.
+- Chụp một vùng tuỳ ý: `node e2e/zoomrect.mjs http://localhost:4173/ /tmp/x.png <x> <y> <w> <h>`.
+- Deploy: push lên `main` → GitHub Actions tự test + build + đăng GitHub Pages.
 
-## Bản đồ code (chỉ đọc file cần thiết, không quét cả repo)
-- `src/render/geometry.js` – toạ độ dùng chung: `ELEC` (đường hạt điện), `YARD`, `GANTRY`, `TOWERS`, `ARM_Y`, `DEPTH`, `PHASE_ALPHA`, `phasePath()`, `linePhase()`.
-- `src/render/flows.js` – hạt Canvas; hạt điện: `this.elec` (constructor), `update()` (dòng ~115), `draw()` mục “xung năng lượng” (~200). `dr.pe` = P_điện/1000.
-- `src/render/plant_hall.js` – máy phát (x 1150–1310, y 590–690) và thanh dẫn 24 kV `#busG` (path `M1285,590 V540 H1410 V775`).
-- `src/render/plant_yard.js` – MBA (x 1372–1512, nắp y≈782), sứ cao áp, máy cắt `breaker()`, giàn, cột `transmission()`, mũi tên `chevron()`.
-- `src/render/labels.js` – nhãn (id, chữ, x, y, part). `src/ui/parts.js` – thẻ thông tin từng bộ phận.
-- `src/sim/model.js` – mô hình vật lí thuần (KHÔNG sửa trừ khi task yêu cầu).
+## Bản đồ code (chỉ mở file cần thiết)
+- `src/render/plant_env.js` – `defs()`: TẤT CẢ gradient/pattern dùng chung; bầu trời, đồi, mặt đất.
+- `src/render/plant_reactor.js` – vỏ bọc lò, thùng lò, lõi, bình điều áp, bình sinh hơi, bơm vòng 1, `pipeSvg()`.
+- `src/render/plant_hall.js` – nhà tuabin, tuabin cao/hạ áp, máy phát, thanh dẫn 24 kV, bình ngưng.
+- `src/render/plant_yard.js` – MBA, máy cắt, giàn, cột điện, dây, tháp làm mát, ống vòng 3 ngầm.
+- `src/render/geometry.js` – toạ độ ống/dây dùng chung cho SVG và hạt. `src/render/flows.js` – hạt Canvas, khói.
+- `src/render/labels.js` – nhãn; `src/styles.css` – giao diện bảng/nút/nhãn. `src/ui/parts.js` – thẻ thông tin.
+- `src/sim/model.js` – mô hình vật lí. **Không sửa** khi làm đồ hoạ.
 
-## Quy tắc bắt buộc
-1. Làm trên nhánh `main` (nhánh mặc định trên GitHub đang trỏ nhánh cũ – bỏ qua nó).
-2. Sửa nhỏ, đúng chỗ. Không đổi tên/xoá export đang dùng, không đổi toạ độ bộ phận cũ trừ khi task nói rõ.
-3. Không thêm thư viện. Giữ hiệu năng điện thoại (không thêm vòng lặp nặng mỗi khung, không filter SVG blur lớn).
-4. Sau mỗi thay đổi: `npm test && npm run build` phải xanh, rồi chụp ảnh vùng liên quan và tự nhìn. Nếu hình xấu/sai hơn trước → sửa hoặc `git checkout -- <file>`.
-5. Vật lí phải đúng chương trình Vật lí 12. Ý tưởng của chủ repo là cố định: chỉ được làm cho đúng vật lí, không được bỏ/cãi yêu cầu.
-6. Commit nhỏ theo từng phase, message tiếng Việt, rồi `git push origin main`.
-7. Không dùng subagent, không plan mode dài; spec trong `TASK.md` đã đủ chi tiết.
-8. Theo dõi tiến độ bằng checklist trong `TASK.md` (đánh dấu [x] khi xong), để sau `/clear` vẫn làm tiếp được.
+## Không được làm hỏng (code JS tìm các phần tử này)
+- id: `cher vesselAlarm bcnA bcnAg bcnR bcnRg imp1 imp2 imp3 genTop genBot genTxtTop genTxtBot genRotor statorL blurHP blurLP vTSV vDump sgHeat przHeat sgSteamTint towerGroup busG`
+  (trước khi xoá/đổi một `id` bất kỳ: `grep -rn "<id>" src`).
+- class/thuộc tính: `.part` + `data-part` (chạm mở thẻ), `.pipe`, `.rodset`, `.asm`, `path.bb`, `path.bf`.
+- Toạ độ trong `geometry.js` dùng chung cho SVG và hạt → đổi đường ống/dây ở SVG thì phải đổi ở đó, không vẽ lệch nhau.
+
+## Quy tắc
+1. Làm trên `main`. Commit nhỏ, message tiếng Việt, `git push origin main` sau mỗi phase.
+2. Không thêm thư viện. Giữ mượt trên điện thoại: không thêm SVG `filter` (blur, drop-shadow), không thêm vòng lặp nặng mỗi khung.
+3. Vật lí, cấu trúc nhà máy và ý nghĩa màu (vòng 1 đỏ, vòng 2 xanh dương/hơi xám, vòng 3 xanh ngọc, điện vàng) là đúng và cố định. Đồ hoạ chỉ được làm đẹp hơn, rõ hơn, không làm sai.
+4. Sau mỗi bước: `npm test && npm run build` xanh → chụp bộ ảnh → tự so với ảnh trước. Chỗ nào không đẹp hơn rõ ràng → hoàn tác chỗ đó.
+5. Không dùng subagent. Tiến độ ghi bằng checklist trong `TASK.md` để sau `/clear` làm tiếp được.

@@ -1,48 +1,62 @@
-# TASK – Dòng điện xoay chiều + dây mới + làm đẹp đồ hoạ
+# TASK – Nâng cấp đồ hoạ: gọn, rõ, bắt mắt (giữ đúng vật lí)
 
-Làm lần lượt từng phase. Xong phase nào: `npm test && npm run build` xanh → chụp ảnh tự kiểm tra → đánh dấu [x] ở đây → commit → `git push origin main`.
-Toạ độ dưới đây là toạ độ thế giới SVG (2450×1100, mặt đất y = 900). Ảnh tham khảo (nếu có) ở `docs/yeu-cau/`.
+Mỗi phase: chụp ảnh trước → sửa → `npm test && npm run build` → chụp ảnh sau → so sánh → hoàn tác chỗ nào không đẹp hơn → đánh dấu [x] → commit → push.
+Ảnh gốc ban đầu: `node e2e/shots.mjs /tmp/goc` (chụp 1 lần ở Phase 0, giữ để so cuối cùng).
 
-## Vật lí phải tuân theo (Vật lí 12 – dòng điện xoay chiều, máy phát, máy biến áp)
-- Máy phát tạo dòng **xoay chiều** i = I₀·cos(ωt + φ). Thực tế f = 50 Hz (đổi chiều 100 lần/giây); trong hình **làm chậm** để mắt thấy được.
-- **Electron không chạy một chiều từ nhà máy ra lưới**: chúng **dao động qua lại tại chỗ** dọc dây. Cái đi một chiều (máy phát → lưới) là **năng lượng** → giữ các mũi tên `chevron` vàng chỉ chiều năng lượng.
-- Đồng bộ với rôto: máy phát 2 cực (p = 1) → **1 vòng quay rôto = 1 chu kì dòng điện**. Dùng luôn góc `this.theta` của rôto trong `src/render/scene.js` (đang quay 0,8 vòng/s) làm pha: pha điện = `theta`. Truyền giá trị này sang `Flows` mỗi khung (qua chỗ đang gọi cả hai, ví dụ `main.js`/`stage.js`); KHÔNG tạo đồng hồ riêng.
-- Mạch kín (như hình máy phát một pha trong SGK): **dây đi và dây về luôn có dòng ngược chiều nhau** (lệch pha π), cùng đổi chiều theo chu kì.
-- Biên độ dao động ∝ cường độ dòng điện: phía 24 kV **dòng lớn** → dao động rộng; phía 500 kV **dòng nhỏ** (≈ 20 lần nhỏ hơn, P = UI) → dao động hẹp hơn hẳn. Mọi biên độ nhân `min(1, dr.pe)`; `pe ≈ 0` (ngắt tuabin/SCRAM, không hoà lưới) → **đứng yên, không có dòng**.
+## Chẩn đoán (vì sao đang "đúng nhưng rối và xấu")
+1. **Không có thứ bậc thị giác**: nhà, nền, khung kèo, thiết bị chính, ống… đều cùng độ đậm, cùng tông xám-xanh nhạt → mắt không biết nhìn vào đâu.
+2. **Nhiễu hoa văn**: pattern gạch chéo/bê tông/cốt thép (`pRebar`, `pPanel`, `pGravel`, `pStripe*`) phủ vỏ lò, nhà tuabin, tháp, mặt đất; vùng phóng xạ bọc bằng gạch chéo đỏ `pHatch` + viền nét đứt quanh lò, bình điều áp, bơm → trông bẩn.
+3. **Khu điện quá dày**: nhiều sứ, nhiều cực máy cắt, pha "chiều sâu" mờ chồng nhau, dây chéo nhau và vắt ngang thân tháp làm mát.
+4. **Hạt quá dày** trên mọi ống; nhãn trắng nhiều, đường dẫn nhãn cắt ngang thiết bị.
+5. **Thiếu chiều sâu/ánh sáng**: vật thể phẳng, bóng đổ không thống nhất, nền nhạt như vật thể.
 
-## Phase 1 – Dao động xoay chiều + dây thứ 2 phía 24 kV
-- [x] **1a. Hạt điện dao động** (`src/render/flows.js`, chỉ phần hạt điện `this.elec`; KHÔNG đụng hạt nước/hơi):
-  - Mỗi hạt có vị trí gốc cố định `s0` (rải đều theo `gap`); vị trí vẽ `s = s0 + A·sin(theta + φ_dây)` (độ dời là tích phân của i ∝ cos).
-  - Độ sáng quầng (lượt vẽ `pass = 0`) ∝ |cos(theta + φ_dây)| = |i| → sáng nhất khi dòng cực đại, gần tắt khi dòng đổi chiều. Chấm lõi giữ nguyên.
-  - Thêm vào mỗi mục `ELEC` (`src/render/geometry.js`) hai trường: `amp` (px) và `ph` (rad). Gợi ý: 24 kV `amp: 12`; 500 kV `amp: 4`.
-  - 3 pha 500 kV hiện có (`ph0..ph2`): `ph = 0, −2π/3, −4π/3` (đúng 3 pha lệch 120°). Thanh dẫn 24 kV hiện có (`bus`): `ph = 0`.
-  - Bỏ chuyển động trôi một chiều của hạt điện (`pos += speed·dt`) – thay bằng dao động ở trên.
-- [x] **1b. Dây thứ 2 phía 24 kV** (đúng nét đỏ chủ repo vẽ trong ảnh 2): một thanh dẫn song song, nằm **bên trong** vòng thanh dẫn vàng hiện có, không cắt nó:
-  - Đầu máy phát: thêm cực ra thứ 2 cạnh cực hiện có (`rect x=1280 y=578 w=12 h=14` trong `plant_hall.js`), ví dụ `x≈1298`.
-  - Đường đi gợi ý: `M1304,590 V556 H1394 V775` (trong vòng `M1285,590 V540 H1410 V775`). Vẽ cùng kiểu 3 lớp như `#busG` (viền tối, thân, ánh sáng), thân màu đồng hơi khác vàng một chút để phân biệt; bề rộng nhỏ hơn 1 chút.
-  - Đầu MBA: thêm sứ hạ áp thứ 2 trên nắp MBA tại x≈1394 (cạnh sứ hạ áp 1402–1418 ở `plant_yard.js`), cùng kiểu.
-  - Thêm vào `ELEC`: `{ id: 'bus2', d: <cùng đường>, gap: 15, amp: 12, ph: Math.PI, alpha: 1 }` – cùng chiều tham số (máy phát → MBA) với `bus` nên lệch π ⇒ luôn ngược chiều dây kia ⇒ thấy dòng điện chạy vòng khép kín qua cuộn dây máy phát và cuộn sơ cấp MBA.
-  - Cho phần tử mới `data-part="busduct"` để chạm vào mở thẻ thông tin.
-- [x] **1c. Chữ**: thẻ `busduct` trong `src/ui/parts.js` thêm 1–2 câu: “Dòng điện xoay chiều 50 Hz: electron chỉ dao động qua lại, đổi chiều 100 lần mỗi giây; năng lượng thì truyền một chiều từ máy phát tới máy biến áp. Hai dây đi – về luôn có dòng ngược chiều nhau (mạch kín). Trong hình đã làm chậm.” Thêm nhãn nhỏ cạnh thanh dẫn: `~ 50 Hz (làm chậm)` trong `labels.js` (độ ưu tiên thấp, `sm: 1`).
-- [x] **1d. Kiểm tra**: test + build; chụp vùng `1130 500 330 300` ở 2–3 thời điểm khác nhau (cách nhau ~0,3 s) → hai dây phải dao động ngược nhau, đồng bộ với rôto; ấn SCRAM (hoặc đặt `pe` = 0) → hạt đứng yên. Commit “Dòng điện xoay chiều dao động + dây đi–về 24 kV”, push.
+## Hệ thống hình ảnh (art direction) – áp dụng cho mọi phase
+- **3 lớp độ đậm**:
+  - *Nền* (trời, đồi, cây xa): nhạt, ít bão hoà, không viền.
+  - *Bối cảnh* (nhà tuabin, vỏ bọc, móng, giàn, mặt đất): tường gần trắng `#F1F4F8`, mặt cắt `#E3E9F0`, nét mảnh 1 px `#A3B0C2`, **không hoa văn**.
+  - *Nhân vật chính* (lò, bình sinh hơi, bình điều áp, bơm, tuabin, máy phát, bình ngưng, MBA, máy cắt, cột, tháp, ống): bão hoà hơn, viền mực `#1E2A44` 1,6 px, có khối sáng–tối.
+- **Một nguồn sáng** từ trên-trái: mọi trụ/ống có dải sáng mảnh phía trên-trái và tối dần xuống dưới-phải; bóng tiếp đất là elip mềm `gAO` cùng một độ đậm.
+- **Bảng màu** (dùng lại, không tự chế thêm màu mới):
+  - Vòng 1: nóng `#D7303A`, lạnh `#EA6E66`. Vòng 2: nước `#2F6FD0`, hơi `#CCD9EA`. Vòng 3: `#12A19E` / `#5BC8AE`.
+  - Thép: `#F5F8FB → #C5CFDB → #8C99AD`. Đồng/điện: `#E2A53B`, viền `#8A5A14`. Sứ: `#EBDDC4`, khấc `#A07E55`. Bê tông: `#DCE2E9`.
+  - Mặt đất: `#EADFCB`, mặt cắt dưới đất `#DCCDB3 → #CDBB9C`. Trời: `#DCEAF6 → #F4F8FC`. Nhấn cảnh báo: `#C62828`.
+- **Vùng phóng xạ**: thay gạch chéo + nét đứt bằng nền tô đỏ rất nhạt `rgba(215,48,58,.07)`, bo góc, viền liền mảnh `rgba(198,40,40,.35)`; giữ biển ☢.
+- Không SVG `filter`. Gradient chỉ khai báo trong `defs()`; dùng lại id có sẵn khi được.
 
-## Phase 2 – Dây mới phía 500 kV: MBA → lên → máy cắt → cột điện (ảnh 3, 4)
-Nét đen chủ repo vẽ: từ nắp MBA (phía phải, gần bình dầu phụ) **đi thẳng lên**, rồi **nối qua máy cắt điện**, rồi từ máy cắt **kéo sang cột điện** (TOWER_A, x = 1768) ở **một xà thấp hơn các xà hiện có**, tiếp tục qua các cột sau như dây hiện có.
-- [x] **2a. Sứ ra mới** trên nắp MBA tại x≈1478 (nắp MBA x 1388–1492, sứ cao áp hiện có quanh x 1446–1460), cao lên tới y≈664 giống `hvBushings()`.
-- [x] **2b. Một cực máy cắt riêng** cho dây mới, dùng lại `breaker()`, đặt sao cho tách biệt, không chồng các cực đang có (ví dụ pha “trước” `k = −1` → tịnh tiến `−DEPTH`, hoặc dịch sang phải ~30 px – chọn cách nhìn rõ nhất, xác nhận bằng ảnh chụp). Kèm chuỗi sứ néo trên giàn như `strainChain()`.
-- [x] **2c. Dây**: sứ mới → (đường cong Bezier đi lên rồi sang, giống `IN_SEGS`) → sứ vào máy cắt mới → (giống `OUT_SEGS`) → điểm néo trên giàn → xà mới của TOWER_A tại `y = 695` → qua mọi cột trong `TOWERS` tới `LINE_END` (như `linePhase`). Thêm xà mới `y = 695` cho **tất cả** cột trong `transmission()` (cùng kiểu xà + sứ treo). Dây không được cắt qua thân cột, MBA hay máy cắt khác.
-- [x] **2d. Dòng điện**: thêm vào `ELEC` `{ id: 'ret5', d: <đường hạt giống phasePath>, gap: 34, amp: 4, ph: Math.PI, alpha: 1 }` – dây về của mạch thứ cấp (ngược pha pha trước `ph0`), dao động ngược chiều như cặp dây 24 kV. Thêm 1 `chevron` chỉ chiều năng lượng trên dây mới.
-- [x] **2e. Chữ**: nhãn ngắn cho cực máy cắt mới nếu cần (tránh chồng nhãn `brk`); thẻ `switchyard`/`lines` thêm 1 câu: “Phía 500 kV dòng điện nhỏ hơn ≈ 20 lần nên electron dao động hẹp hơn; hao phí P²R/U² giảm ≈ 400 lần.”
-- [x] **2f. Kiểm tra**: chụp `1360 520 460 400` và `1120 480 760 440` → mạch liền mạch, không chồng/cắt, đẹp. Commit “Dây 500 kV mới: MBA → máy cắt → cột”, push.
+## Phase 0 – Ảnh gốc
+- [ ] `npm ci` (nếu chưa), `npx vite preview --port 4173 &`, `npm run build && node e2e/shots.mjs /tmp/goc`. Xem cả 6 ảnh.
 
-## Phase 3 – Làm đẹp đồ hoạ (nhanh, an toàn)
-Mục tiêu: đẹp hơn, **không được xấu hơn, không được sai hình**. Chỉ chỉnh màu/gradient/viền/bóng; **không đổi hình dạng, toạ độ, bố cục** bộ phận cũ.
-- [x] **3a. Ảnh “trước”**: chụp toàn cảnh `0 90 2450 1010` (vw 1600 vh 700) và 4 vùng: lò `50 150 690 800`, tuabin `690 440 700 480`, khu điện `1120 480 760 440`, tháp `1780 40 680 1000` → lưu `/tmp/before_*.png`.
-- [x] **3b. Chỉnh** (tối đa ~6 thay đổi nhỏ, ưu tiên `defs()` trong `plant_env.js` và màu trong các file `plant_*.js`): gradient kim loại có điểm sáng mềm hơn; bóng đổ (`gAO`) dịu và nhất quán; độ dày nét viền thống nhất; thanh dẫn đồng/vàng có ánh kim; sứ cách điện màu gốm ấm rõ khấc; màu vòng 1 đỏ / vòng 2 xanh dương / vòng 3 xanh ngọc giữ nguyên ý nghĩa, chỉ hài hoà độ bão hoà. Không thêm `filter` blur/drop-shadow SVG (nặng trên điện thoại).
-- [x] **3c. Ảnh “sau”** cùng vùng, so sánh từng cặp. Thay đổi nào không rõ ràng đẹp hơn → hoàn tác thay đổi đó. Chạy `node e2e/perf.mjs` nếu chạy được để chắc FPS không giảm.
-- [x] **3d.** Commit “Làm đẹp màu sắc, gradient”, push.
+## Phase 1 – Toàn cục: nền, hoa văn, bảng màu (`plant_env.js`)
+- [ ] Bỏ (hoặc giảm còn ≤ 15 % độ mờ) mọi pattern nhiễu: `pRebar`, `pPanel`, `pGravel`, `pStripe`, `pStripe2`. Giữ `pFuel` (thanh nhiên liệu) và `pFill` (lớp đệm tháp) nhưng làm mảnh/nhạt hơn.
+- [ ] Trời, đồi, mặt đất, mặt cắt dưới đất theo bảng màu; đồi xa nhạt hơn để đẩy lùi ra sau.
+- [ ] Chỉnh các gradient kim loại/sơn theo "một nguồn sáng".
+- [ ] Commit "Đồ hoạ: nền sạch, bỏ hoa văn nhiễu, bảng màu thống nhất".
 
-## Phase 4 – Chốt
-- [x] `npm test && npm run build`; `node e2e/run.mjs` (nếu lỗi môi trường Playwright thì bỏ qua, ghi lại).
-- [x] Kiểm tra GitHub Actions: `gh run list -L 1` / `gh run watch` (nếu có `gh`), hoặc báo link https://github.com/harieedawwn/lo-hat-nhan-simulator/actions.
-- [x] Cập nhật README mục “Giả thiết của mô hình”: 1 gạch đầu dòng về dòng xoay chiều làm chậm, đồng bộ rôto, mạch đi–về. Cập nhật `PLAN.md` phần Trạng thái. Commit, push.
+## Phase 2 – Khu lò phản ứng (`plant_reactor.js`)
+- [ ] Vùng phóng xạ theo quy tắc ở trên (không còn `pHatch` gạch chéo quanh ống vòng 1 và các thiết bị).
+- [ ] Vỏ bọc bê tông: lớp *bối cảnh* (mặt cắt sạch, viền mảnh); thùng lò, bình sinh hơi, bình điều áp, bơm: lớp *nhân vật chính*, khối rõ.
+- [ ] Đường nét đứt xanh từ kính lúp tới lõi: mảnh, nhạt hơn.
+- [ ] Commit, push.
+
+## Phase 3 – Nhà tuabin (`plant_hall.js`)
+- [ ] Khung kèo mái, dải cửa sổ, cột nhà: lớp *bối cảnh* (nhạt, mảnh) để tuabin – máy phát nổi lên.
+- [ ] Tuabin cao/hạ áp, máy phát (stato đồng, rôto N đỏ/S xanh), bình ngưng: khối sáng–tối rõ, viền mực.
+- [ ] Commit, push.
+
+## Phase 4 – Khu điện & đường dây (`plant_yard.js`, `geometry.js` nếu cần)
+Giữ nguyên **cấu trúc mạch** (máy phát → 2 thanh dẫn 24 kV → MBA → máy cắt → giàn → cột → đường dây, và dây 500 kV đã thêm). Chỉ làm gọn:
+- [ ] Pha "chiều sâu" phía sau nhạt hơn nữa, pha trước rõ; dây không chéo nhau, độ võng đều, bề dày thống nhất.
+- [ ] Sứ, máy cắt, MBA theo bảng màu (sứ gốm ấm, thân MBA xanh lục có cánh tản nhiệt rõ).
+- [ ] Chỗ dây truyền tải vắt ngang thân tháp làm mát: làm sao đọc được rõ (ví dụ dây đậm hơn, tháp phía sau nhạt hơn một bậc). Được phép dịch nhẹ dây/cột nếu giảm rối mà vẫn đúng mạch; nhớ cập nhật `geometry.js`.
+- [ ] Kiểm tra lại dao động xoay chiều của hạt điện vẫn chạy đúng. Commit, push.
+
+## Phase 5 – Tháp làm mát, nước, cảnh quan (`plant_yard.js`, `plant_env.js`)
+- [ ] Vỏ tháp hyperbol: khối tròn bằng gradient ngang (sáng trái, tối phải), không hoa văn cốt thép; lớp đệm, vòi phun, bể nước gọn.
+- [ ] Sông/hồ, cây, người, xe: hài hoà bảng màu, không tranh chú ý.
+- [ ] Commit, push.
+
+## Phase 6 – Hạt, nhãn, hoàn thiện
+- [ ] `flows.js`: giảm mật độ hạt dòng chảy ~30 % (không đổi tốc độ, chiều, cách điều khiển); hạt điện giữ nguyên.
+- [ ] `labels.js` + `styles.css`: nhãn gọn hơn (bóng nhẹ, viền mảnh), đường dẫn nhãn mảnh/nhạt; ở toàn cảnh chỉ hiện nhãn ưu tiên cao, nhãn còn lại hiện khi phóng to (nếu hệ nhãn có sẵn cơ chế ưu tiên `p` thì dùng nó).
+- [ ] So bộ ảnh cuối với `/tmp/goc`: nhìn toàn cảnh 2 giây phải nhận ra ngay 5 khối: lò – tuabin/máy phát – khu điện – tháp làm mát – sông; ảnh điện thoại không rối hơn.
+- [ ] `node e2e/run.mjs` (bỏ qua nếu lỗi môi trường). Cập nhật `docs/hero.png` bằng ảnh `0-toan-canh.png` mới. Commit "Hoàn thiện đồ hoạ", push, kiểm tra GitHub Actions xanh.
