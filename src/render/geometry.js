@@ -45,7 +45,8 @@ export const tubePath = (a, y0 = 800, yTop = 560) =>
 /** Đường dòng hạt Canvas. spread: độ lệch ngang; speed: px/s tại lưu lượng định mức; drive: khoá điều khiển. */
 export const FLOWS = [
   // Vòng 1 (luôn chạy, bơm không dừng)
-  { id: 'l1_up', loop: 1, d: poly([[250, 830], [250, 545], [398, 545], [398, 822], [492, 822]], 20), spread: 34, spreadFn: 'core', speed: 70, gap: 14, drive: 'one', c0: 'c1', c1: 'c0', size: 2.4 },
+  { id: 'l1_up', loop: 1, d: 'M250,820 L250,545', spread: 30, speed: 70, gap: 14, drive: 'one', c0: 'c1', c1: 'c0', size: 2.4 },
+  { id: 'l1_hot', loop: 1, d: poly([[316, 545], [398, 545], [398, 822], [492, 822]], 18), spread: 6, speed: 70, gap: 14, drive: 'one', c0: 'c1', c1: 'c0', size: 2.4 },
   ...TUBE_A.map((a, i) => ({ id: 'l1_t' + i, loop: 1, d: tubePath(a), spread: 0, speed: 70, gap: 22, drive: 'one', c0: 'c0', c1: 'c1', size: 1.8 })),
   { id: 'l1_cold', loop: 1, d: poly([[546, 806], [546, 822], [622, 822], [622, 862], [362, 862], [362, 600], [304, 600], [304, 800], [250, 826]], 18), spread: 5, speed: 70, gap: 12, drive: 'one', c0: 'c1', c1: 'c1', size: 2.4 },
   { id: 'l1_dcL', loop: 1, d: poly([[196, 590], [196, 800], [250, 826]], 18), spread: 5, speed: 70, gap: 12, drive: 'one', c0: 'c1', c1: 'c1', size: 2.2 },
@@ -58,7 +59,7 @@ export const FLOWS = [
   { id: 'l2_lpR', loop: 2, d: poly([[1020, 616], [1075, 616], [1075, 700], [1075, 746]], 8), spread: 4, speed: 100, gap: 12, drive: 'turb', kind: 'steam', size: 2.3 },
   { id: 'l2_lpM', loop: 2, d: 'M1020,700 L1020,746', spread: 14, speed: 100, gap: 10, drive: 'turb', kind: 'steam', size: 2.2 },
   { id: 'l2_dump', loop: 2, d: poly([[770, 585], [770, 736], [946, 736], [1000, 736]], 10), spread: 3, speed: 130, gap: 11, drive: 'dump', kind: 'steam', size: 3.2 },
-  { id: 'l2_feed', loop: 2, d: poly([[1000, 866], [878, 866], [860, 866], [860, 820], [745, 820], [745, 480], [612, 480], [612, 455], [567, 455], [567, 772], [545, 790]], 12), spread: 2, speed: 80, gap: 15, drive: 'steam', kind: 'water', size: 2.4 },
+  { id: 'l2_feed', loop: 2, d: poly([[1000, 866], [878, 866], [860, 866], [860, 820], [745, 820], [745, 480], [612, 480], [612, 455], [567, 455], [567, 772]], 12), spread: 2, speed: 80, gap: 15, drive: 'steam', kind: 'water', size: 2.4 },
   // Vòng 3
   { id: 'l3_sup', loop: 3, d: poly([[2190, 1020], [1104, 1020], [1104, 846], [1104, 838]], 18), spread: 3, speed: 90, gap: 17, drive: 'one', c0: 'k0', c1: 'k0', size: 2.4 },
   ...[812, 823, 834].map((y, i) => ({ id: 'l3_lo' + i, loop: 3, d: `M1100,${y} L938,${y}`, spread: 0, speed: 90, gap: 24, drive: 'one', c0: 'k0', c1: 'k1', size: 1.8 })),
