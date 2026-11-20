@@ -109,7 +109,7 @@ export function transmission() {
       lat.push(`<path d="M${cx - w1},${y} L${cx + w2},${y + 36} M${cx + w1},${y} L${cx - w2},${y + 36} M${cx - w1},${y} H${cx + w1}"/>`);
     }
     const arms = ARM_Y.map((y) => `<path d="M${cx - 58},${y} H${cx + 58}" stroke-width="3.4"/><path d="M${cx - 58},${y} V${y + 12} M${cx + 58},${y} V${y + 12}" stroke-width="2"/><ellipse cx="${cx - 58}" cy="${y + 15}" rx="3" ry="4" fill="#EBDDC4" stroke="#A07E55" stroke-width=".9"/><ellipse cx="${cx + 58}" cy="${y + 15}" rx="3" ry="4" fill="#EBDDC4" stroke="#A07E55" stroke-width=".9"/>`).join('');
-    return `<g stroke="#46556C" stroke-width="1.6" fill="none"><path d="M${cx - 4},${top} L${cx - bw - 4},${GROUND} M${cx + 4},${top} L${cx + bw + 4},${GROUND}" stroke-width="3"/>${lat.join('')}${arms}<path d="M${cx},${top - 18} V${top}" stroke-width="2.4"/><path d="M${cx - brace},${ARM_Y[0]} L${cx},${top - 18} L${cx + brace},${ARM_Y[0]}" stroke-width="1.6"/></g>`;
+    return `<g stroke="#46556C" stroke-width="1.6" fill="none"><path d="M${cx - bw - 4},${GROUND} L${cx},${top - 18} L${cx + bw + 4},${GROUND}" stroke-width="3" stroke-linejoin="round"/>${lat.join('')}${arms}<path d="M${cx - brace},${ARM_Y[0]} L${cx},${top - 18} L${cx + brace},${ARM_Y[0]}" stroke-width="1.6"/></g>`;
   };
   return `<g id="lines" data-part="lines" class="part">
 ${TOWERS.map((x) => `<ellipse cx="${x}" cy="902" rx="50" ry="5" fill="url(#gAO)"/>`).join('')}
