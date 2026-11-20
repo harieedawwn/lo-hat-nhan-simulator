@@ -191,7 +191,7 @@ details.card>summary h2{margin:0}details.card>summary::after{content:"+";font-si
 
 /* ============ cửa sổ, thẻ thông tin, popover ============ */
 #popover{position:fixed;z-index:120;min-width:190px;max-width:calc(100vw - 16px);background:#fff;border:1px solid var(--line2);border-radius:14px;box-shadow:0 12px 32px rgba(20,33,61,.22);padding:6px}
-#popover button,#popover label.row{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 12px;border:0;background:transparent;border-radius:10px;font-size:13.5px;font-weight:600;text-align:left}
+#popover button{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:0 12px;border:0;background:transparent;border-radius:10px;font-size:13.5px;font-weight:600;text-align:left}
 #popover button:hover{background:#EEF3F9}#popover button.on::after{content:"✓";margin-left:auto;color:var(--ok)}
 #popover h4{margin:6px 12px 2px;font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
 #popover input[type=range]{width:100%}#popover .vol{padding:4px 12px 8px;display:flex;align-items:center;gap:10px}

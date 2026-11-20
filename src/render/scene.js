@@ -5,7 +5,7 @@ const $ = (id) => document.getElementById(id);
 const ROD_TRAVEL = 172;
 
 const STOPS = [[0, [92, 112, 142]], [0.22, [58, 160, 168]], [0.5, [138, 202, 106]], [0.78, [244, 198, 72]], [1.0, [242, 138, 46]], [1.25, [214, 52, 30]]];
-export function heatRGB(p) {
+function heatRGB(p) {
   p = Math.max(0, Math.min(1.25, p));
   for (let i = 1; i < STOPS.length; i++) {
     if (p <= STOPS[i][0]) {
@@ -15,7 +15,7 @@ export function heatRGB(p) {
   }
   return STOPS[STOPS.length - 1][1];
 }
-export const heatCss = (p) => { const c = heatRGB(p); return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; };
+const heatCss = (p) => { const c = heatRGB(p); return `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; };
 
 const COL_N = '#D2463F', COL_S = '#2F67B8';
 /** Độ sáng cánh theo cosφ (mép tối → giữa sáng). */
@@ -102,7 +102,6 @@ export class Scene {
     }
     e.cher.setAttribute('opacity', (0.5 * Math.min(1, s.pf)).toFixed(2));
     // quay bơm
-    const w = dt * 60;
     this.rot.imp1 = (this.rot.imp1 + 260 * dt) % 360; e.imp1.setAttribute('transform', `translate(622,822) rotate(${this.rot.imp1.toFixed(1)})`);
     this.rot.imp2 = (this.rot.imp2 + 200 * dt * Math.min(1.2, 0.25 + s.steam / 1657)) % 360; e.imp2.setAttribute('transform', `translate(862,866) rotate(${this.rot.imp2.toFixed(1)})`);
     this.rot.imp3 = (this.rot.imp3 + 240 * dt) % 360; e.imp3.setAttribute('transform', `translate(2205,1020) rotate(${this.rot.imp3.toFixed(1)})`);

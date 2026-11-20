@@ -4,7 +4,7 @@
  */
 const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
 
-export class AudioGraph {
+class AudioGraph {
   constructor(ctx, quality = 2) {
     this.ctx = ctx; this.q = quality; this.L = {}; this.G = {};
     const c = ctx;
@@ -117,7 +117,7 @@ export class Sound {
   suspend() { if (this.ctx && this.ctx.state === 'running') this.ctx.suspend().catch(() => {}); }
   resume() { if (this.ctx && this.enabled && this.ctx.state !== 'running') this.ctx.resume().catch(() => {}); }
   uiClick(v = 1) { if (this.graph && this.enabled) this.graph.uiTick(v); }
-  update(s, d, dt, focus, active) {
+  update(s, d, focus, active) {
     const g = this.graph; if (!g || !this.enabled || this.ctx.state !== 'running') { if (s && this.ev) this.sync(s); return; }
     if (!this.ev) this.sync(s);
     const t = this.ctx.currentTime;

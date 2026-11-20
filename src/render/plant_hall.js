@@ -5,7 +5,7 @@ const S = 'stroke="#1E2A44" stroke-width="1.6"'; // nhân vật chính
 const SB = 'stroke="#A3B0C2" stroke-width="1"'; // bối cảnh
 const roofY = (x) => 504 - 34 * Math.max(0, 1 - Math.abs(x - 1036) / 340);
 
-export function valve(id, x, y, rot = 0) {
+function valve(id, x, y, rot = 0) {
   return `<g id="${id}" transform="translate(${x},${y}) rotate(${rot})"><path d="M-8,-6 L8,6 V-6 L-8,6 Z" class="vbody" fill="#fff" stroke="#1B2B48" stroke-width="1.4" stroke-linejoin="round"/><path d="M0,0 V-10 M-5,-10 H5" stroke="#1E2A44" stroke-width="1.6"/></g>`;
 }
 
@@ -75,7 +75,7 @@ function stators(xs, l0, l1, R) {
   return out.join('');
 }
 
-function casing(id, x, y, w, h, part) {
+function casing(x, y, w, h) {
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#EEF2F7" stroke="#1E2A44" stroke-width="1.6"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="url(#gTowerShade)"/>
 <rect x="${x}" y="${y}" width="${w}" height="9" rx="4" fill="url(#gCylV)" ${S}/><rect x="${x}" y="${y + h - 9}" width="${w}" height="9" rx="4" fill="url(#gCylV)" ${S}/>`;
 }
@@ -95,13 +95,13 @@ export function hallEquip() {
 <g data-part="turbine" class="part">
 <ellipse cx="1020" cy="694" rx="260" ry="5" fill="url(#gAO)"/>
 <g id="msr"><rect x="905" y="546" width="96" height="24" rx="12" fill="url(#gCylV)" ${S}/><path d="M914,558 H992" stroke="#5D6D86" stroke-width="1" stroke-dasharray="3 3"/></g>
-${casing('hp', 796, 600, 108, 80)}
+${casing(796, 600, 108, 80)}
 ${stators(HP_X, 6, 14.5, 14)}
 <g id="bladesBackHP" fill="#3F4D63">${bladePool('bb', 0, HP_X.length)}</g>
 ${drum(806, 88, 14)}
 <rect id="blurHP" x="810" y="606" width="80" height="68" fill="#C7D3E3" opacity="0"/>
 <rect x="796" y="600" width="12" height="80" fill="url(#gCylHd)" ${S}/><rect x="892" y="600" width="12" height="80" fill="url(#gCylHd)" ${S}/>
-${casing('lp', 945, 590, 150, 100)}
+${casing(945, 590, 150, 100)}
 ${stators(LP_L, 9, 23.5, 14)}${stators(LP_R, 9, 23.5, 14)}
 <g id="bladesBackLP" fill="#3F4D63">${bladePool('bb', HP_X.length)}</g>
 ${drum(955, 130, 14)}

@@ -1,7 +1,7 @@
 import { fmt } from '../sim/format.js';
 
 /** Nhãn tiếng Việt với đường dẫn; tự tránh chồng chéo theo độ ưu tiên (lớp màn hình). */
-export const LABELS = [
+const LABELS = [
   { id: 'containment', t: 'Vỏ bọc lò (bê tông + lót thép)', x: 100, y: 450, dirs: 'ul', p: 2, part: 'containment' },
   { id: 'rpv', t: 'Thùng lò áp lực', x: 172, y: 700, dirs: 'lu', p: 1, part: 'rpv', live: (s) => `${fmt0(s.pPrim)} bar` },
   { id: 'core', t: 'Lõi lò – bó nhiên liệu UO₂', x: 238, y: 760, dirs: 'dl', p: 1, part: 'core' },
@@ -38,7 +38,7 @@ const fmt0 = (n) => fmt(n, 0);
 const fmt1 = (n) => fmt(n, 1);
 
 /** Huy hiệu vòng (số 1-2-3) – luôn hiển thị. */
-export const BADGES = [
+const BADGES = [
   { n: 1, x: 362, y: 760 }, { n: 1, x: 296, y: 560 },
   { n: 2, x: 745, y: 650 }, { n: 2, x: 1010, y: 866 },
   { n: 3, x: 1500, y: 1020 }, { n: 3, x: 1500, y: 960 },

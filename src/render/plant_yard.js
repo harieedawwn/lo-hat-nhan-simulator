@@ -16,7 +16,7 @@ const PH = [2, 1, 0]; // vẽ pha sau trước, pha trước sau cùng
 const EQ_ALPHA = [1, 0.36, 0.18];
 const tr = (k) => `transform="translate(${DEPTH[0] * k},${DEPTH[1] * k})" opacity="${EQ_ALPHA[k]}"`;
 /** Nét dây: cùng bề dày cho mọi pha, pha sau chỉ nhạt hơn. */
-export const wireStyle = (k) => `stroke="${INK}" stroke-width="1.7" stroke-opacity="${PHASE_ALPHA[k]}"`;
+const wireStyle = (k) => `stroke="${INK}" stroke-width="1.7" stroke-opacity="${PHASE_ALPHA[k]}"`;
 /** Viền sáng dưới dây để chỗ dây vắt qua dây/thiết bị/tháp đọc rõ (trước–sau). */
 const halo = (d, k) => `<path d="${d}" stroke="#F4F8FC" stroke-opacity="${(0.85 * PHASE_ALPHA[k]).toFixed(2)}" stroke-width="4.6"/>`;
 
@@ -54,11 +54,6 @@ function strainChain() {
   return `<path d="M${xa - 2},${GANTRY.y} V${y} H${xt}" stroke="#46556C" stroke-width="1.6" fill="none"/>${discs}`;
 }
 
-/** Mũi tên chiều năng lượng đặt trên dây. */
-function chevron(p) {
-  const deg = (p.a * 180 / Math.PI).toFixed(1);
-  return `<g transform="translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${deg})"><path d="M-4,-4.5 L1.5,0 L-4,4.5" fill="none" stroke="#1B2B48" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".55"/><path d="M-4,-4.5 L1.5,0 L-4,4.5" fill="none" stroke="#F4B83A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>`;
-}
 
 function switchyard() {
   const { xl, xr, y, end } = GANTRY, [dx, dy] = DEPTH;
@@ -105,7 +100,7 @@ ${switchyard()}
 }
 
 export function transmission() {
-  const tower = (cx, s = 1) => {
+  const tower = (cx) => {
     const top = 540, bw = 36;
     const brace = (ARM_Y[0] - (top - 18)) * 30 / 42; // thanh chéo đỉnh cột chạm đúng xà trên cùng, giữ độ dốc 30/42
     const lat = [];

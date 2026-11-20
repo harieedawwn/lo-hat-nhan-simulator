@@ -1,7 +1,7 @@
 import { store } from './storage.js';
 /** Mức chất lượng: 0 thấp, 1 trung bình, 2 cao. Tự động theo thiết bị và đo khung hình. */
 export const QNAMES = ['Thấp', 'Trung bình', 'Cao'];
-export function initialQuality() {
+function initialQuality() {
   const mode = store.get('quality', 'auto');
   if (mode === 'high') return 2; if (mode === 'mid') return 1; if (mode === 'low') return 0;
   const mem = navigator.deviceMemory || 4, cores = navigator.hardwareConcurrency || 4, dpr = window.devicePixelRatio || 1;

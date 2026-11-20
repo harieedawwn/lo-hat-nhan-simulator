@@ -46,7 +46,7 @@ export function openInfo(key) {
 export function closeInfo() { const c = $('infocard'); if (!c.hidden) { c.hidden = true; if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (_) { /* */ } } }
 
 /* ---- hướng dẫn ---- */
-export function helpHTML() {
+function helpHTML() {
   return `<h2 id="hmT">Hướng dẫn sử dụng</h2>
 <p>Mô phỏng 2D nhà máy điện hạt nhân lò nước áp lực (PWR) 1000 MW – Vật lí 12 (Kết nối tri thức), chương IV “Vật lí hạt nhân” và Bài 24 “Công nghiệp hạt nhân”.</p>
 <button class="hbtn" id="replayTour">Xem lại hướng dẫn nhanh (4 bước)</button>

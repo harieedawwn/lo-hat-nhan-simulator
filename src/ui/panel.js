@@ -3,7 +3,6 @@ import { calcCorner } from '../sim/calc.js';
 import { canRecover } from '../sim/model.js';
 
 const $ = (id) => document.getElementById(id);
-const NS = 'http://www.w3.org/2000/svg';
 const polar = (cx, cy, r, deg) => [cx + r * Math.cos((deg * Math.PI) / 180), cy + r * Math.sin((deg * Math.PI) / 180)];
 const arc = (cx, cy, r, a0, a1) => { const [x0, y0] = polar(cx, cy, r, a0), [x1, y1] = polar(cx, cy, r, a1); return `M${x0.toFixed(2)},${y0.toFixed(2)} A${r},${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)},${y1.toFixed(2)}`; };
 
@@ -145,7 +144,6 @@ export class Panel {
     const kc = $('kChip'); const kl = d.kLabel, kcls = 'kchip' + (kl === 'Vượt tới hạn' ? ' up' : kl === 'Dưới tới hạn' ? ' dn' : '');
     if (kc.className !== kcls) kc.className = kcls; this.setText('kChip', kl);
     // phân hạch vs phân rã
-    const tot = Math.max(1, d.pFisHeat + d.pDecay);
     this.setText('spF', fmt(d.pFisHeat)); this.setText('spD', fmt(d.pDecay));
     this.setW('.split .sf', (d.pFisHeat / 3750) * 100); this.setW('.split .sd', (d.pDecay / 3750) * 100);
     // cân bằng năng lượng

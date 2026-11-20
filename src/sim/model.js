@@ -5,22 +5,21 @@
  */
 export const DT = 0.05;
 export const P_RATED = 3000;          // MWt
-export const ETA = 0.333;             // hiệu suất nhiệt → điện
-export const H_STEAM = 1.81;          // MJ/kg (nhiệt cấp cho 1 kg hơi)
-export const ROD_RATE = 8;            // %/s (nén thời gian; thực tế thanh dịch chuyển chậm)
-export const ROD_STEP = 0.5;          // %/bước
+const ETA = 0.333;             // hiệu suất nhiệt → điện
+const H_STEAM = 1.81;          // MJ/kg (nhiệt cấp cho 1 kg hơi)
+const ROD_RATE = 8;            // %/s (nén thời gian; thực tế thanh dịch chuyển chậm)
+const ROD_STEP = 0.5;          // %/bước
 export const SCRAM_TIME = 2;          // s
-export const RPM_SYNC = 3000;         // 60·f/p, f = 50 Hz, p = 1 cặp cực
-export const ROLLUP_TIME = 12;        // s
-export const COAST_TIME = 25;         // s (nén từ hàng chục phút)
-export const FRAC_FISSION = 0.935;    // phần nhiệt toả ngay khi phân hạch
-export const FRAC_DECAY = 0.065;      // phần nhiệt từ phân rã sản phẩm phân hạch
-export const COUNTDOWN = 5;           // s đếm ngược trước khi tự động SCRAM (mục đích dạy học)
-export const P_HOT = 33;
-export const T_BASE = 291;
-export const T_BOIL_155 = 345;        // điểm sôi ở 155 bar
-export const T0_WW = 1.08;            // s thực – gốc thời gian để Way–Wigner liên tục với 6,5 %
-export const TIME_COMPRESS = 10;
+const RPM_SYNC = 3000;         // 60·f/p, f = 50 Hz, p = 1 cặp cực
+const ROLLUP_TIME = 12;        // s
+const COAST_TIME = 25;         // s (nén từ hàng chục phút)
+const FRAC_FISSION = 0.935;    // phần nhiệt toả ngay khi phân hạch
+const FRAC_DECAY = 0.065;      // phần nhiệt từ phân rã sản phẩm phân hạch
+const COUNTDOWN = 5;           // s đếm ngược trước khi tự động SCRAM (mục đích dạy học)
+const P_HOT = 33;
+const T_BASE = 291;
+const T0_WW = 1.08;            // s thực – gốc thời gian để Way–Wigner liên tục với 6,5 %
+const TIME_COMPRESS = 10;
 
 const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
 const lag = (cur, target, tau, dt) => cur + (target - cur) * (1 - Math.exp(-dt / tau));
@@ -78,7 +77,7 @@ export function recover(s) {
   return true;
 }
 
-export function k_label(k) {
+function k_label(k) {
   return k > 1.0005 ? 'Vượt tới hạn' : k < 0.9995 ? 'Dưới tới hạn' : 'Tới hạn';
 }
 

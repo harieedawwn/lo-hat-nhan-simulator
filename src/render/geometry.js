@@ -2,7 +2,7 @@
 export const W = 2450, H = 1100, GROUND = 900;
 
 /** Đường gấp khúc có bo góc. pts: [[x,y],...] */
-export function poly(pts, r = 14) {
+function poly(pts, r = 14) {
   let d = `M${pts[0][0]},${pts[0][1]}`;
   for (let i = 1; i < pts.length - 1; i++) {
     const [px, py] = pts[i - 1], [cx, cy] = pts[i], [nx, ny] = pts[i + 1];
@@ -69,10 +69,10 @@ export const FLOWS = [
 ];
 
 /** Dây dẫn truyền tải (xung năng lượng). */
-export const TOWER_A = 1768, TOWER_C = 2398;
+const TOWER_A = 1768, TOWER_C = 2398;
 /** Các cột điện: 2 cột trong khung + các cột ra ngoài biên thế giới để không bao giờ thấy đầu dây. */
 export const TOWERS = [TOWER_A, TOWER_C, 3066, 3734, 4402];
-export const LINE_END = 5200;
+const LINE_END = 5200;
 export const ARM_Y = [575, 615, 655, 695]; // 3 xà cho 3 pha + xà thấp nhất (695) cho dây mới
 export function span(x0, y0, x1, y1, sag) {
   return `M${x0},${y0} Q${(x0 + x1) / 2},${(y0 + y1) / 2 + sag * 2} ${x1},${y1}`;
@@ -96,7 +96,7 @@ export const YARD = {
 };
 export const off = (p, k) => [p[0] + DEPTH[0] * k, p[1] + DEPTH[1] * k];
 /** Pha k lên xà nào của cột: pha sau cùng lên xà trên cùng. */
-export const armOf = (k) => 2 - k;
+const armOf = (k) => 2 - k;
 
 // các đoạn Bezier bậc 3 [p0, c1, c2, p1] của pha trước
 const C = (p0, c1, c2, p1) => [p0, c1, c2, p1];
@@ -123,7 +123,7 @@ export const toTowerSeg = (k) => {
   return C(p0, [(p0[0] + 2 * m[0]) / 3, (p0[1] + 2 * m[1]) / 3], [(p1[0] + 2 * m[0]) / 3, (p1[1] + 2 * m[1]) / 3], p1);
 };
 export const inSegs = (k) => shift(IN_SEGS, k);
-export const outSegs = (k) => shift(OUT_SEGS, k);
+const outSegs = (k) => shift(OUT_SEGS, k);
 /** Dây lèo MBA → máy cắt (pha k). */
 export const yardIn = (k) => segD(inSegs(k));
 /** Dây lèo máy cắt → điểm néo trên giàn (pha k). */
@@ -139,7 +139,7 @@ export function linePhase(k) {
   return d;
 }
 /** Đường hạt của pha k: sứ MBA → máy cắt (nhảy qua thân, M) → giàn → các cột. */
-export const phasePath = (k) => `${yardIn(k)} M${off(YARD.brkOut, k)} ${yardOut(k).replace(/^M[^C]*/, '')} ${linePhase(k).replace(/^M[^C]*/, '')}`;
+const phasePath = (k) => `${yardIn(k)} M${off(YARD.brkOut, k)} ${yardOut(k).replace(/^M[^C]*/, '')} ${linePhase(k).replace(/^M[^C]*/, '')}`;
 
 /* ---- Dây 500 kV mới: sứ MBA (x 1478) → lên → máy cắt riêng → xà thấp nhất của TOWER_A ----
  * Máy cắt đặt ở lớp trước nhất (k = −1) rồi dịch sang phải NEWC.dx để không chồng 3 pha cũ. */
@@ -153,7 +153,7 @@ export const NEW_IN = [
   C([NEW_BRK.inn[0] - 30, 606], [NEW_BRK.inn[0] - 6, 608], [NEW_BRK.inn[0], 636], NEW_BRK.inn),
 ];
 /** Sứ ra máy cắt mới → mũi xà thấp TOWER_A. */
-export const NEW_OUT = C(NEW_BRK.out, [NEW_BRK.out[0] + 12, NEW_BRK.out[1] + 4], [TOWER_A - 58 - 22, NEWC.arm + 14 - 4], [TOWER_A - 58, NEWC.arm + 14]);
+const NEW_OUT = C(NEW_BRK.out, [NEW_BRK.out[0] + 12, NEW_BRK.out[1] + 4], [TOWER_A - 58 - 22, NEWC.arm + 14 - 4], [TOWER_A - 58, NEWC.arm + 14]);
 /** Dây mới: máy cắt → TOWER_A → các cột → ra ngoài biên (M = nhảy qua xà cột). */
 export function newLine() {
   const y = NEWC.arm + 14;
@@ -165,7 +165,6 @@ export function newLine() {
   return d;
 }
 /** Đường hạt của dây mới (dây về mạch thứ cấp): sứ MBA → máy cắt (nhảy qua thân) → cột. */
-export const newPath = () => `${segD(NEW_IN)} M${NEW_BRK.out} ${newLine().replace(/^M[^C]*/, '')}`;
 export const ELEC = [
   // amp: biên độ dao động (px) ∝ cường độ dòng; ph: pha ban đầu (rad). Pha điện = góc rôto θ.
   { id: 'bus', d: poly([[1285, 590], [1285, 540], [1410, 540], [1410, 775]], 10), gap: 15, amp: 12, ph: 0, alpha: 1 },

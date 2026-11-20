@@ -63,7 +63,7 @@ function setSheet(open, animate = true) {
     const off = Math.max(0, Math.min(colOff(), off0 + dy)); p.style.setProperty('--sheetY', off + 'px');
     const now = performance.now(); vel = (e.clientY - lastY) / Math.max(1, now - lastT); lastY = e.clientY; lastT = now;
   });
-  const end = (e) => {
+  const end = () => {
     if (!drag) return; drag = false; p.classList.remove('dragging');
     if (layoutMode() === 'phLand') return;
     if (!moved) { setSheet(!sheetOpen); return; }
@@ -194,7 +194,6 @@ addEventListener('keydown', (e) => {
   if (!$('start').hidden) return;
   const typing = tag === 'INPUT' && t.type !== 'range';
   if (typing) return;
-  const onBtn = tag === 'BUTTON' || tag === 'SUMMARY';
   switch (e.key) {
     case ' ': if (!(t.closest && t.closest('#popover,#confirmScram,#helpModal,#infocard,#tour,#start,summary'))) { e.preventDefault(); togglePause(); } break;
     case 'ArrowLeft': if (tag !== 'INPUT') { e.preventDefault(); nudge(e.shiftKey ? -5 : -1); } break;
@@ -261,7 +260,7 @@ function loop(now) {
     if (!paused && started) { simDt = rdt * speed; acc += simDt; let n = 0; while (acc >= DT && n < 10) { step(s); acc -= DT; n++; } if (n === 10) acc = 0; }
     if (now - lastUI >= 100) { lastUI = now; d = derive(s); panel.update(s, d, s.t, { announce: (m) => { $('srLive').textContent = m; } }); stage.live(s, d); syncSlider(false); const fn = stage.camera.focusName; if (fn !== lastFocusName) { lastFocusName = fn; focusBtns.forEach((b) => b.classList.toggle('on', b.dataset.focus === fn)); } }
     stage.frame(s, d, rdt, simDt);
-    sound.update && sound.update(s, d, rdt, stage.camera.focusName, started && !paused);
+    sound.update && sound.update(s, d, stage.camera.focusName, started && !paused);
   }
   requestAnimationFrame(loop);
 }
