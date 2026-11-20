@@ -1,5 +1,5 @@
 // Chụp bộ ảnh chuẩn để so sánh trước/sau khi chỉnh đồ hoạ.
-// Dùng: npx vite preview --port 4173 &  rồi  node e2e/shots.mjs <thư-mục-ra> [url]
+// Dùng: npx vite preview --port 4173 &  rồi  npm run shots -- <thư-mục-ra> [url]
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 
