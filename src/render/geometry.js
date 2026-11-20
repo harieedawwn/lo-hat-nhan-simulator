@@ -50,7 +50,9 @@ export const FLOWS = [
   { id: 'l1_cold', loop: 1, d: poly([[546, 806], [546, 822], [622, 822], [622, 862], [362, 862], [362, 600], [304, 600], [304, 800], [250, 826]], 18), spread: 5, speed: 70, gap: 12, drive: 'one', c0: 'c1', c1: 'c1', size: 2.4 },
   { id: 'l1_dcL', loop: 1, d: poly([[196, 590], [196, 800], [250, 826]], 18), spread: 5, speed: 70, gap: 12, drive: 'one', c0: 'c1', c1: 'c1', size: 2.2 },
   // Vòng 2
-  { id: 'l2_a', loop: 2, d: poly([[520, 430], [520, 325], [770, 325], [770, 585]], 14), spread: 3, speed: 120, gap: 15, drive: 'steam', kind: 'steam', size: 3.2 },
+  // Hơi bay lên từ miệng trên của 5 ống tách ẩm, dàn khắp bề ngang vòm rồi cong vào cửa ra (520,336)
+  ...[468, 494, 520, 546, 572].map((x, i) => ({ id: 'l2_dome' + i, loop: 2, d: `M${x},392 Q${x},350 520,336`, spread: 5, speed: 60, gap: 40, drive: 'steam', kind: 'steam', size: 2.6 })),
+  { id: 'l2_a', loop: 2, d: poly([[520, 336], [520, 325], [770, 325], [770, 585]], 14), spread: 3, speed: 120, gap: 15, drive: 'steam', kind: 'steam', size: 3.2 },
   { id: 'l2_b', loop: 2, d: poly([[770, 585], [815, 585], [815, 614], [890, 614], [890, 558], [1020, 558], [1020, 592]], 12), spread: 3, speed: 120, gap: 15, drive: 'turb', kind: 'steam', size: 3.0 },
   { id: 'l2_lpL', loop: 2, d: poly([[1020, 592], [1020, 616], [965, 616], [965, 700], [965, 746]], 8), spread: 4, speed: 100, gap: 11, drive: 'turb', kind: 'steam', size: 2.4 },
   { id: 'l2_lpR', loop: 2, d: poly([[1020, 616], [1075, 616], [1075, 700], [1075, 746]], 8), spread: 4, speed: 100, gap: 12, drive: 'turb', kind: 'steam', size: 2.3 },

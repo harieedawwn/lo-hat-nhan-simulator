@@ -52,7 +52,7 @@ export class Labels {
     this.font = '600 12.5px "Be Vietnam Pro",system-ui,sans-serif';
     this.fontSm = '700 10.5px "Be Vietnam Pro",system-ui,sans-serif';
     for (const L of LABELS) {
-      const g = document.createElementNS(NS, 'g'); g.setAttribute('class', L.sm ? 'lbl sm' : 'lbl'); g.dataset.part = L.part;
+      const g = document.createElementNS(NS, 'g'); g.setAttribute('class', L.sm ? 'lbl sm' : 'lbl'); g.dataset.part = L.part; g.style.display = 'none'; // chưa đặt chỗ thì ẩn (nếu không sẽ hiện ở gốc 0,0 và tràn lên dưới header)
       g.innerHTML = '<path class="lead"/><circle class="dot" r="3.2"/><rect class="bg" rx="6"/><text class="t"></text><text class="live"></text>';
       svg.appendChild(g);
       this.cv.font = L.sm ? this.fontSm : this.font;
@@ -104,7 +104,7 @@ export class Labels {
           if (!clash) { best = { rx, ry, d }; break; }
         }
       }
-      if (!best) { if (it.on) { it.g.style.display = 'none'; it.on = false; } continue; }
+      if (!best) { if (it.on || it.g.style.display !== 'none') { it.g.style.display = 'none'; it.on = false; } continue; }
       placed.push({ x: best.rx, y: best.ry, w: bw, h: bh });
       it.on = true; it.g.style.display = '';
       it.bw = bw; it.bh = bh;
