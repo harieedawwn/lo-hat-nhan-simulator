@@ -48,7 +48,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 @media (prefers-reduced-motion:reduce){#vignette{transition:none}}
 
 #lensBox{position:absolute;left:12px;top:12px;width:var(--lens,216px);background:rgba(255,255,255,.94);border:1px solid var(--line2);border-radius:18px;padding:8px 8px 10px;box-shadow:0 6px 24px rgba(20,33,61,.14);z-index:3;pointer-events:auto}
-#lensBox .lensHead{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;padding:0 4px 6px}
+#lensBox .lensHead{display:flex;justify-content:space-between;align-items:center;line-height:1.25;font-size:12.5px;padding:0 4px 6px}
 #lensBox .lensHead b{font-weight:700}#lensBox .lensHead span{color:var(--accent);font-weight:600}
 #lensBox canvas{display:block;width:100%;aspect-ratio:1;border-radius:50%}
 #lensBox .lensLeg{list-style:none;margin:8px 2px 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:10.5px;color:var(--ink2)}
@@ -284,3 +284,4 @@ body.immersive #exitImm{top:auto;bottom:calc(8px + var(--safe-b));right:8px}
 body.immersive.m-phport .hlbar{display:none}
 
 h1,h2,h3{text-wrap:balance}
+.brand .sub span:last-child{color:#8B261D;font-weight:700}

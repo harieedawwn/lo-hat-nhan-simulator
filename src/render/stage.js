@@ -17,7 +17,7 @@ export class Stage {
 <canvas id="fx" aria-hidden="true"></canvas>
 <svg id="lab" xmlns="${NS}" aria-hidden="true"></svg>
 <div id="vignette" aria-hidden="true"></div>
-<div id="lensBox"><div class="lensHead"><b>Bên trong lõi lò</b><span id="lensK" class="num"></span><button id="lensClose" aria-label="Ẩn kính lúp">×</button></div><canvas id="lensCv" aria-label="Mô phỏng phản ứng dây chuyền ở mức hạt nhân"></canvas>
+<div id="lensBox"><div class="lensHead"><b>Bên trong<br>lõi lò</b><span id="lensK" class="num"></span><button id="lensClose" aria-label="Ẩn kính lúp">×</button></div><canvas id="lensCv" aria-label="Mô phỏng phản ứng dây chuyền ở mức hạt nhân"></canvas>
 <ul class="lensLeg"><li><i style="background:#F08A24"></i>neutron nhanh</li><li><i style="background:#1D6FE0"></i>neutron chậm (nhiệt)</li><li><i style="background:#E0603C"></i>²³⁵U (phân hạch)</li><li><i style="background:#7B8AA3"></i>²³⁸U</li><li><i style="background:#2B3A55"></i>thanh điều khiển</li></ul></div>`;
     this.svg = host.querySelector('#svg'); this.cam = host.querySelector('#cam');
     this.fx = host.querySelector('#fx'); this.ctx = this.fx.getContext('2d');
