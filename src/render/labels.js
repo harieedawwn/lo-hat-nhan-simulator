@@ -15,7 +15,7 @@ const LABELS = [
   { id: 'rad', t: 'Khu vực có phóng xạ – vòng 1', x: 135, y: 650, dirs: 'ur', p: 2, part: 'radzone' },
   { id: 'steam', t: 'Đường hơi chính', x: 770, y: 420, dirs: 'rl', p: 2, part: 'steamline', live: (s) => `${fmt0(s.pSteam)} bar` },
   { id: 'hp', t: 'Tuabin cao áp', x: 850, y: 668, dirs: 'dl', p: 1, part: 'turbine' },
-  { id: 'lp', t: 'Tuabin hạ áp', x: 1020, y: 596, dirs: 'ur', p: 1, part: 'turbine', live: (s) => `${fmt0(s.rpm)} vòng/phút` },
+  { id: 'lp', t: 'Tuabin hạ áp', x: 1020, y: 590, dirs: 'ul', p: 1, part: 'turbine', live: (s) => `${fmt0(s.rpm)} vòng/phút` },
   { id: 'gen', t: 'Máy phát điện', x: 1230, y: 592, dirs: 'ul', p: 1, part: 'generator' },
   { id: 'cond', t: 'Bình ngưng (ranh giới vòng 2 | vòng 3)', x: 1020, y: 790, dirs: 'dl', p: 1, part: 'condenser' },
   { id: 'feed', t: 'Bơm cấp nước', x: 860, y: 880, dirs: 'dl', p: 2, part: 'feedpump' },
