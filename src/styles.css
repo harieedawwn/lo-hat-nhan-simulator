@@ -123,6 +123,8 @@ button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-
 .st-title{font-weight:700;font-size:16px}.st-text{font-size:12.5px;color:var(--ink2);margin-top:2px;line-height:1.35}
 .st-count{margin-left:auto;font-size:34px;font-weight:700;color:var(--bad);min-width:2ch;text-align:center}
 .st-ok{border-left-color:var(--ok);background:#F0F9F3}.st-ok .st-title{color:#1E6B41}
+.st-sub{border-left-color:#8E6CC8;background:#F5F1FC}.st-sub .st-title{color:#5B3C99}
+.st-sup{border-left-color:#D9534F;background:#FDF2F0}.st-sup .st-title{color:#A33A2C}
 .st-warn{border-left-color:var(--warn);background:#FFF8E8}.st-warn .st-title{color:#8A5A00}
 .st-bad{border-left-color:var(--bad);background:#FDEDED;animation:pulseBad 1s ease-in-out infinite}.st-bad .st-title{color:#9C1C1C}
 .st-scram{border-left:6px solid var(--scram);background:repeating-linear-gradient(135deg,#FBE4E4 0 12px,#F6D2D2 12px 24px);animation:pulseBad 1.6s ease-in-out infinite}.st-scram .st-title{color:#7A1010}

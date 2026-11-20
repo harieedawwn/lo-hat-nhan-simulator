@@ -12,7 +12,7 @@ const ICONS = {
   bad: '<svg viewBox="0 0 34 34"><path d="M11 2h12l9 9v12l-9 9H11L2 23V11z" fill="#C62828"/><path d="M17 9v10M17 24v.01" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>',
   scram: '<svg viewBox="0 0 34 34"><path d="M17 2l13 7.5v15L17 32 4 24.5v-15z" fill="#8E1B1B"/><rect x="11" y="9" width="12" height="16" rx="2" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M14 9v13M17 9v16M20 9v13" stroke="#fff" stroke-width="2.2"/></svg>',
 };
-const TITLES = { normal: 'Bình thường', warning: 'Cảnh báo', overheat: 'Quá nhiệt', scram: 'Dập lò khẩn cấp (SCRAM)' };
+const TITLES = { sup: 'Vượt hạn', sub: 'Dưới hạn', ok: 'Tới hạn', warning: 'Cảnh báo', overheat: 'Quá nhiệt', scram: 'Dập lò khẩn cấp (SCRAM)' };
 
 export class Panel {
   constructor() {
@@ -21,7 +21,7 @@ export class Panel {
     this.trend = $('trend'); this.tctx = this.trend.getContext('2d');
     this.N = 300; this.hTh = new Float32Array(this.N); this.hEl = new Float32Array(this.N); this.hT = new Float32Array(this.N);
     this.hn = 0; this.lastPush = -1; this.lastDraw = 0;
-    this.lastStatus = ''; this.txt = {};
+    this.lastStatus = ''; this.lastKey = ''; this.txt = {};
   }
   setText(id, v) { if (this.txt[id] !== v) { this.txt[id] = v; const e = this.c[id] || (this.c[id] = $(id)); e.textContent = v; } }
   setW(sel, v) { const e = this.c[sel] || (this.c[sel] = document.querySelector(sel)); const w = Math.max(0, Math.min(100, v)).toFixed(1) + '%'; if (this.txt[sel] !== w) { this.txt[sel] = w; e.style.setProperty('--w', w); e.style.width = w; } }
@@ -102,19 +102,23 @@ export class Panel {
       else if (s.p < 0.03) text = 'Lò đang dừng nóng, chưa có điện. Hãy rút thanh điều khiển để tăng công suất.';
       else if (s.k > 1.0005) text = 'k > 1: số neutron tăng, công suất đang tăng theo độ rút thanh.';
       else if (s.k < 0.9995) text = 'k < 1: số neutron giảm, công suất đang giảm.';
-      else text = 'Tới hạn (k = 1): phản ứng dây chuyền ổn định, đã hòa lưới 50 Hz.';
+      else text = 'k = 1: phản ứng dây chuyền ổn định, đã hòa lưới 50 Hz.';
     } else if (st === 'warning') text = 'Công suất vượt 103 % hoặc nhiệt độ nhánh nóng quá 325,5 °C. Hãy đưa bớt thanh điều khiển vào.';
     else if (st === 'overheat') text = `Công suất > 110 % hoặc T > 327,5 °C. Hệ thống bảo vệ sẽ tự động dập lò sau ${Math.max(0, Math.ceil(s.countdown))} s.`;
     else {
       const why = s.scramReason === 'auto' ? 'Hệ thống bảo vệ tự động dập lò. ' : s.scramReason === 'prompt' ? 'Công suất ≥ 118 %: tắt lò tức thì. ' : 'Đã bấm SCRAM. ';
       text = why + `Thanh rơi vào lõi, phản ứng dây chuyền dừng; dư nhiệt phân rã vẫn ≈ ${fmt(d.pDecay)} MW nên bơm và làm mát tiếp tục chạy.`;
     }
+    const key = st === 'normal' ? (s.k > 1.0005 ? 'sup' : s.k < 0.9995 ? 'sub' : 'ok') : st;
+    if (key !== this.lastKey) {
+      this.lastKey = key;
+      sc.className = 'card st ' + { sup: 'st-sup', sub: 'st-sub', ok: 'st-ok', warning: 'st-warn', overheat: 'st-bad', scram: 'st-scram' }[key];
+      sc.querySelector('.st-ico').innerHTML = ICONS[{ sup: 'ok', sub: 'ok', ok: 'ok', warning: 'warn', overheat: 'bad', scram: 'scram' }[key]];
+      this.setText('stTitle', TITLES[key]);
+    }
     if (st !== this.lastStatus) {
       this.lastStatus = st;
-      sc.className = 'card st ' + { normal: 'st-ok', warning: 'st-warn', overheat: 'st-bad', scram: 'st-scram' }[st];
-      sc.querySelector('.st-ico').innerHTML = ICONS[{ normal: 'ok', warning: 'warn', overheat: 'bad', scram: 'scram' }[st]];
-      this.setText('stTitle', TITLES[st]);
-      opts.announce(TITLES[st] + (st === 'scram' ? '. Thanh điều khiển đang rơi.' : ''));
+      opts.announce(TITLES[key] + (st === 'scram' ? '. Thanh điều khiển đang rơi.' : ''));
     }
     this.setText('stText', text);
     const cd = $('stCount');
