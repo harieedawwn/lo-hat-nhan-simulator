@@ -39,6 +39,5 @@ const bare = `#top,#panel,#overlay,#lab,#lensBox,#vignette,#toast,#tour{display:
 {
   const p = await open(1440, 900); await p.waitForTimeout(1200);
   await p.screenshot({ path: 'docs/hero.png' }); await p.close();
-  const q = await open(390, 844, { dpr: 2 }); await q.waitForTimeout(600); await q.screenshot({ path: 'docs/mobile.png' }); await q.close();
 }
 await b.close();

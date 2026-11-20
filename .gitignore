@@ -4,3 +4,6 @@ dist
 *.log
 test-results
 e2e/out
+playwright-report
+.vite
+/shots
