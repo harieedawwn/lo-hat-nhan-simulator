@@ -284,4 +284,5 @@ body.immersive #exitImm{top:auto;bottom:calc(8px + var(--safe-b));right:8px}
 body.immersive.m-phport .hlbar{display:none}
 
 h1,h2,h3{text-wrap:balance}
-.brand .sub span:last-child{color:#8B261D;font-weight:700}
+.brand .sub span:first-child{text-transform:uppercase;font-size:14px;font-weight:800;letter-spacing:.02em}
+.brand .sub span:last-child{color:#8B261D;font-weight:700;font-size:9.5px;margin-top:1px}
