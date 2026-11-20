@@ -98,7 +98,7 @@ export function closeHelp() { const w = $('helpModal'); if (!w.hidden) { w.hidde
 export class Tour {
   constructor(hooks) { this.h = hooks; this.i = 0; this.on = false; this.steps = [
     { t: '#rodsCard', title: 'Thanh điều khiển', text: 'Kéo thanh trượt để rút hoặc đưa thanh điều khiển vào lõi. Công suất bám theo; k > 1 khi đang tăng, k < 1 khi đang giảm.', pre: () => this.h.sheet(false) },
-    { t: '#heroCard', title: 'Chuỗi chuyển hoá năng lượng', text: 'Nhiệt → hơi nước → tuabin → điện. Hãy đổi độ rút thanh và xem độ trễ lan dọc theo chuỗi.', pre: () => this.h.sheet(true) },
+    { t: '#heroCard', title: 'Chuỗi chuyển hóa năng lượng', text: 'Nhiệt → hơi nước → tuabin → điện. Hãy đổi độ rút thanh và xem độ trễ lan dọc theo chuỗi.', pre: () => this.h.sheet(true) },
     { t: '#btnScram', title: 'SCRAM – dập lò khẩn cấp', text: 'Giữ nút đỏ 0,6 giây: thanh rơi hết trong ≈ 2 giây. Phản ứng dây chuyền dừng nhưng dư nhiệt phân rã vẫn còn 6–7 %.', pre: () => this.h.sheet(false) },
     { t: '.focusbar', title: 'Sơ đồ nhà máy', text: 'Kéo để di chuyển, chụm hai ngón để phóng to, chạm vào bộ phận bất kỳ để xem thẻ thông tin. Dùng các nút này để bay tới lò, tuabin hay tháp làm mát; kính lúp “Bên trong lõi lò” cho thấy phản ứng dây chuyền.', pre: () => this.h.sheet(false) },
   ]; this.card = $('tourCard'); this.ring = $('tourRing');
